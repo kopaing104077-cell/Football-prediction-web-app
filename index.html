@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Supercomputer Football Predictor 1080p</title>
+    <title>Football Circle Prediction Video Generator (1080p)</title>
     <style>
         * {
             margin: 0;
@@ -11,338 +11,326 @@
             box-sizing: border-box;
         }
         body {
-            background-color: #050811;
+            background-color: #111;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: Arial, sans-serif;
             overflow: hidden;
         }
         
-        /* 9:16 Tik Tok / Reels Container Layout */
-        #viewportContainer {
+        /* 9:16 Vertical Screen Container */
+        #container3G {
             position: relative;
             width: 100%;
-            max-width: 450px;
+            max-width: 430px;
             height: 100vh;
-            max-height: 800px;
-            background: radial-gradient(circle at center, #0a1128 0%, #02040a 100%);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            max-height: 780px;
+            background-color: #0d8a00; /* ဗီဒီယိုထဲက မြက်ခင်းစိမ်းရောင် အစစ် */
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding-bottom: 20px;
-            border: 1px solid rgba(0, 242, 254, 0.15);
+            align-items: center;
+            padding: 30px 0;
         }
 
-        /* Sci-Fi Grid Line Animation Overlay */
-        #viewportContainer::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
-            pointer-events: none;
-        }
-
-        /* Top HUD Scoreboard Header */
-        .hud-header {
-            width: 100%;
+        /* Top Header Scoreboard */
+        .scoreboard-top {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 35px;
-            z-index: 5;
+            z-index: 10;
         }
-        .hud-title {
-            color: #00f2fe;
-            font-size: 10px;
-            font-weight: bold;
-            letter-spacing: 3px;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            text-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
-        }
-        .match-score-row {
+        .score-row-display {
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 15px;
-            background: rgba(2, 6, 18, 0.75);
-            padding: 8px 22px;
-            border-radius: 4px;
-            border: 1px solid rgba(0, 242, 254, 0.3);
-            box-shadow: inset 0 0 15px rgba(0, 242, 254, 0.1);
         }
-        .team-flag {
-            width: 36px;
-            height: 24px;
-            background-color: #111;
-            border: 1px solid rgba(255,255,255,0.3);
+        .flag-box {
+            width: 38px;
+            height: 25px;
+            background-color: #222;
+            border: 1px solid #ffffff;
             object-fit: cover;
             border-radius: 2px;
         }
-        .score-nums {
+        .score-live-text {
             color: #ffffff;
             font-size: 32px;
-            font-weight: 900;
-            font-family: monospace;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(255,255,255,0.3);
-        }
-        .hud-timer {
-            color: #00f2fe;
-            font-size: 26px;
-            margin-top: 10px;
             font-weight: bold;
-            font-family: monospace;
-            text-shadow: 0 0 6px rgba(0, 242, 254, 0.5);
+            letter-spacing: 1px;
+        }
+        .time-live-text {
+            color: #ffffff;
+            font-size: 24px;
+            margin-top: 5px;
+            font-weight: 500;
         }
 
-        /* Center Canvas Simulation Board */
+        /* Canvas Pitch Layout */
         canvas {
             width: 100%;
-            height: 400px;
+            height: 380px;
             display: block;
         }
 
-        /* 🛠️ Modern Neon Control Panel */
-        .neon-control-card {
-            background: rgba(2, 4, 10, 0.9);
-            width: 92%;
-            margin: 0 auto;
-            border-radius: 16px;
-            padding: 16px;
+        /* Bottom Match Card (ဗီဒီယိုထဲကအတိုင်း အနက်ရောင် Card အဝိုင်း) */
+        .bottom-match-card {
+            background-color: #000000;
+            width: 85%;
+            border-radius: 18px;
+            padding: 12px 15px;
             color: white;
-            border: 1px solid rgba(0, 242, 254, 0.2);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-            z-index: 10;
-        }
-        .config-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-        .input-group {
-            flex: 1;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 8px;
-            padding: 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            z-index: 10;
         }
-        .input-group input[type="text"] {
+        .match-meta-info {
+            font-size: 11px;
+            color: #aaaaaa;
+            margin-bottom: 3px;
+        }
+        .match-main-status {
+            font-size: 19px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+        .teams-io-row {
+            display: flex;
+            justify-content: space-between;
             width: 100%;
-            background: #070c18;
-            border: 1px solid rgba(0, 242, 254, 0.3);
-            color: #fff;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .team-io-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #0f0f0f;
             padding: 6px;
-            border-radius: 6px;
+            border-radius: 10px;
+            border: 1px solid #1a1a1a;
+        }
+        .team-io-box input[type="text"] {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #333;
+            color: #fff;
+            padding: 4px;
             text-align: center;
             font-size: 13px;
             font-weight: bold;
             outline: none;
+            margin-bottom: 5px;
         }
-        .input-group input[type="text"]:focus {
-            border-color: #00f2fe;
-            box-shadow: 0 0 8px rgba(0, 242, 254, 0.4);
-        }
-        .neon-upload {
-            background: rgba(0, 242, 254, 0.05);
-            color: #00f2fe;
+        .uploader-lbl {
             font-size: 10px;
-            font-weight: bold;
-            padding: 6px 10px;
-            border-radius: 6px;
+            color: #0d8a00;
             cursor: pointer;
-            text-align: center;
-            width: 100%;
-            border: 1px dashed rgba(0, 242, 254, 0.4);
+            font-weight: bold;
             text-transform: uppercase;
         }
-        .neon-upload input[type="file"] {
+        .uploader-lbl input[type="file"] {
             display: none;
         }
-        .action-btn {
+
+        /* Record Button */
+        .record-trigger-btn {
             width: 100%;
-            background: linear-gradient(45deg, #00f2fe, #4facfe);
-            color: #000;
+            background: #ffffff;
+            color: #000000;
             border: none;
-            padding: 12px;
-            border-radius: 30px;
+            padding: 10px;
+            border-radius: 20px;
             font-weight: bold;
             font-size: 13px;
             cursor: pointer;
-            letter-spacing: 1px;
             text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.4);
-            transition: 0.3s;
+            letter-spacing: 0.5px;
+            transition: 0.2s;
         }
-        .action-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.6);
+        .record-trigger-btn:hover {
+            background: #dddddd;
         }
     </style>
 </head>
 <body>
 
-<div id="viewportContainer">
-    <div class="hud-header">
-        <div class="hud-title">AI Supercomputer Match Prediction</div>
-        <div class="match-score-row">
-            <img id="flagL" class="team-flag" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background-color: #00f2fe;">
-            <div class="score-nums" id="hudScore">0 - 0</div>
-            <img id="flagR" class="team-flag" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background-color: #ff007f;">
+<div id="container3G">
+    <div class="scoreboard-top">
+        <div class="score-row-display">
+            <img id="flagDisplayL" class="flag-box" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background-color: #ffcc00;">
+            <div class="score-live-text" id="liveScoreLabel">0 - 0</div>
+            <img id="flagDisplayR" class="flag-box" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background-color: #cc0000;">
         </div>
-        <div class="hud-timer" id="hudTime">00:00</div>
+        <div class="time-live-text" id="liveTimeLabel">00:00</div>
     </div>
 
-    <canvas id="simulationCanvas"></canvas>
+    <canvas id="predictionCanvas"></canvas>
 
-    <div class="neon-control-card">
-        <div class="config-row">
-            <div class="input-group">
-                <input type="text" id="name1" value="TEAM A">
-                <label class="neon-upload">
-                    📷 Upload Logo
-                    <input type="file" id="file1" accept="image/*">
+    <div class="bottom-match-card">
+        <div class="match-meta-info">6/10</div>
+        <div class="match-main-status" id="statusHeaderText">Tomorrow</div>
+        
+        <div class="teams-io-row">
+            <div class="team-io-box">
+                <input type="text" id="nameInputL" value="Iraq">
+                <label class="uploader-lbl">📷 Upload Logo
+                    <input type="file" id="fileInputL" accept="image/*">
                 </label>
             </div>
-            <div class="input-group">
-                <input type="text" id="name2" value="TEAM B">
-                <label class="neon-upload">
-                    📷 Upload Logo
-                    <input type="file" id="file2" accept="image/*">
+            <div class="team-io-box">
+                <input type="text" id="nameInputR" value="Venezuela">
+                <label class="uploader-lbl">📷 Upload Logo
+                    <input type="file" id="fileInputR" accept="image/*">
                 </label>
             </div>
         </div>
-        <button class="action-btn" id="triggerBtn">Record & Start Predict</button>
+
+        <button class="record-trigger-btn" id="startRecordingActionBtn">Start Predict & Download 1080p</button>
     </div>
 </div>
 
 <script>
-    const canvas = document.getElementById('simulationCanvas');
+    const canvas = document.getElementById('predictionCanvas');
     const ctx = canvas.getContext('2d');
 
-    // ⭐ High Definition 1080p Internal Resolution Setup (ဗီဒီယိုကြည်လင်ပြတ်သားရန်)
-    const renderWidth = 1080;
-    const renderHeight = 960; 
-    canvas.width = renderWidth;
-    canvas.height = renderHeight;
+    // 1080p Internal Quality Resolution Setup
+    const internalW = 1080;
+    const internalH = 960;
+    canvas.width = internalW;
+    canvas.height = internalH;
 
-    const center = { x: renderWidth / 2, y: renderHeight / 2 };
-    const fieldRadius = 360; // 1080p အချိုးကျ စက်ဝိုင်းကြီးအောင် ချဲ့ထားသည်
+    const centerPoint = { x: internalW / 2, y: internalH / 2 };
+    const ringRadius = 340; 
 
-    let score = { team1: 0, team2: 0 };
-    let isLive = false;
+    let scoreState = { left: 0, right: 0 };
+    let isMatchRunning = false;
     
-    // ⏱️ ၁၅ စက္ကန့် စနစ်တည်ဆောက်မှု (15 Seconds Real time = 90 Minutes Match time)
-    let virtualMins = 0;
-    let virtualSecs = 0;
-    let lastClockTick = 0;
-    const simulationDuration = 15; // စက္ကန့် ၁၅ စက္ကန့်ကွက်တိ ကစားပါမည်
+    // ⏱️ ၁၅ စက္ကန့် စနစ် (၁၅ စက္ကန့် = မိနစ် ၉၀ ပွဲပြီး)
+    let minutesCounter = 0;
+    let secondsCounter = 0;
+    let totalElapsedMs = 0;
+    let previousTimeFrame = 0;
+    const matchTotalSeconds = 15; 
 
-    // 🥅 ဗီဒီယိုအတိုင်း အဆက်မပြတ်လည်ပတ်နေသော ဂိုးပေါက်စနစ်
-    let goalAngle = -Math.PI / 2;
-    const goalSpeed = 0.015; // လည်ပတ်နှုန်း အရှိန်
-    const goalWidthAngle = 0.28; // ဂိုးသွင်းရခက်အောင် ကျဉ်းကျဉ်းနှင့် စိတ်လှုပ်ရှားဖွရာ သတ်မှတ်ထားသည်
+    // 🥅 အမြဲတမ်း ပတ်ချာလည်နေသော ဂိုးပေါက်စနစ်
+    let currentGoalAngle = 0;
+    const goalRotationSpeed = 0.016; 
+    const netWidthAngle = 0.32; 
 
-    const balls = [
-        { id: 'team1', name: 'TEAM A', x: center.x - 90, y: center.y + 40, vx: -12, vy: 14, radius: 48, img: null, isGoalOut: false, color: '#00f2fe' },
-        { id: 'team2', name: 'TEAM B', x: center.x + 90, y: center.y - 40, vx: 14, vy: -12, radius: 48, img: null, isGoalOut: false, color: '#ff007f' }
+    const gameBalls = [
+        { id: 'left', name: 'Iraq', x: centerPoint.x - 70, y: centerPoint.y + 30, vx: -12, vy: 11, radius: 42, img: null, isGoalOut: false, color: '#ffcc00' },
+        { id: 'right', name: 'Venezuela', x: centerPoint.x + 70, y: centerPoint.y - 30, vx: 11, vy: -12, radius: 42, img: null, isGoalOut: false, color: '#cc0000' }
     ];
 
-    // 🎥 Video Recorder Variables
-    let mediaRecorder;
-    let recordedChunks = [];
+    let particleTrails = [];
+    let videoMediaRecorder;
+    let chunksOfVideo = [];
 
-    // 🔊 Web Audio API
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // Audio Engine
+    const soundContext = new (window.AudioContext || window.webkitAudioContext)();
 
-    function playTickSound() {
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(500, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.03);
+    function triggerTickAudio() {
+        if (soundContext.state === 'suspended') soundContext.resume();
+        const oscillator = soundContext.createOscillator();
+        const nodeGain = soundContext.createGain();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(450, soundContext.currentTime);
+        nodeGain.gain.setValueAtTime(0.08, soundContext.currentTime);
+        nodeGain.gain.exponentialRampToValueAtTime(0.001, soundContext.currentTime + 0.04);
+        oscillator.connect(nodeGain);
+        nodeGain.connect(soundContext.destination);
+        oscillator.start();
+        oscillator.stop(soundContext.currentTime + 0.04);
     }
 
-    function playGoalSound() {
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const bufferSize = audioCtx.sampleRate * 1.5;
-        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-            data[i] = Math.random() * 2 - 1;
+    function triggerGoalAudio() {
+        if (soundContext.state === 'suspended') soundContext.resume();
+        const size = soundContext.sampleRate * 1.2;
+        const audioBuffer = soundContext.createBuffer(1, size, soundContext.sampleRate);
+        const bufferData = audioBuffer.getChannelData(0);
+        for (let idx = 0; idx < size; idx++) {
+            bufferData[idx] = Math.random() * 2 - 1;
         }
-        const noise = audioCtx.createBufferSource();
-        noise.buffer = buffer;
-        const filter = audioCtx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(380, audioCtx.currentTime);
-        const gain = audioCtx.createGain();
-        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + 1.4);
-        noise.connect(filter);
-        filter.connect(gain);
-        gain.connect(audioCtx.destination);
-        noise.start();
+        const audioSource = soundContext.createBufferSource();
+        audioSource.buffer = audioBuffer;
+        const lowpassFilter = soundContext.createBiquadFilter();
+        lowpassFilter.type = 'lowpass';
+        lowpassFilter.frequency.setValueAtTime(400, soundContext.currentTime);
+        const nodeGain = soundContext.createGain();
+        nodeGain.gain.setValueAtTime(0.25, soundContext.currentTime);
+        nodeGain.gain.exponentialRampToValueAtTime(0.005, soundContext.currentTime + 1.2);
+        audioSource.connect(lowpassFilter);
+        lowpassFilter.connect(nodeGain);
+        nodeGain.connect(soundContext.destination);
+        audioSource.start();
     }
 
-    function resetBall(ball) {
-        ball.x = center.x + (Math.random() * 40 - 20);
-        ball.y = center.y + (Math.random() * 40 - 20);
-        ball.vx = (Math.random() > 0.5 ? 1 : -1) * (11 + Math.random() * 5);
-        ball.vy = (Math.random() > 0.5 ? 1 : -1) * (11 + Math.random() * 5);
-        ball.isGoalOut = false;
+    function spawnParticles(x, y, color) {
+        for (let i = 0; i < 8; i++) {
+            particleTrails.push({
+                x: x, y: y,
+                vx: (Math.random() - 0.5) * 6,
+                vy: (Math.random() - 0.5) * 6,
+                life: 1.0,
+                color: color
+            });
+        }
     }
 
-    // ⚙️ Core Physics Engine Loop
-    function update() {
-        // ဂိုးပေါက်ကို ဗီဒီယိုအတိုင်း အဆက်မပြတ် လည်ပတ်စေခြင်း
-        goalAngle += goalSpeed;
-        if (goalAngle > Math.PI * 2) goalAngle -= Math.PI * 2;
+    function respawnBallObject(ballObj) {
+        ballObj.x = centerPoint.x + (Math.random() * 40 - 20);
+        ballObj.y = centerPoint.y + (Math.random() * 40 - 20);
+        ballObj.vx = (Math.random() > 0.5 ? 1 : -1) * (11 + Math.random() * 4);
+        ballObj.vy = (Math.random() > 0.5 ? 1 : -1) * (11 + Math.random() * 4);
+        ballObj.isGoalOut = false;
+    }
 
-        if (!isLive) return;
+    // Physics Update Logic
+    function updatePhysicsEngine(delta) {
+        // ဂိုးပေါက်အမြဲတမ်းလည်ပတ်နေစေခြင်း
+        currentGoalAngle += goalRotationSpeed;
+        if (currentGoalAngle > Math.PI * 2) currentGoalAngle -= Math.PI * 2;
 
-        // ⏱️ ၁၅ စက္ကန့်အတွင်း မိနစ် ၉၀ အမြန်ဆုံးဖြတ်စနစ်
-        let now = Date.now();
-        if (now - lastClockTick >= (simulationDuration * 1000 / 5400)) {
-            virtualSecs++;
-            if (virtualSecs >= 60) {
-                virtualSecs = 0;
-                virtualMins++;
-            }
-            lastClockTick = now;
+        if (!isMatchRunning) return;
 
-            if (virtualMins >= 90) {
-                virtualMins = 90; virtualSecs = 0;
-                isLive = false;
-                stopRecordingAndDownload();
-            }
-            
-            document.getElementById('hudTime').innerText = `${virtualMins.toString().padStart(2, '0')}:${virtualSecs.toString().padStart(2, '0')}`;
+        // ⏱️ Clock Update
+        totalElapsedMs += delta;
+        const dynamicProgress = totalElapsedMs / (matchTotalSeconds * 1000);
+        const currentMatchMinutes = Math.min(90, Math.floor(dynamicProgress * 90));
+        const currentMatchSeconds = Math.floor((dynamicProgress * 90 * 60) % 60);
+
+        if (dynamicProgress >= 1.0) {
+            isMatchRunning = false;
+            minutesCounter = 90;
+            secondsCounter = 0;
+            document.getElementById('liveTimeLabel').innerText = "90:00";
+            finalizeSimulationVideo();
+            return;
         }
 
-        balls.forEach(ball => {
+        document.getElementById('liveTimeLabel').innerText = 
+            `${currentMatchMinutes.toString().padStart(2, '0')}:${currentMatchSeconds.toString().padStart(2, '0')}`;
+
+        // Particle System Update
+        particleTrails.forEach((p, idx) => {
+            p.x += p.vx; p.y += p.vy; p.life -= 0.04;
+            if (p.life <= 0) particleTrails.splice(idx, 1);
+        });
+
+        gameBalls.forEach(ball => {
             if (ball.isGoalOut) {
-                ball.x += ball.vx;
-                ball.y += ball.vy;
-                if (ball.x < -100 || ball.x > renderWidth + 100 || ball.y < -100 || ball.y > renderHeight + 100) {
-                    resetBall(ball);
+                ball.x += ball.vx; ball.y += ball.vy;
+                if (ball.x < -100 || ball.x > internalW + 100 || ball.y < -100 || ball.y > internalH + 100) {
+                    respawnBallObject(ball);
                 }
                 return;
             }
@@ -350,114 +338,129 @@
             ball.x += ball.vx;
             ball.y += ball.vy;
 
-            let dx = ball.x - center.x;
-            let dy = ball.y - center.y;
-            let distance = Math.sqrt(dx * dx + dy * dy);
+            let diffX = ball.x - centerPoint.x;
+            let diffY = ball.y - centerPoint.y;
+            let currentDist = Math.sqrt(diffX * diffX + diffY * diffY);
 
-            if (distance + ball.radius >= fieldRadius) {
-                let ballAngle = Math.atan2(dy, dx);
-                if (ballAngle < 0) ballAngle += Math.PI * 2;
+            if (currentDist + ball.radius >= ringRadius) {
+                let ballPositionAngle = Math.atan2(diffY, diffX);
+                if (ballPositionAngle < 0) ballPositionAngle += Math.PI * 2;
 
-                let angleDiff = Math.abs(ballAngle - goalAngle);
-                if (angleDiff > Math.PI) angleDiff = Math.PI * 2 - angleDiff;
+                let differenceAngle = Math.abs(ballPositionAngle - currentGoalAngle);
+                if (differenceAngle > Math.PI) differenceAngle = Math.PI * 2 - differenceAngle;
 
-                // ဂိုးဝင်ခြင်း ရှိ/မရှိ စစ်ဆေးခြင်း
-                if (angleDiff < goalWidthAngle / 2) {
+                if (differenceAngle < netWidthAngle / 2) {
+                    // Goal In!
                     ball.isGoalOut = true;
-                    playGoalSound();
-                    if (ball.id === 'team1') score.team1++;
-                    else score.team2++;
-                    document.getElementById('hudScore').innerText = `${score.team1} - ${score.team2}`;
+                    triggerGoalAudio();
+                    if (ball.id === 'left') scoreState.left++;
+                    else scoreState.right++;
+                    document.getElementById('liveScoreLabel').innerText = `${scoreState.left} - ${scoreState.right}`;
                 } else {
-                    // တိကျသော Elastic Collision + Chaos Factor
-                    let nx = dx / distance;
-                    let ny = dy / distance;
+                    // Bounce Off Circle
+                    let normX = diffX / currentDist;
+                    let normY = diffY / currentDist;
 
-                    ball.x = center.x + nx * (fieldRadius - ball.radius);
-                    ball.y = center.y + ny * (fieldRadius - ball.radius);
+                    ball.x = centerPoint.x + normX * (ringRadius - ball.radius);
+                    ball.y = centerPoint.y + normY * (ringRadius - ball.radius);
 
-                    let dotProduct = ball.vx * nx + ball.vy * ny;
-                    let deviation = (Math.random() - 0.5) * 0.5; // လမ်းကြောင်းလွှဲမှုစနစ်
+                    let product = ball.vx * normX + ball.vy * normY;
+                    ball.vx = ball.vx - 2 * product * normX;
+                    ball.vy = ball.vy - 2 * product * normY;
 
-                    ball.vx = (ball.vx - 2 * dotProduct * nx) + deviation;
-                    ball.vy = (ball.vy - 2 * dotProduct * ny) + deviation;
-
-                    // Speed Limits Control
-                    let currentSpeed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
-                    if (currentSpeed > 22) { ball.vx *= (18/currentSpeed); ball.vy *= (18/currentSpeed); }
-                    if (currentSpeed < 12) { ball.vx *= (14/currentSpeed); ball.vy *= (14/currentSpeed); }
-
-                    playTickSound();
+                    // ဗီဒီယိုအတိုင်း အမှုန်လေးများထွက်ခြင်း
+                    spawnParticles(ball.x, ball.y, ball.color);
+                    triggerTickAudio();
                 }
             }
         });
 
-        // ဘောလုံးအချင်းချင်း တိုက်မိခြင်း
-        for (let i = 0; i < balls.length; i++) {
-            for (let j = i + 1; j < balls.length; j++) {
-                let b1 = balls[i]; let b2 = balls[j];
+        // Ball vs Ball Physics
+        for (let i = 0; i < gameBalls.length; i++) {
+            for (let j = i + 1; j < gameBalls.length; j++) {
+                let b1 = gameBalls[i]; let b2 = gameBalls[j];
                 if (b1.isGoalOut || b2.isGoalOut) continue;
 
-                let dx = b2.x - b1.x; let dy = b2.y - b1.y;
-                let dist = Math.sqrt(dx * dx + dy * dy);
+                let dX = b2.x - b1.x; let dY = b2.y - b1.y;
+                let currentDistance = Math.sqrt(dX * dX + dY * dY);
 
-                if (dist < b1.radius + b2.radius) {
-                    let overlap = (b1.radius + b2.radius) - dist;
-                    let nx = dx / dist; let ny = dy / dist;
+                if (currentDistance < b1.radius + b2.radius) {
+                    let overlappingSpace = (b1.radius + b2.radius) - currentDistance;
+                    let normX = dX / currentDistance; let normY = dY / currentDistance;
 
-                    b1.x -= nx * overlap / 2; b1.y -= ny * overlap / 2;
-                    b2.x += nx * overlap / 2; b2.y += ny * overlap / 2;
+                    b1.x -= normX * overlappingSpace / 2; b1.y -= normY * overlappingSpace / 2;
+                    b2.x += normX * overlappingSpace / 2; b2.y += normY * overlappingSpace / 2;
 
-                    let kx = b1.vx - b2.vx; let ky = b1.vy - b2.vy;
-                    let p = nx * kx + ny * ky;
+                    let relativeKx = b1.vx - b2.vx; let relativeKy = b1.vy - b2.vy;
+                    let dotProd = normX * relativeKx + normY * relativeKy;
 
-                    b1.vx -= p * nx; b1.vy -= p * ny;
-                    b2.vx += p * nx; b2.vy += p * ny;
-                    playTickSound();
+                    b1.vx -= dotProd * normX; b1.vy -= dotProd * normY;
+                    b2.vx += dotProd * normX; b2.vy += dotProd * normY;
+                    triggerTickAudio();
                 }
             }
         }
     }
 
-    // 🎨 Sci-Fi High Tech Visual Rendering Module
-    function draw() {
-        ctx.clearRect(0, 0, renderWidth, renderHeight);
+    // Graphical Render Engine
+    function renderGraphics() {
+        ctx.clearRect(0, 0, internalW, internalH);
 
-        // Cyberpunk Glowing Ring Base
-        ctx.shadowBlur = 25;
-        ctx.shadowColor = '#00f2fe';
+        // Main Field Ring Line
         ctx.beginPath();
-        ctx.arc(center.x, center.y, fieldRadius, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(0, 242, 254, 0.8)';
-        ctx.lineWidth = 12;
-        ctx.stroke();
-        ctx.shadowBlur = 0; // Reset Shadow
-
-        // 🥅 မျက်စိပသာဒဖြစ်စေမည့် တောက်ပသော လည်ပတ်ဂိုးပေါက်ဆွဲခြင်း
-        ctx.save();
-        ctx.translate(center.x, center.y);
-        ctx.rotate(goalAngle);
-        
-        ctx.shadowBlur = 30;
-        ctx.shadowColor = '#ffffff';
+        ctx.arc(centerPoint.x, centerPoint.y, ringRadius, 0, Math.PI * 2);
         ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 10;
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
-        
-        ctx.beginPath();
-        ctx.arc(0, 0, fieldRadius + 50, -goalWidthAngle/2, goalWidthAngle/2);
-        let endX = Math.cos(goalWidthAngle/2) * fieldRadius;
-        let endY = Math.sin(goalWidthAngle/2) * fieldRadius;
-        ctx.lineTo(endX, endY);
-        ctx.arc(0, 0, fieldRadius, goalWidthAngle/2, -goalWidthAngle/2, true);
-        ctx.closePath();
-        ctx.fill();
+        ctx.lineWidth = 14;
         ctx.stroke();
-        ctx.restore();
-        ctx.shadowBlur = 0;
 
-        // ဘောလုံး/အလံပုံရိပ်များ ဖော်ထုတ်ခြင်း
-        balls.forEach(ball => {
+        // 🥅 Rotating Net Goal Design (ဗီဒီယိုထဲကအတိုင်း လှပသော လှေကားကွက် ပိုက်ကွန်ပုံစံ)
+        ctx.save();
+        ctx.translate(centerPoint.x, centerPoint.y);
+        ctx.rotate(currentGoalAngle);
+        
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 6;
+        ctx.beginPath();
+        
+        let initialAngle = -netWidthAngle / 2;
+        let finalAngle = netWidthAngle / 2;
+        
+        // ပိုက်ကွန် ဘောင်လိုင်းဆွဲခြင်း
+        ctx.arc(0, 0, ringRadius + 45, initialAngle, finalAngle);
+        let cornerX = Math.cos(finalAngle) * ringRadius;
+        let cornerY = Math.sin(finalAngle) * ringRadius;
+        ctx.lineTo(cornerX, cornerY);
+        ctx.arc(0, 0, ringRadius, finalAngle, initialAngle, true);
+        ctx.closePath();
+        ctx.stroke();
+
+        // ပိုက်ကွန်အတွင်းက အကွက်လိုင်းလေးများ ဆွဲခြင်း
+        ctx.lineWidth = 3;
+        for (let angleStep = initialAngle; angleStep <= finalAngle; angleStep += 0.06) {
+            ctx.beginPath();
+            ctx.moveTo(Math.cos(angleStep) * ringRadius, Math.sin(angleStep) * ringRadius);
+            ctx.lineTo(Math.cos(angleStep) * (ringRadius + 45), Math.sin(angleStep) * (ringRadius + 45));
+            ctx.stroke();
+        }
+        for (let hRadius = ringRadius + 15; hRadius < ringRadius + 45; hRadius += 15) {
+            ctx.beginPath();
+            ctx.arc(0, 0, hRadius, initialAngle, finalAngle);
+            ctx.stroke();
+        }
+        ctx.restore();
+
+        // Draw Particles
+        particleTrails.forEach(p => {
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = p.life;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = 1.0;
+        });
+
+        // Draw Team Flag Balls
+        gameBalls.forEach(ball => {
             ctx.save();
             ctx.beginPath();
             ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
@@ -479,90 +482,99 @@
         });
     }
 
-    function mainEngineLoop() {
-        update();
-        draw();
-        requestAnimationFrame(mainEngineLoop);
+    // Animation Engine Initialization
+    function executeMainLoop(timestamp) {
+        if (!previousTimeFrame) previousTimeFrame = timestamp;
+        let delta = timestamp - previousTimeFrame;
+        if (delta > 100) delta = 16; 
+        previousTimeFrame = timestamp;
+
+        updatePhysicsEngine(delta);
+        renderGraphics();
+        requestAnimationFrame(executeMainLoop);
     }
 
-    // 🎥 1080p Video Capturer Engine (ဒေါင်းလုဒ်လုပ်ရန် စနစ်)
-    function startRecording() {
-        recordedChunks = [];
-        const stream = canvas.captureStream(60); // 60 FPS HD Quality
-        mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9', videoBitsPerSecond: 8000000 }); // High Bitrate
+    // Video Recording Capture Module
+    function initiateVideoCapturer() {
+        chunksOfVideo = [];
+        const captureStream = canvas.captureStream(60); // 60 FPS HD Capture
+        videoMediaRecorder = new MediaRecorder(captureStream, { mimeType: 'video/webm;codecs=vp9', videoBitsPerSecond: 9000000 });
         
-        mediaRecorder.ondataavailable = (e) => {
-            if (e.data.size > 0) recordedChunks.push(e.data);
+        videoMediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) chunksOfVideo.push(event.data);
         };
 
-        mediaRecorder.onstop = () => {
-            const blob = new Blob(recordedChunks, { type: 'video/webm' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Match_Prediction_${balls[0].name}_vs_${balls[1].name}.webm`;
-            a.click();
+        videoMediaRecorder.onstop = () => {
+            const finalBlob = new Blob(chunksOfVideo, { type: 'video/webm' });
+            const temporaryUrl = URL.createObjectURL(finalBlob);
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.href = temporaryUrl;
+            downloadAnchor.download = `Prediction_${gameBalls[0].name}_vs_${gameBalls[1].name}.webm`;
+            downloadAnchor.click();
             
-            // UI Finish State
-            let winner = "DRAW CONCLUDED";
-            if (score.team1 > score.team2) winner = `${balls[0].name} PREDICTED WINNER`;
-            else if (score.team2 > score.team1) winner = `${balls[1].name} PREDICTED WINNER`;
-            document.getElementById('cardMain').innerText = winner;
-            document.getElementById('triggerBtn').innerText = "PREDICTION FINISHED";
-            document.getElementById('triggerBtn').style.background = "#222";
+            let finalWinner = "DRAW MATCH";
+            if (scoreState.left > scoreState.right) finalWinner = `${gameBalls[0].name} WINS`;
+            else if (scoreState.right > scoreState.left) finalWinner = `${gameBalls[1].name} WINS`;
+            
+            document.getElementById('statusHeaderText').innerText = finalWinner;
+            document.getElementById('startRecordingActionBtn').innerText = "PREDICTION COMPLETE";
+            document.getElementById('startRecordingActionBtn').style.background = "#333";
+            document.getElementById('startRecordingActionBtn').style.color = "#777";
         };
 
-        mediaRecorder.start();
+        videoMediaRecorder.start();
     }
 
-    function stopRecordingAndDownload() {
-        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-            mediaRecorder.stop();
+    function finalizeSimulationVideo() {
+        if (videoMediaRecorder && videoMediaRecorder.state !== 'inactive') {
+            videoMediaRecorder.stop();
         }
     }
 
-    // 🕹️ UI Logic Synchronization
-    document.getElementById('name1').addEventListener('input', (e) => { balls[0].name = e.target.value.toUpperCase() || 'TEAM A'; });
-    document.getElementById('name2').addEventListener('input', (e) => { balls[1].name = e.target.value.toUpperCase() || 'TEAM B'; });
+    // Sync Text UI Input
+    document.getElementById('nameInputL').addEventListener('input', (e) => { gameBalls[0].name = e.target.value || 'Team 1'; });
+    document.getElementById('nameInputR').addEventListener('input', (e) => { gameBalls[1].name = e.target.value || 'Team 2'; });
 
-    function syncLogoUploader(inputId, ballIdx, flagId) {
-        document.getElementById(inputId).addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    const img = new Image();
-                    img.src = evt.target.result;
-                    img.onload = () => { 
-                        balls[ballIdx].img = img; 
-                        document.getElementById(flagId).src = evt.target.result;
+    // Image Upload Pipeline Connection
+    function establishImageUploader(inputId, index, targetFlagId) {
+        document.getElementById(inputId).addEventListener('change', function(event) {
+            const activeFile = event.target.files[0];
+            if (activeFile) {
+                const fileReader = new FileReader();
+                fileReader.onload = function(evt) {
+                    const imgObj = new Image();
+                    imgObj.src = evt.target.result;
+                    imgObj.onload = () => { 
+                        gameBalls[index].img = imgObj; 
+                        document.getElementById(targetFlagId).src = evt.target.result;
                     };
                 };
-                reader.readAsDataURL(file);
+                fileReader.readAsDataURL(activeFile);
             }
         });
     }
-    syncLogoUploader('file1', 0, 'flagL');
-    syncLogoUploader('file2', 1, 'flagR');
+    establishImageUploader('fileInputL', 0, 'flagDisplayL');
+    establishImageUploader('fileInputR', 1, 'flagDisplayR');
 
-    // Button Click Trigger Action
-    const triggerBtn = document.getElementById('triggerBtn');
-    triggerBtn.addEventListener('click', () => {
-        if (virtualMins >= 90 || isLive) return;
+    // Trigger Simulation Action
+    const recordActionBtn = document.getElementById('startRecordingActionBtn');
+    recordActionBtn.addEventListener('click', () => {
+        if (minutesCounter >= 90 || isMatchRunning) return;
         
-        if (audioCtx.state === 'suspended') audioCtx.resume();
+        if (soundContext.state === 'suspended') soundContext.resume();
         
-        isLive = true;
-        lastClockTick = Date.now();
-        triggerBtn.innerText = "RECORDING LIVE SIMULATION...";
-        triggerBtn.style.background = "linear-gradient(45deg, #ff007f, #ff0055)";
-        triggerBtn.style.color = "#fff";
+        isMatchRunning = true;
+        totalElapsedMs = 0;
+        previousTimeFrame = performance.now();
+        recordActionBtn.innerText = "Simulating & Recording HD...";
+        recordActionBtn.style.background = "#cc0000";
+        recordActionBtn.style.color = "#fff";
         
-        startRecording(); // ဗီဒီယိုဖမ်းယူခြင်း စတင်မည်
+        initiateVideoCapturer();
     });
 
-    // Start Engine
-    mainEngineLoop();
+    // Start Engine On Load
+    requestAnimationFrame(executeMainLoop);
 </script>
 
 </body>
