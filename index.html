@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Football Circle Goal Simulation with Uploads</title>
+    <title>Football Fast Match Simulator</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,7 @@
             font-family: Arial, sans-serif;
             overflow: hidden;
         }
-        /* 9:16 Vertical Container */
+        /* 9:16 Vertical Screen TikTok/Reels Layout */
         #canvasContainer {
             position: relative;
             width: 100%;
@@ -31,39 +31,88 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
+            padding-bottom: 20px;
         }
         
-        /* Game Area Canvas */
+        /* Top Scoreboard Container */
+        .top-scoreboard {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 25px;
+            z-index: 5;
+        }
+        .score-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .score-flag {
+            width: 40px;
+            height: 26px;
+            background-color: #333;
+            border: 1px solid #fff;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+        .score-text {
+            color: #ffffff;
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+        }
+        .timer-text {
+            color: #ffffff;
+            font-size: 26px;
+            margin-top: 5px;
+            font-weight: 500;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+        }
+
+        /* Canvas Area */
         canvas {
             width: 100%;
-            flex: 1;
+            height: 420px;
             display: block;
         }
 
-        /* 🛠️ အောက်ခြေ Control Panel (ဗီဒီယိုထဲက ပုံစံအတိုင်း ဖန်တီးထားသည်) */
-        .control-panel {
+        /* 🛠️ Bottom Control Card (ဗီဒီယိုထဲက ပုံစံအတိုင်း) */
+        .bottom-card {
             background-color: #000000;
+            width: 90%;
+            margin: 0 auto;
+            border-radius: 18px;
             padding: 15px;
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
             z-index: 10;
         }
-
-        .teams-row {
+        .card-title {
+            text-align: center;
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 4px;
+        }
+        .card-main-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+        .teams-setup {
             display: flex;
             justify-content: space-between;
-            align-items: center;
             gap: 10px;
+            margin-bottom: 12px;
         }
-
         .team-box {
             flex: 1;
             background: #111;
-            border: 1px solid #333;
+            border: 1px solid #222;
             border-radius: 10px;
             padding: 8px;
             display: flex;
@@ -71,87 +120,92 @@
             align-items: center;
             gap: 6px;
         }
-
         .team-box input[type="text"] {
             width: 100%;
             background: #222;
             border: 1px solid #444;
             color: #fff;
-            padding: 4px 8px;
-            border-radius: 5px;
+            padding: 5px;
+            border-radius: 6px;
             text-align: center;
             font-size: 13px;
+            font-weight: bold;
         }
-
         .upload-btn {
-            background: #0b7300;
-            color: white;
+            background: #222;
+            color: #aaa;
             font-size: 11px;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 5px 8px;
+            border-radius: 6px;
             cursor: pointer;
             text-align: center;
             width: 100%;
+            border: 1px dashed #555;
         }
-
+        .upload-btn:hover {
+            background: #333;
+            color: #fff;
+        }
         .upload-btn input[type="file"] {
             display: none;
         }
-
-        .center-info {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-width: 80px;
+        .start-btn-container {
+            width: 100%;
         }
-
-        .status-txt {
-            font-size: 12px;
-            color: #888;
-            margin-bottom: 4px;
-        }
-
-        .action-btn {
+        .start-btn {
+            width: 100%;
             background: #ffffff;
             color: #000000;
             border: none;
-            padding: 6px 12px;
-            border-radius: 20px;
+            padding: 10px;
+            border-radius: 25px;
             font-weight: bold;
+            font-size: 14px;
             cursor: pointer;
-            font-size: 12px;
-            width: 100%;
+            transition: 0.2s;
+        }
+        .start-btn:hover {
+            background: #e0e0e0;
         }
     </style>
 </head>
 <body>
 
 <div id="canvasContainer">
+    <div class="top-scoreboard">
+        <div class="score-row">
+            <img id="flagLeft" class="score-flag" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background-color: #4d94ff;">
+            <div class="score-text" id="scoreDisplay">0 - 0</div>
+            <img id="flagRight" class="score-flag" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background-color: #ff4d4d;">
+        </div>
+        <div class="timer-text" id="timerDisplay">00:00</div>
+    </div>
+
     <canvas id="gameCanvas"></canvas>
 
-    <div class="control-panel">
-        <div class="teams-row">
+    <div class="bottom-card">
+        <div class="card-title" id="cardSub">6/10</div>
+        <div class="card-main-title" id="cardMain">Tomorrow</div>
+        
+        <div class="teams-setup">
             <div class="team-box">
-                <input type="text" id="team1Name" value="Venezuela">
+                <input type="text" id="t1NameInput" value="Venezuela">
                 <label class="upload-btn">
-                    📷 ပုံတင်ရန်
-                    <input type="file" id="team1Img" accept="image/*">
+                    📷 Upload Image
+                    <input type="file" id="t1File" accept="image/*">
                 </label>
             </div>
-
-            <div class="center-info">
-                <span class="status-txt" id="matchDay">Tomorrow</span>
-                <button class="action-btn" id="startBtn">START</button>
-            </div>
-
             <div class="team-box">
-                <input type="text" id="team2Name" value="Iraq">
+                <input type="text" id="t2NameInput" value="Iraq">
                 <label class="upload-btn">
-                    📷 ပုံတင်ရန်
-                    <input type="file" id="team2Img" accept="image/*">
+                    📷 Upload Image
+                    <input type="file" id="t2File" accept="image/*">
                 </label>
             </div>
+        </div>
+
+        <div class="start-btn-container">
+            <button class="start-btn" id="ctrlBtn">START SIMULATION</button>
         </div>
     </div>
 </div>
@@ -160,29 +214,30 @@
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
 
-    // Canvas ပတ်ဝန်းကျင် အရွယ်အစား သတ်မှတ်ချက်
     const WIDTH = 450;
-    const HEIGHT = 650; // Control panel စာမျက်နှာအတွက် နေရာချန်ပြီး ကျုံ့ထားသည်
+    const HEIGHT = 420; 
     canvas.width = WIDTH;
     canvas.height = HEIGHT;
 
-    const center = { x: WIDTH / 2, y: HEIGHT / 2 + 20 };
-    const fieldRadius = 135; 
+    const center = { x: WIDTH / 2, y: HEIGHT / 2 };
+    const fieldRadius = 145; 
 
+    // Simulation Configs
     let score = { team1: 0, team2: 0 };
-    let startTime = Date.now();
-    let isRunning = false; 
+    let isSimulating = false;
+    
+    // ⭐ အချိန်စနစ်မြှင့်တင်ခြင်း (မိနစ် ၉၀ ကို ၇၅ စက္ကန့်အတွင်း အပြီးမောင်းမည်)
+    let virtualMinutes = 0;
+    let virtualSeconds = 0;
+    let lastTimeUpdate = 0;
+    const matchDurationInSeconds = 75; // စုစုပေါင်း ၇၅ စက္ကန့် ကြာမြင့်မည်
 
-    let goalAngle = -Math.PI / 2; 
-    const goalWidthAngle = 0.5; 
-
-    // Default အရောင်အဝိုင်းများ (ပုံမတင်ခင် ပြသရန်)
-    let img1Data = null;
-    let img2Data = null;
+    let goalAngle = -Math.PI / 3; 
+    const goalWidthAngle = 0.45; 
 
     const balls = [
-        { id: 'team1', name: 'Venezuela', x: center.x - 40, y: center.y + 30, vx: -4, vy: 3, radius: 20, img: null, isGoalOut: false, color: '#4d94ff' },
-        { id: 'team2', name: 'Iraq', x: center.x + 40, y: center.y - 30, vx: 3.5, vy: -4, radius: 20, img: null, isGoalOut: false, color: '#ff4d4d' }
+        { id: 'team1', name: 'Venezuela', x: center.x - 35, y: center.y + 20, vx: -6, vy: 5, radius: 21, img: null, isGoalOut: false, color: '#4d94ff' },
+        { id: 'team2', name: 'Iraq', x: center.x + 35, y: center.y - 20, vx: 5.5, vy: -6, radius: 21, img: null, isGoalOut: false, color: '#ff4d4d' }
     ];
 
     // 🔊 Web Audio API
@@ -193,18 +248,18 @@
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+        osc.frequency.setValueAtTime(550, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.04);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
         osc.start();
-        osc.stop(audioCtx.currentTime + 0.05);
+        osc.stop(audioCtx.currentTime + 0.04);
     }
 
     function playGoalSound() {
         if (audioCtx.state === 'suspended') audioCtx.resume();
-        const bufferSize = audioCtx.sampleRate * 1.5;
+        const bufferSize = audioCtx.sampleRate * 1.2;
         const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
         const data = buffer.getChannelData(0);
         for (let i = 0; i < bufferSize; i++) {
@@ -214,10 +269,10 @@
         noise.buffer = buffer;
         const filter = audioCtx.createBiquadFilter();
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(400, audioCtx.currentTime);
+        filter.frequency.setValueAtTime(450, audioCtx.currentTime);
         const gain = audioCtx.createGain();
-        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
+        gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.2);
         noise.connect(filter);
         filter.connect(gain);
         gain.connect(audioCtx.destination);
@@ -225,22 +280,49 @@
     }
 
     function resetBall(ball) {
-        ball.x = center.x + (Math.random() * 40 - 20);
-        ball.y = center.y + (Math.random() * 40 - 20);
-        ball.vx = (Math.random() > 0.5 ? 1 : -1) * (3.5 + Math.random() * 1.5);
-        ball.vy = (Math.random() > 0.5 ? 1 : -1) * (3.5 + Math.random() * 1.5);
+        ball.x = center.x + (Math.random() * 30 - 15);
+        ball.y = center.y + (Math.random() * 30 - 15);
+        // အရှိန်မြှင့်ထားသော Velocity
+        ball.vx = (Math.random() > 0.5 ? 1 : -1) * (5 + Math.random() * 3);
+        ball.vy = (Math.random() > 0.5 ? 1 : -1) * (5 + Math.random() * 3);
         ball.isGoalOut = false;
     }
 
-    // ⚙️ Logic Update
+    // ⚙️ Logic Update Loop
     function update() {
-        if (!isRunning) return;
+        if (!isSimulating) return;
+
+        // ⏱️ ၉၀ မိနစ် အမြန်ပြေးစနစ် တွက်ချက်ခြင်း
+        let now = Date.now();
+        if (now - lastTimeUpdate >= (matchDurationInSeconds * 1000 / 5400)) { 
+            virtualSeconds++;
+            if (virtualSeconds >= 60) {
+                virtualSeconds = 0;
+                virtualMinutes++;
+            }
+            lastTimeUpdate = now;
+
+            // မိနစ် ၉၀ ပြည့်လျှင် ရပ်တန့်မည်
+            if (virtualMinutes >= 90) {
+                virtualMinutes = 90;
+                virtualSeconds = 0;
+                isSimulating = false;
+                document.getElementById('ctrlBtn').innerText = "MATCH FINISHED";
+                document.getElementById('ctrlBtn').style.background = "#555";
+                document.getElementById('ctrlBtn').style.color = "#fff";
+            }
+            
+            // DOM သို့ အချိန်လှမ်းပြောင်းခြင်း
+            let minsStr = virtualMinutes.toString().padStart(2, '0');
+            let secsStr = virtualSeconds.toString().padStart(2, '0');
+            document.getElementById('timerDisplay').innerText = `${minsStr}:${secsStr}`;
+        }
 
         balls.forEach(ball => {
             if (ball.isGoalOut) {
                 ball.x += ball.vx;
                 ball.y += ball.vy;
-                if (ball.x < -50 || ball.x > WIDTH + 50 || ball.y < -50 || ball.y > HEIGHT + 50) {
+                if (ball.x < -40 || ball.x > WIDTH + 40 || ball.y < -40 || ball.y > HEIGHT + 40) {
                     resetBall(ball);
                 }
                 return;
@@ -259,11 +341,15 @@
                 if (angleDiff > Math.PI) angleDiff = Math.PI * 2 - angleDiff;
 
                 if (angleDiff < goalWidthAngle / 2) {
+                    // ⚽ ဂိုးဝင်ပြီ!
                     ball.isGoalOut = true;
                     playGoalSound();
                     if (ball.id === 'team1') score.team1++;
                     else score.team2++;
+                    
+                    document.getElementById('scoreDisplay').innerText = `${score.team1} - ${score.team2}`;
                 } else {
+                    // ဘောင်ကန်ထွက်ခြင်း
                     let nx = dx / distance;
                     let ny = dy / distance;
 
@@ -274,7 +360,7 @@
                     ball.vx = ball.vx - 2 * dotProduct * nx;
                     ball.vy = ball.vy - 2 * dotProduct * ny;
 
-                    goalAngle = ballAngle;
+                    goalAngle = ballAngle; // ဂိုးပေါက် ချက်ချင်းရွှေ့ခြင်း
                     playTickSound();
                 }
             }
@@ -308,29 +394,9 @@
         }
     }
 
-    // 🎨 UI နှင့် ဂရပ်ဖစ်ဆွဲခြင်း
+    // 🎨 Graphics Render Loop
     function draw() {
         ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        
-        // ေနာင်ခံမြက်ခင်း
-        ctx.fillStyle = '#0b7300';
-        ctx.fillRect(0, 0, WIDTH, HEIGHT);
-
-        // ရမှတ်ဘုတ်နှင့် Timer
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 26px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText(`${balls[0].name}  ${score.team1} - ${score.team2}  ${balls[1].name}`, WIDTH / 2, 60);
-
-        let timeText = "00:00";
-        if (isRunning) {
-            let diff = Date.now() - startTime;
-            let mins = Math.floor(diff / 60000).toString().padStart(2, '0');
-            let secs = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
-            timeText = `${mins}:${secs}`;
-        }
-        ctx.font = '20px sans-serif';
-        ctx.fillText(timeText, WIDTH / 2, 95);
 
         // အလယ်အဝိုင်းကွင်း
         ctx.beginPath();
@@ -339,7 +405,7 @@
         ctx.lineWidth = 5;
         ctx.stroke();
 
-        // ဂိုးပေါက်
+        // လည်ပတ်/ရွေ့လျားသော ဂိုးပေါက်
         ctx.save();
         ctx.translate(center.x, center.y);
         ctx.rotate(goalAngle);
@@ -347,7 +413,7 @@
         ctx.lineWidth = 4;
         ctx.fillStyle = 'rgba(255,255,255,0.2)';
         ctx.beginPath();
-        ctx.arc(0, 0, fieldRadius + 25, -goalWidthAngle/2, goalWidthAngle/2);
+        ctx.arc(0, 0, fieldRadius + 22, -goalWidthAngle/2, goalWidthAngle/2);
         let endX = Math.cos(goalWidthAngle/2) * fieldRadius;
         let endY = Math.sin(goalWidthAngle/2) * fieldRadius;
         ctx.lineTo(endX, endY);
@@ -357,7 +423,7 @@
         ctx.stroke();
         ctx.restore();
 
-        // ဘောလုံးများဆွဲခြင်း
+        // ဘောလုံး/အလံများ ဆွဲခြင်း
         balls.forEach(ball => {
             ctx.save();
             ctx.beginPath();
@@ -380,71 +446,69 @@
         });
     }
 
-    function loop() {
+    function mainLoop() {
         update();
         draw();
-        requestAnimationFrame(loop);
+        requestAnimationFrame(mainLoop);
     }
 
     // -------------------------------------------------------------
-    // 🕹️ UI Event Listeners (အသုံးပြုသူ စိတ်ကြိုက်ပြောင်းလဲနိုင်သော အပိုင်း)
+    // 🕹️ Interactive UI Logic
     // -------------------------------------------------------------
     
-    // ၁။ နာမည်များ ပြောင်းလဲခြင်း စနစ်
-    document.getElementById('team1Name').addEventListener('input', (e) => {
-        balls[0].name = e.target.value || 'Team A';
+    // အမည်များ လိုက်ပြောင်းရန်
+    document.getElementById('t1NameInput').addEventListener('input', (e) => {
+        balls[0].name = e.target.value || 'Team 1';
     });
-    document.getElementById('team2Name').addEventListener('input', (e) => {
-        balls[1].name = e.target.value || 'Team B';
-    });
-
-    // ၂။ ပုံများကို Upload လုပ်ပြီး ဘောလုံးထဲ ထည့်သွင်းခြင်း စနစ်
-    document.getElementById('team1Img').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = () => { balls[0].img = img; };
-            };
-            reader.readAsDataURL(file);
-        }
+    document.getElementById('t2NameInput').addEventListener('input', (e) => {
+        balls[1].name = e.target.value || 'Team 2';
     });
 
-    document.getElementById('team2Img').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = () => { balls[1].img = img; };
-            };
-            reader.readAsDataURL(file);
-        }
-    });
+    // ပုံတင်စနစ် (Upload Image to Ball & Scoreboard Flag)
+    function handleImageUpload(fileInputId, ballIndex, flagImgId) {
+        document.getElementById(fileInputId).addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => { 
+                        balls[ballIndex].img = img; 
+                        document.getElementById(flagImgId).src = event.target.result;
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+    handleImageUpload('t1File', 0, 'flagLeft');
+    handleImageUpload('t2File', 1, 'flagRight');
 
-    // ၃။ Start / Pause ခလုတ် စနစ်
-    const startBtn = document.getElementById('startBtn');
-    startBtn.addEventListener('click', () => {
+    // START SIMULATION ကိုနှိပ်မှ စတင်မည့်စနစ်
+    const ctrlBtn = document.getElementById('ctrlBtn');
+    ctrlBtn.addEventListener('click', () => {
+        if (virtualMinutes >= 90) return; // ပွဲပြီးရင် ထပ်နှိပ်မရပါ
+        
         if (audioCtx.state === 'suspended') audioCtx.resume();
         
-        isRunning = !isRunning;
-        if (isRunning) {
-            startBtn.innerText = "PAUSE";
-            startBtn.style.background = "#ff4d4d";
-            startBtn.style.color = "#fff";
-            startTime = Date.now(); // Timer ကို ပြန်စမည်
+        isSimulating = !isSimulating;
+        if (isSimulating) {
+            ctrlBtn.innerText = "PAUSE SIMULATION";
+            ctrlBtn.style.background = "#ff4d4d";
+            ctrlBtn.style.color = "#fff";
+            lastTimeUpdate = Date.now();
         } else {
-            startBtn.innerText = "START";
-            startBtn.style.background = "#ffffff";
-            startBtn.style.color = "#000000";
+            ctrlBtn.innerText = "START SIMULATION";
+            ctrlBtn.style.background = "#ffffff";
+            ctrlBtn.style.color = "#000000";
         }
     });
 
-    loop();
+    // Engine စတင်ပတ်မောင်းနှင်ခြင်း
+    mainLoop();
 </script>
 
 </body>
 </html>
+
