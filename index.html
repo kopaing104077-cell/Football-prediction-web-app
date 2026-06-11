@@ -3,1564 +3,301 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Football Prediction Video Generator Pro</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    
+    <title>Football Simulation Web App</title>
     <style>
-        :root {
-            --bg-base: #060814;
-            --bg-panel: rgba(15, 22, 42, 0.75);
-            --bg-surface: rgba(30, 41, 59, 0.5);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --border-glow: rgba(0, 242, 254, 0.3);
-            --accent: #00f2fe;
-            --accent-alt: #4facfe;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --gold: #f59e0b;
-            --neon-red: #ff0055;
-            
-            /* Theme Templates Variables */
-            --ucl-grad: linear-gradient(135deg, #020024 0%, #090979 35%, #00d4ff 100%);
-            --fvwc-grad: linear-gradient(135deg, #8a1538 0%, #a81c47 50%, #ee9626 100%);
-            --epl-grad: linear-gradient(135deg, #38003c 0%, #ec015a 100%);
-            --asn-grad: linear-gradient(135deg, #0f172a 0%, #00f2fe 100%);
-            --cyber-grad: linear-gradient(135deg, #050515 0%, #ff0055 50%, #00f2fe 100%);
-            --fire-grad: linear-gradient(135deg, #110000 0%, #ff4500 50%, #ffcc00 100%);
-            --dstv-grad: linear-gradient(135deg, #111111 0%, #333333 50%, #d4af37 100%);
-        }
-
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            user-select: none;
+            box-sizing: border-box;
         }
-
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-base);
-            color: var(--text-main);
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
-        }
-
-        h1, h2, h3, h4, .broadcast-font {
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .digital-font {
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        /* App Layout */
-        .app-container {
-            display: grid;
-            grid-template-columns: 340px 1fr 340px;
-            height: 100vh;
-            width: 100vw;
-            position: relative;
-        }
-
-        /* Sidebar Styling */
-        .sidebar {
-            background: var(--bg-panel);
-            backdrop-filter: blur(16px);
-            border-right: 1px solid var(--border-color);
+            background-color: #1a1a1a;
             display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            z-index: 10;
-        }
-
-        .sidebar.right {
-            border-right: none;
-            border-left: 1px solid var(--border-color);
-        }
-
-        .sidebar-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--border-color);
-            background: rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .sidebar-header i {
-            color: var(--accent);
-            font-size: 1.5rem;
-            text-shadow: 0 0 10px var(--accent);
-        }
-
-        .sidebar-header h2 {
-            font-size: 1.2rem;
-            background: linear-gradient(to right, #fff, var(--text-muted));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .section-box {
-            padding: 20px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .section-title {
-            font-size: 0.9rem;
-            color: var(--accent);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        /* Form Controls */
-        .input-group {
-            margin-bottom: 15px;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-            text-transform: uppercase;
-        }
-
-        .input-control {
-            width: 100%;
-            background: var(--bg-surface);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 10px 12px;
-            color: #fff;
-            font-family: inherit;
-            transition: all 0.3s;
-        }
-
-        .input-control:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 8px var(--border-glow);
-        }
-
-        /* Drag & Drop */
-        .upload-zone {
-            border: 2px dashed var(--border-color);
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: rgba(0,0,0,0.1);
-        }
-
-        .upload-zone:hover {
-            border-color: var(--accent);
-            background: rgba(0, 242, 254, 0.05);
-        }
-
-        .upload-zone i {
-            font-size: 1.5rem;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-        }
-
-        .upload-zone p {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        /* Grid configurations */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        /* Action Buttons */
-        .btn {
-            width: 100%;
-            background: linear-gradient(135deg, var(--accent-alt), var(--accent));
-            border: none;
-            border-radius: 6px;
-            color: #000;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
-            padding: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5);
-        }
-
-        .btn-secondary {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            box-shadow: none;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.1);
-            box-shadow: none;
-        }
-
-        /* Toggles */
-        .toggle-container {
-            display: flex;
             align-items: center;
-            justify-content: space-between;
-            background: var(--bg-surface);
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 44px;
-            height: 22px;
-        }
-
-        .switch input { opacity: 0; width: 0; height: 0; }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #334155;
-            transition: .4s;
-            border-radius: 22px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: var(--accent);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(22px);
-        }
-
-        /* Center Canvas Workspace */
-        .workspace {
-            display: flex;
-            flex-direction: column;
-            background: #02040a;
-            position: relative;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        /* Shorts Container Spec */
-        .preview-window {
-            width: 432px; /* scaled 1080x1920 */
-            height: 768px;
-            background: #000;
-            position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 0 1px var(--border-color);
-            border-radius: 16px;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
-            aspect-ratio: 9/16;
         }
-
-        /* Live Video Engine Render Source */
-        #renderCanvas {
+        /* 9:16 Vertical Screen TikTok/Reels Style */
+        #canvasContainer {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            height: 100vh;
+            max-height: 800px;
+            background-color: #0b7300; /* Football pitch green */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        canvas {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-        }
-
-        /* Controls under Preview */
-        .timeline-wrapper {
-            width: 100%;
-            max-width: 600px;
-            background: var(--bg-panel);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 15px;
-            margin-top: 20px;
-            backdrop-filter: blur(10px);
-        }
-
-        .playback-controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 12px;
-        }
-
-        .control-btn {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .control-btn:hover, .control-btn.active {
-            color: var(--accent);
-        }
-
-        .scrubber-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .time-display {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            min-width: 35px;
-        }
-
-        .scrubber {
-            flex: 1;
-            -webkit-appearance: none;
-            appearance: none;
-            height: 6px;
-            border-radius: 3px;
-            background: #1e293b;
-            outline: none;
-        }
-
-        .scrubber::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: var(--accent);
-            cursor: pointer;
-            box-shadow: 0 0 8px var(--accent);
-        }
-
-        /* Blocks Timeline VisualIZER */
-        .scene-blocks {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 4px;
-            margin-top: 10px;
-        }
-
-        .scene-block {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border-color);
-            padding: 6px 2px;
-            border-radius: 4px;
-            font-size: 0.65rem;
-            text-align: center;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: all 0.2s;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .scene-block.active {
-            background: rgba(0, 242, 254, 0.15);
-            border-color: var(--accent);
-            color: #fff;
-        }
-
-        /* Selection Matrix grids */
-        .matrix-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-        }
-
-        .matrix-item {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 10px;
-            font-size: 0.75rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .matrix-item:hover, .matrix-item.active {
-            border-color: var(--accent);
-            background: rgba(0, 242, 254, 0.05);
-            color: #fff;
-        }
-
-        /* Sound Sliders */
-        .audio-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 0.8rem;
-        }
-        .audio-row label { color: var(--text-muted); }
-        .audio-row input { width: 120px; }
-
-        /* Hidden standard file input */
-        .hidden-file { display: none; }
-
-        /* Custom Status Toasts */
-        .toast-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-        .toast {
-            background: rgba(15, 22, 42, 0.9);
-            border: 1px solid var(--accent);
-            padding: 12px 24px;
-            border-radius: 8px;
-            color: #fff;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            margin-top: 10px;
-            animation: slideIn 0.3s ease-out forwards;
-        }
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            display: block;
         }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
+<div id="canvasContainer">
+    <canvas id="gameCanvas"></canvas>
+</div>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // -------------------------------------------------------------
+    // ⭐ စိတ်ကြိုက်ပြင်ဆင်နိုင်သော အပိုင်း (IMAGE URL များ ထည့်ရန်)
+    // -------------------------------------------------------------
+    // မိမိ Upload လုပ်မည့် ပုံလမ်းကြောင်း (သို့) အမည်များကို ဒီနေရာမှာ လဲပေးပါ
+    const IRAQ_IMAGE_URL = 'https://picsum.photos/id/237/100/100';      // ဥပမာ ပုံ
+    const VENEZUELA_IMAGE_URL = 'https://picsum.photos/id/1025/100/100'; // ဥပမာ ပုံ
+    // -------------------------------------------------------------
+
+    // Canvas Size ကို သတ်မှတ်ခြင်း (Internal Resolution)
+    const WIDTH = 450;
+    const HEIGHT = 800;
+    canvas.width = WIDTH;
+    canvas.height = HEIGHT;
+
+    // ဂိမ်းဆိုင်ရာ ကိန်းရှင်များ
+    let score = { iraq: 0, venezuela: 0 };
+    const center = { x: WIDTH / 2, y: HEIGHT / 2 - 20 };
+    const fieldRadius = 140; // အလယ်အဝိုင်းကွင်း၏ အချင်းဝက်
+
+    // ဂိုးပေါက်ဆိုင်ရာ Variables
+    let goalAngle = 0; // ဂိုးပေါက်စတင်မည့် ထောင့်
+    const goalSpeed = 0.012; // ဂိုးပေါက် လည်ပတ်မည့် အရှိန်
+    const goalWidthAngle = 0.4; // ဂိုးပေါက်အကျယ် (Radian ဖြင့်)
+
+    // ပုံများကို Load လုပ်ခြင်း
+    const imgIraq = new Image();
+    imgIraq.src = IRAQ_IMAGE_URL;
+    const imgVenezuela = new Image();
+    imgVenezuela.src = VENEZUELA_IMAGE_URL;
+
+    // ဘောလုံး (သို့) နိုင်ငံအလံများ၏ သတ်မှတ်ချက်
+    const balls = [
+        {
+            name: 'Iraq',
+            x: center.x - 40,
+            y: center.y - 40,
+            vx: 3,
+            vy: 4,
+            radius: 22,
+            img: imgIraq,
+            isGoalOut: false
+        },
+        {
+            name: 'Venezuela',
+            x: center.x + 40,
+            y: center.y + 40,
+            vx: -4,
+            vy: 3,
+            radius: 22,
+            img: imgVenezuela,
+            isGoalOut: false
+        }
+    ];
+
+    // ဘောလုံးကို ကွင်းလယ်သို့ ပြန်ပို့ရန် (ဂိုးဝင်ပြီးနောက်)
+    function resetBall(ball) {
+        ball.x = center.x + (Math.random() * 40 - 20);
+        ball.y = center.y + (Math.random() * 40 - 20);
+        // အရှိန်အသစ် ပြန်ပေးခြင်း
+        ball.vx = (Math.random() > 0.5 ? 1 : -1) * (3 + Math.random() * 2);
+        ball.vy = (Math.random() > 0.5 ? 1 : -1) * (3 + Math.random() * 2);
+        ball.isGoalOut = false;
+    }
+
+    // အဓိက Game Loop အလုပ်လုပ်ပုံ
+    function update() {
+        // 1. ဂိုးပေါက်ကို လည်ပတ်စေခြင်း
+        goalAngle += goalSpeed;
+        if (goalAngle > Math.PI * 2) goalAngle -= Math.PI * 2;
+
+        balls.forEach(ball => {
+            // ဂိုးဝင်ပြီး အပြင်ထွက်သွားချိန်ဆိုလျှင် အဝိုင်းဘောင်နှင့် ထိတွေ့မှု မတွက်တော့ပါ
+            if (ball.isGoalOut) {
+                ball.x += ball.vx;
+                ball.y += ball.vy;
+
+                // ကန်バス အပြင်ဘက် လုံးဝရောက်သွားရင် Reset လုပ်မယ်
+                if (ball.x < -50 || ball.x > WIDTH + 50 || ball.y < -50 || ball.y > HEIGHT + 50) {
+                    resetBall(ball);
+                }
+                return;
+            }
+
+            // ဘောလုံး ရွေ့လျားမှု ကိန်းဂဏန်းများ ပြောင်းလဲခြင်း
+            ball.x += ball.vx;
+            ball.y += ball.vy;
+
+            // အလယ်ဗဟိုကနေ ဘောလုံးဆီသို့ အကွာအဝေးကို တွက်ချက်ခြင်း
+            let dx = ball.x - center.x;
+            let dy = ball.y - center.y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+
+            // အဝိုင်းကွင်းဘောင်နားသို့ ရောက်ရှိခြင်း ရှိ/မရှိ စစ်ဆေးခြင်း
+            if (distance + ball.radius >= fieldRadius) {
+                
+                // ဘောလုံးရှိနေသည့် လက်ရှိ ထောင့် (Angle) ကို ရှာခြင်း
+                let ballAngle = Math.atan2(dy, dx);
+                if (ballAngle < 0) ballAngle += Math.PI * 2;
+
+                // ဂိုးပေါက်တည်နေရာ Angle အပိုင်းအခြားအတွင်း ရောက်မရောက် စစ်ဆေးခြင်း
+                let angleDiff = Math.abs(ballAngle - goalAngle);
+                if (angleDiff > Math.PI) angleDiff = Math.PI * 2 - angleDiff;
+
+                if (angleDiff < goalWidthAngle / 2) {
+                    // ⭐ ဂိုးဝင်သွားပြီ! (ဂိုးပေါက်ထဲသို့ ဆက်လက်ထွက်ခွာခွင့်ပြုသည်)
+                    ball.isGoalOut = true;
+                    if (ball.name === 'Iraq') score.iraq++;
+                    else score.venezuela++;
+                } else {
+                    // ဂိုးပေါက် မဟုတ်လျှင် ဘောင်နှင့်တိုက်ပြီး လမ်းကြောင်းပြောင်း (Bounce ပြန်ကန်) စေမည်
+                    let nx = dx / distance;
+                    let ny = dy / distance;
+
+                    // ဘောလုံးကို ဘောင်ပေါ်သို့ တိကျစွာ ပြန်တင်ပေးခြင်း
+                    ball.x = center.x + nx * (fieldRadius - ball.radius);
+                    ball.y = center.y + ny * (fieldRadius - ball.radius);
+
+                    // Reflect velocity vector
+                    let dotProduct = ball.vx * nx + ball.vy * ny;
+                    ball.vx = ball.vx - 2 * dotProduct * nx;
+                    ball.vy = ball.vy - 2 * dotProduct * ny;
+                }
+            }
+        });
+
+        // ဘောလုံးအချင်းချင်း တိုက်မိခြင်းကို တွက်ချက်ခြင်း
+        for (let i = 0; i < balls.length; i++) {
+            for (let j = i + 1; j < balls.length; j++) {
+                let b1 = balls[i];
+                let b2 = balls[j];
+                if (b1.isGoalOut || b2.isGoalOut) continue;
+
+                let dx = b2.x - b1.x;
+                let dy = b2.y - b1.y;
+                let dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < b1.radius + b2.radius) {
+                    // အချင်းချင်း တိုက်မိ၍ ပြန်ကန်ထွက်ခြင်း
+                    let overlap = (b1.radius + b2.radius) - dist;
+                    let nx = dx / dist;
+                    let ny = dy / dist;
+
+                    b1.x -= nx * overlap / 2;
+                    b1.y -= ny * overlap / 2;
+                    b2.x += nx * overlap / 2;
+                    b2.y += ny * overlap / 2;
+
+                    // ရိုးရှင်းသော အရှိန်လဲလှယ်မှု (Velocity Swap)
+                    let kx = b1.vx - b2.vx;
+                    let ky = b1.vy - b2.vy;
+                    let p = nx * kx + ny * ky;
+
+                    b1.vx -= p * nx;
+                    b1.vy -= p * ny;
+                    b2.vx += p * nx;
+                    b2.vy += p * ny;
+                }
+            }
+        }
+    }
+
+    // Canvas ပေါ်တွင် ပုံရိပ်များ ဆွဲခြင်း (Drawing)
+    function draw() {
+        // နောက်ခံမြက်ခင်းပြင်အရောင် ချယ်ခြင်း
+        ctx.fillStyle = '#0b7300';
+        ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+        // ကွင်းအပြင်ဘက် အဖြူရောင် လိုင်းများ
+        ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+        ctx.lineWidth = 5;
+        ctx.strokeRect(20, 20, WIDTH - 40, HEIGHT - 40);
+
+        // အလယ်အဝိုင်းကွင်းကြီး ဆွဲခြင်း
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, fieldRadius, 0, Math.PI * 2);
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 6;
+        ctx.stroke();
+
+        // 🥅 လည်ပတ်နေသော ဂိုးပေါက်အား ဆွဲခြင်း
+        ctx.save();
+        ctx.translate(center.x, center.y);
+        ctx.rotate(goalAngle);
         
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                <h2>AI Engine Controls</h2>
-            </div>
+        // ဂိုးပေါက်ပုံစံ (အဖြူရောင် လေးထောင့်ကွက်ကျား ကွန်ရက်)
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 4;
+        
+        ctx.beginPath();
+        // ဂိုးပေါက်ကို အဝိုင်းအပြင်ဘက်သို့ ထိုးထွက်နေသော ပုံစံဆွဲခြင်း
+        ctx.arc(0, 0, fieldRadius + 30, -goalWidthAngle/2, goalWidthAngle/2);
+        let startX = Math.cos(-goalWidthAngle/2) * fieldRadius;
+        let startY = Math.sin(-goalWidthAngle/2) * fieldRadius;
+        let endX = Math.cos(goalWidthAngle/2) * fieldRadius;
+        let endY = Math.sin(goalWidthAngle/2) * fieldRadius;
+        
+        ctx.lineTo(endX, endY);
+        ctx.arc(0, 0, fieldRadius, goalWidthAngle/2, -goalWidthAngle/2, true);
+        ctx.lineTo(startX, startY);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+
+        // ⚽ ဘောလုံးများ (သို့) အလံပုံများအား ဆွဲခြင်း
+        balls.forEach(ball => {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.clip(); // ပုံကို အဝိုင်းပုံစံ ဖြစ်အောင် ညှပ်ထုတ်ခြင်း
             
-            <div class="section-box">
-                <div class="section-title"><span><i class="fa-solid fa-shield-halved"></i> Team A (Home)</span></div>
-                <div class="input-group">
-                    <label>Team Name</label>
-                    <input type="text" id="teamAName" class="input-control" value="Manchester City">
-                </div>
-                <div class="input-group">
-                    <label>Logo Asset</label>
-                    <div class="upload-zone" onclick="document.getElementById('teamALogoFile').click()">
-                        <i class="fa-solid fa-cloud-arrow-up"></i>
-                        <p>Drop or click to upload</p>
-                        <input type="file" id="teamALogoFile" class="hidden-file" accept="image/*">
-                    </div>
-                </div>
-            </div>
-
-            <div class="section-box">
-                <div class="section-title"><span><i class="fa-solid fa-shield-halved"></i> Team B (Away)</span></div>
-                <div class="input-group">
-                    <label>Team Name</label>
-                    <input type="text" id="teamBName" class="input-control" value="Liverpool">
-                </div>
-                <div class="input-group">
-                    <label>Logo Asset</label>
-                    <div class="upload-zone" onclick="document.getElementById('teamBLogoFile').click()">
-                        <i class="fa-solid fa-cloud-arrow-up"></i>
-                        <p>Drop or click to upload</p>
-                        <input type="file" id="teamBLogoFile" class="hidden-file" accept="image/*">
-                    </div>
-                </div>
-            </div>
-
-            <div class="section-box">
-                <div class="section-title"><span><i class="fa-solid fa-brain"></i> Prediction Type</span></div>
-                <div class="matrix-grid" id="predictionTypeGrid">
-                    <div class="matrix-item active" data-type="ai">AI System</div>
-                    <div class="matrix-item" data-type="expert">Expert Panel</div>
-                    <div class="matrix-item" data-type="super">Supercomputer</div>
-                    <div class="matrix-item" data-type="community">Community</div>
-                    <div class="matrix-item" data-type="analytics">Advanced AI</div>
-                </div>
-            </div>
-
-            <div class="section-box">
-                <button class="btn" id="btnGenerate">
-                    <i class="fa-solid fa-bolt"></i> Run AI Prediction
-                </button>
-                <div style="margin-top: 10px;">
-                    <button class="btn btn-secondary" id="btnRandomize">
-                        <i class="fa-solid fa-shuffle"></i> Randomize Matchup
-                    </button>
-                </div>
-            </div>
-
-            <div class="section-box">
-                <div class="toggle-container">
-                    <div>
-                        <div style="font-size:0.85rem; font-weight:700; color:#fff;"><i class="fa-solid fa-fire" style="color:var(--neon-red)"></i> VIRAL SHORTS MODE</div>
-                        <div style="font-size:0.7rem; color:var(--text-muted)">Max physics, glow & movement</div>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox" id="viralModeToggle" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-        </div>
-
-        <div class="workspace">
-            <div class="preview-window" id="previewWindow">
-                <canvas id="renderCanvas" width="1080" height="1920"></canvas>
-            </div>
-
-            <div class="timeline-wrapper">
-                <div class="playback-controls">
-                    <button class="control-btn" id="btnRewind" title="Restart"><i class="fa-solid fa-backward-step"></i></button>
-                    <button class="control-btn" id="btnPlayPause" title="Play/Pause"><i class="fa-solid fa-play"></i></button>
-                    <button class="control-btn" id="btnToggleMute" title="Mute/Unmute"><i class="fa-solid fa-volume-high"></i></button>
-                    <button class="control-btn" id="btnFullscreen" title="Fullscreen Preview"><i class="fa-solid fa-expand"></i></button>
-                </div>
-                <div class="scrubber-container">
-                    <span class="time-display" id="currentTimeLabel">0.0s</span>
-                    <input type="range" class="scrubber" id="timelineScrubber" min="0" max="18" step="0.05" value="0">
-                    <span class="time-display" id="totalTimeLabel">18.0s</span>
-                </div>
-                <div class="scene-blocks" id="sceneBlocksTimeline">
-                    <div class="scene-block active" data-scene="0">1: Stadium</div>
-                    <div class="scene-block" data-scene="1">2: Vs Match</div>
-                    <div class="scene-block" data-scene="2">3: Probability</div>
-                    <div class="scene-block" data-scene="3">4: Outcome</div>
-                    <div class="scene-block" data-scene="4">5: Score</div>
-                    <div class="scene-block" data-scene="5">6: CTA</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="sidebar right">
-            <div class="sidebar-header">
-                <i class="fa-solid fa-palette"></i>
-                <h2>Graphics & Theme Matrix</h2>
-            </div>
-
-            <div class="section-box">
-                <div class="section-title"><span><i class="fa-solid fa-clapperboard"></i> Broadcast Style</span></div>
-                <div class="matrix-grid" id="themeGrid">
-                    <div class="matrix-item active" data-theme="ucl">UCL Dark Blue</div>
-                    <div class="matrix-item" data-theme="fvwc">World Cup Gold</div>
-                    <div class="matrix-item" data-theme="epl">EPL Neon Purple</div>
-                    <div class="matrix-item" data-theme="asn">Cyan Futuristic</div>
-                    <div class="matrix-item" data-theme="cyber">Cyberpunk Pink</div>
-                    <div class="matrix-item" data-theme="fire">Fire Arena</div>
-                    <div class="matrix-item" data-theme="dstv">Black Gold TV</div>
-                </div>
-            </div>
-
-            <div class="section-box">
-                <div class="section-title"><span><i class="fa-solid fa-sliders"></i> Scene Configuration</span></div>
-                <div class="input-group">
-                    <label id="durationLabel">Scene Duration: 3.0s</label>
-                    <input type="range" class="scrubber" id="sceneDurationInput" min="1.5" max="5.0" step="0.5" value="3.0">
-                </div>
-            </div>
-
-            <div class="section-box">
-                <div class="section-title"><span><i class="fa-solid fa-sliders"></i> Soundscape Simulation</span></div>
-                <div class="audio-row">
-                    <label>Master Volume</label>
-                    <input type="range" class="scrubber" id="volMaster" min="0" max="100" value="80">
-                </div>
-                <div class="audio-row">
-                    <label>Crowd Ambience</label>
-                    <input type="range" class="scrubber" id="volCrowd" min="0" max="100" value="70">
-                </div>
-                <div class="audio-row">
-                    <label>FX Dynamics</label>
-                    <input type="range" class="scrubber" id="volFX" min="0" max="100" value="90">
-                </div>
-            </div>
-
-            <div class="section-box" style="margin-top:auto; border-bottom:none;">
-                <div class="section-title"><span><i class="fa-solid fa-download"></i> Production Output</span></div>
-                <div style="display:flex; flex-direction:column; gap:10px;">
-                    <button class="btn" id="btnExportThumbnail"><i class="fa-solid fa-image"></i> Export Thumbnail</button>
-                    <button class="btn btn-secondary" id="btnExportCard"><i class="fa-solid fa-id-card"></i> Export Prediction Card</button>
-                    <div class="grid-2">
-                        <button class="btn btn-secondary" id="btnSaveProject" style="font-size:0.75rem;"><i class="fa-solid fa-file-code"></i> Save JSON</button>
-                        <button class="btn btn-secondary" id="btnLoadProject" style="font-size:0.75rem;" onclick="document.getElementById('projectFileField').click()"><i class="fa-solid fa-folder-open"></i> Load JSON</button>
-                    </div>
-                    <input type="file" id="projectFileField" class="hidden-file" accept=".json">
-                    <button class="btn btn-secondary" id="btnExportAllZip"><i class="fa-solid fa-file-zipper"></i> Zip Asset Bundle</button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="toast-container" id="toastContainer"></div>
-
-    <script>
-        /**
-         * AI Football Prediction Video Generator Pro
-         * Core Production JavaScript Architecture
-         */
-
-        // Production Storage & Global Application State
-        const State = {
-            metadata: {
-                teamA: "Manchester City",
-                teamB: "Liverpool",
-                teamALogo: null, // Base64 data strings stored locally
-                teamBLogo: null,
-                predictionType: "ai", // ai, expert, super, community, analytics
-                theme: "ucl" // ucl, fvwc, epl, asn, cyber, fire, dstv
-            },
-            engine: {
-                probA: 55,
-                probDraw: 20,
-                probB: 25,
-                winner: "A", // "A", "B", "Draw"
-                scoreA: 2,
-                scoreB: 1
-            },
-            timeline: {
-                sceneDuration: 3.0, // seconds per scene
-                totalScenes: 6,
-                currentTime: 0.0,
-                isPlaying: true,
-                viralMode: true
-            },
-            audio: {
-                masterVolume: 0.8,
-                crowdVolume: 0.7,
-                fxVolume: 0.9,
-                muted: false
-            }
-        };
-
-        // UI Selectors Matrix Cache
-        const DOM = {
-            teamAName: document.getElementById('teamAName'),
-            teamBName: document.getElementById('teamBName'),
-            teamALogoFile: document.getElementById('teamALogoFile'),
-            teamBLogoFile: document.getElementById('teamBLogoFile'),
-            predictionTypeGrid: document.getElementById('predictionTypeGrid'),
-            themeGrid: document.getElementById('themeGrid'),
-            viralModeToggle: document.getElementById('viralModeToggle'),
-            sceneDurationInput: document.getElementById('sceneDurationInput'),
-            durationLabel: document.getElementById('durationLabel'),
-            btnGenerate: document.getElementById('btnGenerate'),
-            btnRandomize: document.getElementById('btnRandomize'),
-            btnPlayPause: document.getElementById('btnPlayPause'),
-            btnRewind: document.getElementById('btnRewind'),
-            btnToggleMute: document.getElementById('btnToggleMute'),
-            btnFullscreen: document.getElementById('btnFullscreen'),
-            timelineScrubber: document.getElementById('timelineScrubber'),
-            currentTimeLabel: document.getElementById('currentTimeLabel'),
-            totalTimeLabel: document.getElementById('totalTimeLabel'),
-            sceneBlocksTimeline: document.getElementById('sceneBlocksTimeline'),
-            previewWindow: document.getElementById('previewWindow'),
-            canvas: document.getElementById('renderCanvas'),
-            volMaster: document.getElementById('volMaster'),
-            volCrowd: document.getElementById('volCrowd'),
-            volFX: document.getElementById('volFX'),
-            btnExportThumbnail: document.getElementById('btnExportThumbnail'),
-            btnExportCard: document.getElementById('btnExportCard'),
-            btnSaveProject: document.getElementById('btnSaveProject'),
-            btnExportAllZip: document.getElementById('btnExportAllZip'),
-            projectFileField: document.getElementById('projectFileField'),
-            toastContainer: document.getElementById('toastContainer')
-        };
-
-        // Graphics Framework Context Initialization
-        const ctx = DOM.canvas.getContext('2d');
-
-        // Embedded default placeholder logo configurations generated directly through rendering functions if null
-        let assetsLoaded = {
-            logoA: new Image(),
-            logoB: new Image()
-        };
-
-        // Audio System Synth Engine Configuration
-        let audioCtx = null;
-        let ambientNode = null;
-
-        function initAudio() {
-            if (audioCtx) return;
+            // Image တက်လာရင် ပုံဆွဲမယ်၊ မတက်သေးရင် အရောင်ဝိုင်းပြထားမယ်
             try {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                startStadiumAmbience();
-            } catch(e) { console.warn("Audio Context init block denied interaction setup."); }
-        }
-
-        function startStadiumAmbience() {
-            if(!audioCtx || State.audio.muted) return;
-            // Generate simulated baseline pink/brown crowd noise filter loop
-            let bufferSize = 2 * audioCtx.sampleRate,
-                noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate),
-                output = noiseBuffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) {
-                output[i] = Math.random() * 2 - 1;
-            }
-            let whiteNoise = audioCtx.createBufferSource();
-            whiteNoise.buffer = noiseBuffer;
-            
-            let filter = audioCtx.createBiquadFilter();
-            filter.type = 'lowpass';
-            filter.frequency.value = 400;
-
-            let gainNode = audioCtx.createGain();
-            gainNode.gain.value = State.audio.masterVolume * State.audio.crowdVolume * 0.15;
-
-            whiteNoise.connect(filter);
-            filter.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            whiteNoise.loop = true;
-            whiteNoise.start();
-            ambientNode = whiteNoise;
-        }
-
-        function playSynthFX(type) {
-            if(!audioCtx || State.audio.muted) return;
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-
-            let vol = State.audio.masterVolume * State.audio.fxVolume;
-
-            if (type === 'impact') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.4);
-                gain.gain.setValueAtTime(vol * 0.8, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.4);
-            } else if (type === 'whistle') {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-                osc.frequency.setValueAtTime(900, audioCtx.currentTime + 0.1);
-                gain.gain.setValueAtTime(vol * 0.3, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
-            } else if (type === 'reveal') {
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(200, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.6);
-                gain.gain.setValueAtTime(vol * 0.2, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.6);
-            }
-        }
-
-        // Display Alert Notification Messaging System
-        function showNotification(msg) {
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color:var(--accent); margin-right:8px;"></i> ${msg}`;
-            DOM.toastContainer.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
-
-        // Random Predict Generator Core Engines Equations
-        function computePredictionMatrix() {
-            // Rules calculations setup
-            let pA = Math.floor(Math.random() * (70 - 45 + 1)) + 45;
-            let pDraw = Math.floor(Math.random() * (30 - 10 + 1)) + 10;
-            let pB = 100 - (pA + pDraw);
-            
-            // Re-normalize checks if boundaries fall outside ranges natively
-            if (pB < 10 || pB > 45) {
-                // Second iteration fail-safe safe normalization
-                pA = 52; pDraw = 20; pB = 28;
-            }
-
-            State.engine.probA = pA;
-            State.engine.probDraw = pDraw;
-            State.engine.probB = pB;
-
-            // Winner dynamic assign auto system
-            if (pA > pB && pA > pDraw) State.engine.winner = "A";
-            else if (pB > pA && pB > pDraw) State.engine.winner = "B";
-            else State.engine.winner = "Draw";
-
-            // Generate Score Metrics match outcome criteria
-            if (State.engine.winner === "A") {
-                State.engine.scoreA = Math.floor(Math.random() * 3) + 1;
-                State.engine.scoreB = Math.floor(Math.random() * State.engine.scoreA);
-            } else if (State.engine.winner === "B") {
-                State.engine.scoreB = Math.floor(Math.random() * 3) + 1;
-                State.engine.scoreA = Math.floor(Math.random() * State.engine.scoreB);
-            } else {
-                State.engine.scoreA = Math.floor(Math.random() * 3);
-                State.engine.scoreB = State.engine.scoreA;
-            }
-
-            updateTimelineLimits();
-            showNotification("AI Match Analysis Completed Successfully!");
-        }
-
-        function updateTimelineLimits() {
-            const total = State.timeline.sceneDuration * State.timeline.totalScenes;
-            DOM.totalTimeLabel.innerText = total.toFixed(1) + 's';
-            DOM.timelineScrubber.max = total;
-        }
-
-        // Base Data Asset Handlers
-        function setupFileListeners() {
-            DOM.teamALogoFile.addEventListener('change', (e) => handleLogoConversion(e.target.files[0], 'A'));
-            DOM.teamBLogoFile.addEventListener('change', (e) => handleLogoConversion(e.target.files[0], 'B'));
-            
-            DOM.teamAName.addEventListener('input', (e) => { State.metadata.teamA = e.target.value; });
-            DOM.teamBName.addEventListener('input', (e) => { State.metadata.teamB = e.target.value; });
-
-            // Grid Selectors Action Listeners Configuration
-            DOM.predictionTypeGrid.addEventListener('click', (e) => {
-                const target = e.target.closest('.matrix-item');
-                if(!target) return;
-                DOM.predictionTypeGrid.querySelectorAll('.matrix-item').forEach(i => i.classList.remove('active'));
-                target.classList.add('active');
-                State.metadata.predictionType = target.dataset.type;
-                playSynthFX('reveal');
-            });
-
-            DOM.themeGrid.addEventListener('click', (e) => {
-                const target = e.target.closest('.matrix-item');
-                if(!target) return;
-                DOM.themeGrid.querySelectorAll('.matrix-item').forEach(i => i.classList.remove('active'));
-                target.classList.add('active');
-                State.metadata.theme = target.dataset.theme;
-                playSynthFX('impact');
-            });
-
-            DOM.viralModeToggle.addEventListener('change', (e) => {
-                State.timeline.viralMode = e.target.checked;
-            });
-
-            DOM.sceneDurationInput.addEventListener('input', (e) => {
-                State.timeline.sceneDuration = parseFloat(e.target.value);
-                DOM.durationLabel.innerText = `Scene Duration: ${State.timeline.sceneDuration.toFixed(1)}s`;
-                updateTimelineLimits();
-            });
-
-            // Master Application Primary Controls Action Setup
-            DOM.btnGenerate.addEventListener('click', () => {
-                initAudio();
-                computePredictionMatrix();
-                State.timeline.currentTime = 0;
-            });
-
-            DOM.btnRandomize.addEventListener('click', () => {
-                const teamPool = ["Real Madrid", "Barcelona", "Bayern Munich", "PSG", "Arsenal", "Chelsea", "Juventus", "AC Milan", "Inter Milan", "Dortmund", "Man City", "Liverpool"];
-                let rA = teamPool[Math.floor(Math.random()*teamPool.length)];
-                let rB = teamPool[Math.floor(Math.random()*teamPool.length)];
-                while(rA === rB) { rB = teamPool[Math.floor(Math.random()*teamPool.length)]; }
-                
-                DOM.teamAName.value = rA; State.metadata.teamA = rA;
-                DOM.teamBName.value = rB; State.metadata.teamB = rB;
-                
-                // Clear existing images forced backup design logic vectors
-                State.metadata.teamALogo = null;
-                State.metadata.teamBLogo = null;
-                
-                computePredictionMatrix();
-            });
-        }
-
-        function handleLogoConversion(file, targetTeam) {
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                if (targetTeam === 'A') {
-                    State.metadata.teamALogo = event.target.result;
-                    assetsLoaded.logoA.src = event.target.result;
-                } else {
-                    State.metadata.teamBLogo = event.target.result;
-                    assetsLoaded.logoB.src = event.target.result;
-                }
-                showNotification(`Team ${targetTeam} Graphic Asset Buffered Layer Ready.`);
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // Timeline Automation Logic Controls Block
-        function setupTimelineEngine() {
-            DOM.btnPlayPause.addEventListener('click', () => {
-                initAudio();
-                State.timeline.isPlaying = !State.timeline.isPlaying;
-                DOM.btnPlayPause.innerHTML = State.timeline.isPlaying ? '<i class="fa-solid fa-pause"></i>' : '<i class="fa-solid fa-play"></i>';
-            });
-
-            DOM.btnRewind.addEventListener('click', () => {
-                State.timeline.currentTime = 0;
-                DOM.timelineScrubber.value = 0;
-                if(!State.timeline.isPlaying) {
-                    State.timeline.isPlaying = true;
-                    DOM.btnPlayPause.innerHTML = '<i class="fa-solid fa-pause"></i>';
-                }
-            });
-
-            DOM.btnToggleMute.addEventListener('click', () => {
-                State.audio.muted = !State.audio.muted;
-                DOM.btnToggleMute.innerHTML = State.audio.muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
-                if(ambientNode) {
-                    try { ambientNode.stop(); } catch(e){}
-                    ambientNode = null;
-                }
-                if(!State.audio.muted && audioCtx) startStadiumAmbience();
-            });
-
-            DOM.btnFullscreen.addEventListener('click', () => {
-                if (!document.fullscreenElement) {
-                    DOM.previewWindow.requestFullscreen().catch(err => {
-                        alert(`Error attempting to enable fullscreen mode: ${err.message}`);
-                    });
-                } else {
-                    document.exitFullscreen();
-                }
-            });
-
-            DOM.timelineScrubber.addEventListener('input', (e) => {
-                State.timeline.currentTime = parseFloat(e.target.value);
-            });
-
-            // Fast Click Scene Timeline Blocks Navigator Pipeline Hooks
-            DOM.sceneBlocksTimeline.addEventListener('click', (e) => {
-                const block = e.target.closest('.scene-block');
-                if(!block) return;
-                const idx = parseInt(block.dataset.scene);
-                State.timeline.currentTime = idx * State.timeline.sceneDuration;
-                DOM.timelineScrubber.value = State.timeline.currentTime;
-            });
-        }
-
-        // AUDIO CONTROLS VOL MIXER
-        function setupAudioMixer() {
-            DOM.volMaster.addEventListener('input', (e) => { State.audio.masterVolume = e.target.value / 100; });
-            DOM.volCrowd.addEventListener('input', (e) => { State.audio.crowdVolume = e.target.value / 100; });
-            DOM.volFX.addEventListener('input', (e) => { State.audio.fxVolume = e.target.value / 100; });
-        }
-
-        // THEME RENDER MATRIX DICTIONARY ENGINE SETUP
-        const ThemesConfig = {
-            ucl: { bg: ['#020024', '#090979', '#00d4ff'], primary: '#00f2fe', accent: '#fff', font: 'Rajdhani' },
-            fvwc: { bg: ['#8a1538', '#a81c47', '#ee9626'], primary: '#f59e0b', accent: '#fff', font: 'Orbitron' },
-            epl: { bg: ['#38003c', '#240028', '#ec015a'], primary: '#ec015a', accent: '#00ff87', font: 'Rajdhani' },
-            asn: { bg: ['#0f172a', '#1e293b', '#0f172a'], primary: '#00f2fe', accent: '#38bdf8', font: 'Orbitron' },
-            cyber: { bg: ['#050515', '#150020', '#000000'], primary: '#ff0055', accent: '#00f2fe', font: 'Orbitron' },
-            fire: { bg: ['#110000', '#2a0800', '#110000'], primary: '#ff4500', accent: '#ffcc00', font: 'Rajdhani' },
-            dstv: { bg: ['#0a0a0a', '#1a1a1a', '#020202'], primary: '#d4af37', accent: '#ffffff', font: 'Rajdhani' }
-        };
-
-        // CORE VECTOR GRAPHICS BACKUP LOGO BUILDERS
-        function drawFallbackLogo(ctx, text, x, y, size, primaryColor) {
-            ctx.save();
-            ctx.shadowBlur = 20;
-            ctx.shadowColor = primaryColor;
-            
-            // Draw Shield Crest Geometric Vector Outline Shape
-            ctx.beginPath();
-            ctx.moveTo(x, y - size/2);
-            ctx.lineTo(x + size/2, y - size/4);
-            ctx.lineTo(x + size/3, y + size/2);
-            ctx.quadraticCurveTo(x, y + size * 0.7, x - size/3, y + size/2);
-            ctx.lineTo(x - size/2, y - size/4);
-            ctx.closePath();
-            
-            ctx.fillStyle = "rgba(10, 15, 30, 0.85)";
-            ctx.fill();
-            ctx.strokeStyle = primaryColor;
-            ctx.lineWidth = 5;
-            ctx.stroke();
-
-            // Inner Accent Line
-            ctx.beginPath();
-            ctx.moveTo(x, y - size/2.3);
-            ctx.lineTo(x + size/2.4, y - size/4.2);
-            ctx.lineTo(x + size/3.4, y + size/2.3);
-            ctx.quadraticCurveTo(x, y + size * 0.62, x - size/3.4, y + size/2.3);
-            ctx.lineTo(x - size/2.4, y - size/4.2);
-            ctx.closePath();
-            ctx.strokeStyle = "rgba(255,255,255,0.2)";
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            
-            // Typography label initialing identifier marker matrix block
-            ctx.fillStyle = '#ffffff';
-            ctx.font = `900 ${size * 0.35}px 'Orbitron'`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(text.substring(0, 3).toUpperCase(), x, y + 2);
-            ctx.restore();
-        }
-
-        // GENERATOR RENDER MATRIX FRAME ITERATION PIPELINE LOOP
-        let lastSceneIdx = -1;
-        function renderVideoPipelineLoop() {
-            requestAnimationFrame(renderVideoPipelineLoop);
-
-            // Compute Global Frame Real-Time metrics tick rate variables
-            const duration = State.timeline.sceneDuration;
-            const totalDuration = duration * State.timeline.totalScenes;
-
-            if (State.timeline.isPlaying) {
-                State.timeline.currentTime += 1/60; // Approximate 60FPS incremental delta timeline simulation step
-                if (State.timeline.currentTime >= totalDuration) {
-                    State.timeline.currentTime = 0; // Seamless video output rendering infinite looping cycle standard
-                }
-                DOM.timelineScrubber.value = State.timeline.currentTime;
-            }
-
-            const current = State.timeline.currentTime;
-            DOM.currentTimeLabel.innerText = current.toFixed(1) + 's';
-
-            // Extract scene metrics tracking states identifiers indexes
-            let sceneIdx = Math.floor(current / duration);
-            if(sceneIdx >= State.timeline.totalScenes) sceneIdx = State.timeline.totalScenes - 1;
-
-            // Automation tracker visual state syncing loop indicators updates
-            if (sceneIdx !== lastSceneIdx) {
-                document.querySelectorAll('.scene-block').forEach((b, i) => {
-                    if(i === sceneIdx) b.classList.add('active');
-                    else b.classList.remove('active');
-                });
-                lastSceneIdx = sceneIdx;
-                // Dispatch automated audio triggers synced tracking blocks
-                if(sceneIdx === 3) playSynthFX('whistle');
-                else if(sceneIdx === 4) playSynthFX('impact');
-                else playSynthFX('reveal');
-            }
-
-            // Time progression scale internally offset inside specific active block context
-            const sceneProgress = (current % duration) / duration;
-
-            // Begin Canvas Raster Graph drawing operations
-            ctx.clearRect(0, 0, 1080, 1920);
-            
-            // Extract configuration matrix
-            const theme = ThemesConfig[State.metadata.theme] || ThemesConfig.ucl;
-            
-            // Step 1: Draw Dynamic Moving Gradient Background Matrix
-            drawBackgroundPipeline(theme, current);
-
-            // Phase Layout Render Branches Multiplexer Deck Route Engine
-            switch(sceneIdx) {
-                case 0: drawSceneStadium(theme, sceneProgress); break;
-                case 1: drawSceneVSMatch(theme, sceneProgress); break;
-                case 2: drawSceneProbabilityBars(theme, sceneProgress); break;
-                case 3: drawSceneWinnerReveal(theme, sceneProgress); break;
-                case 4: drawSceneScorePrediction(theme, sceneProgress); break;
-                case 5: drawSceneCallToAction(theme, sceneProgress); break;
-            }
-
-            // High Tech Global Overlays & Frame Broadcast Elements Branding Vector Overlays
-            drawGlobalBroadcastOverlays(theme);
-        }
-
-        // GRAPHICS DRAWING EXTENSIONS PIPELINE
-        function drawBackgroundPipeline(theme, time) {
-            let grad = ctx.createLinearGradient(0, 0, 1080, 1920);
-            // Oscillating movement variance vectors based on time parameter matrix
-            let shift = Math.sin(time * 0.5) * 0.15;
-            
-            grad.addColorStop(0, theme.bg[0]);
-            grad.addColorStop(0.5 + shift, theme.bg[1]);
-            grad.addColorStop(1, theme.bg[2]);
-            
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, 1080, 1920);
-
-            // High tech background grid pattern array matrix simulation loop lines setup
-            ctx.save();
-            ctx.globalAlpha = 0.04;
-            ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 2;
-            let gridSize = 80;
-            for(let x=0; x<1080; x+=gridSize) {
-                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 1920); ctx.stroke();
-            }
-            for(let y=0; y<1920; y+=gridSize) {
-                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(1080, y); ctx.stroke();
-            }
-            ctx.restore();
-        }
-
-        function drawGlobalBroadcastOverlays(theme) {
-            ctx.save();
-            // Upper Broadcast Header Branding Banner Bar
-            ctx.fillStyle = "rgba(2, 6, 23, 0.65)";
-            ctx.fillRect(0, 0, 1080, 160);
-            ctx.strokeStyle = theme.primary;
-            ctx.lineWidth = 4;
-            ctx.beginPath(); ctx.moveTo(0, 160); ctx.lineTo(1080, 160); ctx.stroke();
-
-            // Badge Upper Platform Label System Text
-            let badgeText = "AI PREDICTION SYSTEM";
-            if (State.metadata.predictionType === 'expert') badgeText = "EXPERT ANALYSIS LIVE";
-            if (State.metadata.predictionType === 'super') badgeText = "SUPERCOMPUTER MODEL v4.1";
-            if (State.metadata.predictionType === 'community') badgeText = "COMMUNITY FAN POLL MATRIX";
-            if (State.metadata.predictionType === 'analytics') badgeText = "PRO ANALYTICS DEEP LEARNING";
-
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = theme.primary;
-            ctx.fillStyle = theme.primary;
-            ctx.font = `900 38px 'Orbitron'`;
-            ctx.textAlign = 'center';
-            ctx.fillText(badgeText, 540, 100);
-            ctx.restore();
-        }
-
-        // SCENE 1 GENERATION MATRIX CODE BLOCK
-        function drawSceneStadium(theme, p) {
-            ctx.save();
-            // Render Epic Stadium Structural Geometric lines perspectives
-            ctx.strokeStyle = "rgba(255,255,255,0.06)";
-            ctx.lineWidth = 6;
-            ctx.beginPath();
-            ctx.moveTo(0, 1200); ctx.lineTo(540, 700); ctx.lineTo(1080, 1200);
-            ctx.stroke();
-
-            // Zoom Scaling logic parameters
-            let zoom = 1.0 + (p * 0.25);
-            if(State.timeline.viralMode) zoom = 1.0 + (p * 0.45);
-
-            ctx.translate(540, 960);
-            ctx.scale(zoom, zoom);
-
-            // Flying Particle FX Field Simulation Systems Vector Array Rendering Multiplier
-            let count = State.timeline.viralMode ? 60 : 30;
-            ctx.fillStyle = theme.primary;
-            for(let i=0; i<count; i++) {
-                let seed = i * 45.32;
-                let px = Math.sin(seed + p) * 400;
-                let py = Math.cos(seed * 2 + p * 0.5) * 600;
-                let size = Math.abs(Math.sin(seed)) * (State.timeline.viralMode ? 12 : 7);
-                ctx.globalAlpha = Math.abs(Math.cos(seed + p)) * 0.6;
-                ctx.beginPath();
-                ctx.arc(px, py, size, 0, Math.PI*2);
+                ctx.drawImage(ball.img, ball.x - ball.radius, ball.y - ball.radius, ball.radius * 2, ball.radius * 2);
+            } catch (e) {
+                ctx.fillStyle = ball.name === 'Iraq' ? '#ff4d4d' : '#4d94ff';
                 ctx.fill();
             }
-
-            // Draw Team Graphic Assets Arrays
-            ctx.globalAlpha = Math.min(p * 2, 1);
-            if (State.metadata.teamALogo) {
-                try { ctx.drawImage(assetsLoaded.logoA, -280, -150, 200, 200); } catch(e){}
-            } else {
-                drawFallbackLogo(ctx, State.metadata.teamA, -180, -50, 160, theme.primary);
-            }
-
-            if (State.metadata.teamBLogo) {
-                try { ctx.drawImage(assetsLoaded.logoB, 80, -150, 200, 200); } catch(e){}
-            } else {
-                drawFallbackLogo(ctx, State.metadata.teamB, 180, -50, 160, theme.accent);
-            }
-
-            // Cinematic Stadium Lights Flare Simulation Matrix Overlay
-            ctx.restore();
-            ctx.save();
-            ctx.globalAlpha = Math.sin(p * Math.PI) * 0.3;
-            let flareGrad = ctx.createRadialGradient(540, 300, 50, 540, 300, 400);
-            flareGrad.addColorStop(0, '#ffffff');
-            flareGrad.addColorStop(0.3, theme.primary);
-            flareGrad.addColorStop(1, 'transparent');
-            ctx.fillStyle = flareGrad;
-            ctx.fillRect(0,0,1080,1920);
-            ctx.restore();
-        }
-
-        // SCENE 2 GENERATION MATRIX CODE BLOCK (VS Animation Slide Ins Layer Matrix)
-        function drawSceneVSMatch(theme, p) {
-            ctx.save();
-            let slide = 0;
-            // Matrix curve physics slide simulation equations variables setup
-            if(p < 0.5) {
-                slide = Math.pow(p * 2, 3); // Cubic Acceleration curve interpolation 
-            } else {
-                slide = 1.0;
-            }
-
-            // Visual Screen Shake modifiers initialization configuration checks
-            if (State.timeline.viralMode && p > 0.4 && p < 0.7) {
-                let shakeX = (Math.random() - 0.5) * 15;
-                let shakeY = (Math.random() - 0.5) * 15;
-                ctx.translate(shakeX, shakeY);
-            }
-
-            // Render Sliding Text Parameters Team A Home Platform Elements Array Geometry
-            ctx.fillStyle = "#ffffff";
-            ctx.font = `900 75px '${theme.font}'`;
-            ctx.textAlign = 'center';
             
-            let posX_A = -500 + (slide * 1040); // Offset interpolation calculations
-            let posX_B = 1580 - (slide * 1040);
-
-            // Team A Layout text line bounding matrix block array systems
-            ctx.shadowBlur = 10; ctx.shadowColor = theme.primary;
-            ctx.fillText(State.metadata.teamA.toUpperCase(), posX_A, 700);
-
-            // Light Sweep Glow Filter Execution Step Layer Matrix Mask Graphics Overlay 
-            ctx.fillStyle = theme.primary;
-            ctx.font = `900 130px 'Orbitron'`;
-            let vsScale = p < 0.3 ? p / 0.3 : 1.0 + Math.sin((p-0.3)*10)*0.08;
-            ctx.save();
-            ctx.translate(540, 960);
-            ctx.scale(vsScale, vsScale);
-            ctx.shadowBlur = 40; ctx.shadowColor = theme.primary;
-            ctx.fillStyle = '#ffffff';
-            ctx.fillText("VS", 0, 0);
-            ctx.restore();
-
-            ctx.fillStyle = "#ffffff";
-            ctx.font = `900 75px '${theme.font}'`;
-            ctx.shadowBlur = 10; ctx.shadowColor = theme.accent;
-            ctx.fillText(State.metadata.teamB.toUpperCase(), posX_B, 1220);
-            ctx.restore();
-        }
-
-        // SCENE 3 GENERATION MATRIX CODE BLOCK (Probability Data Counter Architecture Grid)
-        function drawSceneProbabilityBars(theme, p) {
-            ctx.save();
-            
-            // Linear progression interpolation variables counter loop mappings
-            let valA = Math.floor(State.engine.probA * p);
-            let valDraw = Math.floor(State.engine.probDraw * p);
-            let valB = Math.floor(State.engine.probB * p);
-
-            if(p >= 0.95) { // Ensure ceiling alignment correctness checks arrays
-                valA = State.engine.probA; valDraw = State.engine.probDraw; valB = State.engine.probB;
-            }
-
-            let startY = 650;
-            let barSpacing = 220;
-
-            // Define Function inside framework loop context scope for performance optimizations array mapping setup execution layers
-            function drawStatBar(label, val, maxVal, yPos, barColor) {
-                ctx.fillStyle = "rgba(255,255,255,0.6)";
-                ctx.font = `700 35px 'Rajdhani'`;
-                ctx.textAlign = 'left';
-                ctx.fillText(label.toUpperCase(), 140, yPos - 25);
-
-                // Main Bar Background Backing
-                ctx.fillStyle = "rgba(255,255,255,0.05)";
-                ctx.fillRect(140, yPos, 800, 45);
-
-                // Active Metric fill length calculation math vectors bounds geometry alignment metrics
-                let fillWidth = (val / 100) * 800;
-                let fillGrad = ctx.createLinearGradient(140, 0, 140 + fillWidth, 0);
-                fillGrad.addColorStop(0, 'rgba(15,23,42,0.8)');
-                fillGrad.addColorStop(1, barColor);
-                
-                ctx.fillStyle = fillGrad;
-                ctx.fillRect(140, yPos, fillWidth, 45);
-                
-                // Glow Stroke Caps Outline Bounds Border Matrix
-                ctx.strokeStyle = barColor;
-                ctx.lineWidth = 2;
-                ctx.strokeRect(140, yPos, fillWidth, 45);
-
-                // Numeric string counters overlay data indicators placement positions
-                ctx.fillStyle = '#ffffff';
-                ctx.font = `900 45px 'Orbitron'`;
-                ctx.textAlign = 'right';
-                ctx.shadowBlur = 10; ctx.shadowColor = barColor;
-                ctx.fillText(val + "%", 940, yPos - 20);
-            }
-
-            // Execute draw statements layers components sequentially
-            drawStatBar(State.metadata.teamA, valA, State.engine.probA, startY, theme.primary);
-            drawStatBar("DRAW MATRIX", valDraw, State.engine.probDraw, startY + barSpacing, '#64748b');
-            drawStatBar(State.metadata.teamB, valB, State.engine.probB, startY + (barSpacing * 2), theme.accent);
-
-            ctx.restore();
-        }
-
-        // SCENE 4 GENERATION MATRIX CODE BLOCK (Winner Reveal Presentation Stage Panel Overlay Graphics)
-        function drawSceneWinnerReveal(theme, p) {
-            ctx.save();
-            
-            // Background Flash Generator Matrix Engine Step
-            if(p < 0.15 && State.timeline.viralMode) {
-                ctx.fillStyle = `rgba(255,255,255, ${0.8 * (1 - (p/0.15))})`;
-                ctx.fillRect(0,0,1080,1920);
-            }
-
-            // Big Core Winner Text Calculations Scales Positioning
-            let targetName = State.engine.winner === "A" ? State.metadata.teamA : (State.engine.winner === "B" ? State.metadata.teamB : "DRAW");
-            
-            ctx.translate(540, 850);
-            let entryScale = Math.min(p / 0.2, 1.0) + (p * 0.05);
-            ctx.scale(entryScale, entryScale);
-
-            // Lighting Strike Generator Spark Core Simulation Layers Matrix Arrays Logic
-            if(State.timeline.viralMode && Math.random() > 0.7) {
-                ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = 8;
-                ctx.shadowBlur = 30; ctx.shadowColor = theme.primary;
-                ctx.beginPath();
-                ctx.moveTo((Math.random()-0.5)*400, -600);
-                ctx.lineTo((Math.random()-0.5)*200, -200);
-                ctx.lineTo((Math.random()-0.5)*100, 200);
-                ctx.stroke();
-            }
-
-            // Shield Core Render Target
-            if (State.engine.winner === "A" && !State.metadata.teamALogo) {
-                drawFallbackLogo(ctx, State.metadata.teamA, 0, -180, 260, theme.primary);
-            } else if (State.engine.winner === "B" && !State.metadata.teamBLogo) {
-                drawFallbackLogo(ctx, State.metadata.teamB, 0, -180, 260, theme.accent);
-            } else {
-                // Image draw implementation bounds
-                try {
-                    let activeImg = State.engine.winner === "A" ? assetsLoaded.logoA : assetsLoaded.logoB;
-                    if(State.engine.winner !== "Draw") {
-                        ctx.drawImage(activeImg, -150, -330, 300, 300);
-                    }
-                } catch(e){}
-            }
-
-            // Main typography blocks headers
-            ctx.fillStyle = 'var(--gold)';
-            ctx.font = `900 55px 'Orbitron'`;
-            ctx.textAlign = 'center';
-            ctx.shadowBlur = 20; ctx.shadowColor = 'var(--gold)';
-            ctx.fillText("PROJECTED WINNER", 0, 150);
-
-            // Target Name Box string array system
-            ctx.fillStyle = '#ffffff';
-            ctx.font = `900 95px '${theme.font}'`;
-            ctx.shadowBlur = 35; ctx.shadowColor = theme.primary;
-            ctx.fillText(targetName.toUpperCase(), 0, 270);
-
-            // Confetti and Sparks Explosive Field Render Vectors Simulation Arrays Loop Block
-            let confettiCount = State.timeline.viralMode ? 50 : 20;
-            for(let i=0; i<confettiCount; i++) {
-                let cSeed = i * 23.84 + p * 5;
-                let cx = Math.sin(cSeed) * (400 * p);
-                let cy = Math.cos(cSeed * 1.5) * (500 * p) + 100;
-                ctx.fillStyle = i % 2 === 0 ? theme.primary : 'var(--gold)';
-                ctx.globalAlpha = 1.0 - p;
-                ctx.fillRect(cx, cy, 14, 14);
-            }
-
-            ctx.restore();
-        }
-
-        // SCENE 5 GENERATION MATRIX CODE BLOCK (Correct Score Predictions Model Visual Layer Matrix)
-        function drawSceneScorePrediction(theme, p) {
-            ctx.save();
-            ctx.translate(540, 960);
-
-            let popScale = 0.3 + (Math.min(p / 0.2, 1.0) * 0.7);
-            ctx.scale(popScale, popScale);
-
-            ctx.fillStyle = '#ffffff';
-            ctx.font = `900 65px 'Rajdhani'`;
-            ctx.textAlign = 'center';
-            ctx.fillText("PREDICTED SCORE", 0, -220);
-
-            // Render Central Score Box Matrix Chassis Border Panels Layout
-            ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
-            ctx.strokeStyle = theme.primary;
-            ctx.lineWidth = 5;
-            ctx.shadowBlur = 25; ctx.shadowColor = theme.primary;
-            
-            // Draw central geometric polygon block
+            // ဘောလုံးဘောင်လိုင်း
             ctx.beginPath();
-            ctx.moveTo(-350, -100); ctx.lineTo(350, -100);
-            ctx.lineTo(300, 120); ctx.lineTo(-300, 120);
-            ctx.closePath();
-            ctx.fill(); ctx.stroke();
-
-            // Large Digital Score Output Data String Text Layout Configuration Block Arrays
-            ctx.fillStyle = '#ffffff';
-            ctx.font = `900 170px 'Orbitron'`;
-            ctx.shadowBlur = 15; ctx.shadowColor = '#ffffff';
-            let scoreString = `${State.engine.scoreA} - ${State.engine.scoreB}`;
-            ctx.fillText(scoreString, 0, 45);
-
-            // Underneath analytical text validation layer data labels array metrics configuration setup
-            ctx.fillStyle = 'rgba(255,255,255,0.4)';
-            ctx.font = `700 30px 'Orbitron'`;
-            ctx.fillText("HIGH CONFIDENCE DATA MODEL", 0, 220);
-
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
             ctx.restore();
-        }
+        });
 
-        // SCENE 6 GENERATION MATRIX CODE BLOCK (Call to Action Viral Marketing Loop Overlay Screen Elements)
-        function drawSceneCallToAction(theme, p) {
-            ctx.save();
-            ctx.translate(540, 960);
+        // 📊 ရမှတ်ဘုတ် (Scoreboard) ဆွဲခြင်း
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+        ctx.fillRect(40, 40, WIDTH - 80, 70);
+        ctx.borderRadius = 10;
 
-            // Pulsing timeline scaling looping variables parameters transformations matrix bounds geometry setup
-            let pulse = 1.0 + Math.sin(p * Math.PI * 2) * 0.04;
-            ctx.scale(pulse, pulse);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 24px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`Iraq  ${score.iraq} - ${score.venezuela}  Venezuela`, WIDTH / 2, 82);
+    }
 
-            // Top CTA Line Text Array Matrix Block Core Chassis
-            ctx.fillStyle = '#ffffff';
-            ctx.font = `900 85px 'Orbitron'`;
-            ctx.textAlign = 'center';
-            ctx.shadowBlur = 20; ctx.shadowColor = theme.primary;
-            ctx.fillText("COMMENT YOUR", 0, -240);
-            
-            ctx.fillStyle = theme.primary;
-            ctx.fillText("PREDICTION!", 0, -130);
+    // Animation ကို စဉ်ဆက်မပြတ် မောင်းနှင်ပေးမည့် လုပ်ဆောင်ချက်
+    function loop() {
+        update();
+        draw();
+        requestAnimationFrame(loop);
+    }
 
-            // Decorative separator vector tracking asset graphics elements bounding arrays block
-            ctx.strokeStyle = 'rgba(255,255,255,0.15)';
-            ctx.lineWidth = 4;
-            ctx.beginPath(); ctx.moveTo(-300, 0); ctx.lineTo(300, 0); ctx.stroke();
+    // စတင်မောင်းနှင်ခြင်း
+    loop();
+</script>
 
-            // Sub-Tier Viral Growth Engagement Buttons Graphics Panels Overlays Layer Simulation Arrays 
-            ctx.fillStyle = '#ffffff';
-            ctx.font = `900 70px 'Rajdhani'`;
-            ctx.fillText("LIKE & FOLLOW FOR MORE", 0, 160);
-
-            // Render modern sleek interactive looking icon graphic shape vectors arrays overlays data block matrix indicators
-            ctx.fillStyle = 'var(--neon-red)';
-            ctx.shadowBlur = 15; ctx.shadowColor = 'var(--neon-red)';
-            
-            // Draw geometric interactive follow simulation icon heart representation vector array markers
-            ctx.beginPath();
-            ctx.arc(-60, 290, 25, 0, Math.PI*2);
-            ctx.arc(60, 290, 25, 0, Math.PI*2);
-            ctx.fill();
-
-            ctx.restore();
-        }
-
-        // ASSET EXPORT INTEGRATION PIPELINE INTERACTIVE ENGINE OPERATIONS
-        function setupExportPipeline() {
-            DOM.btnExportThumbnail.addEventListener('click', () => {
-                // Direct buffer frame execution grab sequencing pipeline manipulation rules context state
-                State.timeline.currentTime = State.timeline.sceneDuration * 3.1; // Force align state timeline rendering inside Scene 4 (Winner Reveal Frame Block)
-                renderVideoPipelineLoop(); // Force single frame update pass step matrix
-                
-                const link = document.createElement('a');
-                link.download = `${State.metadata.teamA}-vs-${State.metadata.teamB}-AI-Thumbnail.png`;
-                link.href = DOM.canvas.toDataURL('image/png');
-                link.click();
-                showNotification("Production Master High-Res Thumbnail Image PNG Export Stream Triggered.");
-            });
-
-            DOM.btnExportCard.addEventListener('click', () => {
-                // Force align state layer context target visualization onto accurate precise probability frame presentation stage matrices
-                State.timeline.currentTime = State.timeline.sceneDuration * 2.9; 
-                renderVideoPipelineLoop();
-                
-                const link = document.createElement('a');
-                link.download = `${State.metadata.teamA}-vs-${State.metadata.teamB}-Prediction-Card.png`;
-                link.href = DOM.canvas.toDataURL('image/png');
-                link.click();
-                showNotification("Data Prediction Metrics Infographic Card Export Completed Asset Stream Delivery.");
-            });
-
-            DOM.btnSaveProject.addEventListener('click', () => {
-                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(State, null, 4));
-                const dlAnchorElem = document.createElement('a');
-                dlAnchorElem.setAttribute("href", dataStr);
-                dlAnchorElem.setAttribute("download", `AI-Football-Project-${State.metadata.teamA}-vs-${State.metadata.teamB}.json`);
-                dlAnchorElem.click();
-                showNotification("Application State Metadata Configuration Blueprint Matrix Saved Export Block File Stream.");
-            });
-
-            DOM.projectFileField.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    try {
-                        const parsed = JSON.parse(evt.target.result);
-                        // Re-hydrate application level deep core parameters states properties nodes variables configuration schemas
-                        if(parsed.metadata) Object.assign(State.metadata, parsed.metadata);
-                        if(parsed.engine) Object.assign(State.engine, parsed.engine);
-                        if(parsed.timeline) Object.assign(State.timeline, parsed.timeline);
-                        
-                        // Sync Input Fields UI
-                        DOM.teamAName.value = State.metadata.teamA;
-                        DOM.teamBName.value = State.metadata.teamB;
-                        if(State.metadata.teamALogo) assetsLoaded.logoA.src = State.metadata.teamALogo;
-                        if(State.metadata.teamBLogo) assetsLoaded.logoB.src = State.metadata.teamBLogo;
-                        
-                        updateTimelineLimits();
-                        showNotification("Project State Topology Re-Hydration Sequence Completed Successfully.");
-                    } catch(err) { alert("Invalid File Format Node Matrix Detected."); }
-                };
-                reader.readAsText(file);
-            });
-
-            DOM.btnExportAllZip.addEventListener('click', () => {
-                showNotification("Bundling asset structure map payload arrays manifest details... (Simulated Deployment Sequence Active)");
-                setTimeout(() => {
-                    alert("ZIP Engine Framework Build Deployment Complete. Asset Package Payload Manifest verified zero structural faults nodes anomalies pipelines.");
-                }, 1000);
-            });
-        }
-
-        // GLOBAL HARDWARE LEVEL APPS DESKTOP INTERACTIVITY KEYBOARD HOTKEYS INPUT MAPPINGS MATRIX INTERFACE MANAGER LOOKUPS
-        function bindKeyboardShortcuts() {
-            window.addEventListener('keydown', (e) => {
-                if (document.activeElement.tagName === 'INPUT') return; // Bypass if typing inside form fields array text selectors nodes
-                
-                if (e.code === 'Space') {
-                    e.preventDefault();
-                    DOM.btnPlayPause.click();
-                } else if (e.code === 'KeyR') {
-                    DOM.btnRewind.click();
-                } else if (e.code === 'KeyF') {
-                    DOM.btnFullscreen.click();
-                } else if (e.code === 'KeyG') {
-                    DOM.btnGenerate.click();
-                }
-            });
-        }
-
-        // ENTRY LEVEL BOOTSTRAPPING ARCHITECTURE INITIALIZER SEED ROUTER APPLICATION MANIFEST DRIVER EXECUTIONS TRACE SETUP HOOK
-        function mainApplicationBootstrap() {
-            setupFileListeners();
-            setupTimelineEngine();
-            setupAudioMixer();
-            setupExportPipeline();
-            bindKeyboardShortcuts();
-            
-            // Initialization run triggers mapping variables tracking states nodes sequences allocations
-            computePredictionMatrix();
-            updateTimelineLimits();
-            
-            // Activate High Performance System Master Visual Render Output Matrix Stream Loop Pipeline Tick Rate Timer Execution
-            requestAnimationFrame(renderVideoPipelineLoop);
-        }
-
-        // Launch Application Instance Execution Threads Setup Lifecycle
-        window.addEventListener('DOMContentLoaded', mainApplicationBootstrap);
-
-    </script>
 </body>
 </html>
