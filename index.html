@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Football Circle Goal Simulation</title>
+    <title>Football Circle Goal Simulation with Uploads</title>
     <style>
         * {
             margin: 0;
@@ -19,20 +19,109 @@
             font-family: Arial, sans-serif;
             overflow: hidden;
         }
+        /* 9:16 Vertical Container */
         #canvasContainer {
             position: relative;
             width: 100%;
             max-width: 450px;
             height: 100vh;
             max-height: 800px;
-            background-color: #0b7300; /* Football Field Green */
+            background-color: #0b7300; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
+        
+        /* Game Area Canvas */
         canvas {
             width: 100%;
-            height: 100%;
+            flex: 1;
             display: block;
+        }
+
+        /* 🛠️ အောက်ခြေ Control Panel (ဗီဒီယိုထဲက ပုံစံအတိုင်း ဖန်တီးထားသည်) */
+        .control-panel {
+            background-color: #000000;
+            padding: 15px;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .teams-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .team-box {
+            flex: 1;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .team-box input[type="text"] {
+            width: 100%;
+            background: #222;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .upload-btn {
+            background: #0b7300;
+            color: white;
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+        }
+
+        .upload-btn input[type="file"] {
+            display: none;
+        }
+
+        .center-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 80px;
+        }
+
+        .status-txt {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 4px;
+        }
+
+        .action-btn {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 12px;
+            width: 100%;
         }
     </style>
 </head>
@@ -40,45 +129,63 @@
 
 <div id="canvasContainer">
     <canvas id="gameCanvas"></canvas>
+
+    <div class="control-panel">
+        <div class="teams-row">
+            <div class="team-box">
+                <input type="text" id="team1Name" value="Venezuela">
+                <label class="upload-btn">
+                    📷 ပုံတင်ရန်
+                    <input type="file" id="team1Img" accept="image/*">
+                </label>
+            </div>
+
+            <div class="center-info">
+                <span class="status-txt" id="matchDay">Tomorrow</span>
+                <button class="action-btn" id="startBtn">START</button>
+            </div>
+
+            <div class="team-box">
+                <input type="text" id="team2Name" value="Iraq">
+                <label class="upload-btn">
+                    📷 ပုံတင်ရန်
+                    <input type="file" id="team2Img" accept="image/*">
+                </label>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
 
-    // -------------------------------------------------------------
-    // ⭐ စိတ်ကြိုက်ပြင်ဆင်နိုင်သော အပိုင်း (IMAGE URL များ ထည့်ရန်)
-    // -------------------------------------------------------------
-    const IRAQ_IMAGE_URL = 'https://picsum.photos/id/237/100/100';      
-    const VENEZUELA_IMAGE_URL = 'https://picsum.photos/id/1025/100/100'; 
-    // -------------------------------------------------------------
-
+    // Canvas ပတ်ဝန်းကျင် အရွယ်အစား သတ်မှတ်ချက်
     const WIDTH = 450;
-    const HEIGHT = 800;
+    const HEIGHT = 650; // Control panel စာမျက်နှာအတွက် နေရာချန်ပြီး ကျုံ့ထားသည်
     canvas.width = WIDTH;
     canvas.height = HEIGHT;
 
-    const center = { x: WIDTH / 2, y: HEIGHT / 2 + 30 };
-    const fieldRadius = 150; 
+    const center = { x: WIDTH / 2, y: HEIGHT / 2 + 20 };
+    const fieldRadius = 135; 
 
-    // Score & Timer
-    let score = { iraq: 0, venezuela: 0 };
+    let score = { team1: 0, team2: 0 };
     let startTime = Date.now();
+    let isRunning = false; 
 
-    // ဂိုးပေါက် တည်နေရာ (အစပိုင်းတွင် အပေါ်တည့်တည့်၌ ထားမည်)
     let goalAngle = -Math.PI / 2; 
-    const goalWidthAngle = 0.5; // ဂိုးပေါက် အကျယ်အဝန်း
+    const goalWidthAngle = 0.5; 
 
-    // Images Loading
-    const imgIraq = new Image(); imgIraq.src = IRAQ_IMAGE_URL;
-    const imgVenezuela = new Image(); imgVenezuela.src = VENEZUELA_IMAGE_URL;
+    // Default အရောင်အဝိုင်းများ (ပုံမတင်ခင် ပြသရန်)
+    let img1Data = null;
+    let img2Data = null;
 
     const balls = [
-        { name: 'Iraq', x: center.x - 30, y: center.y - 20, vx: 3.5, vy: -4, radius: 20, img: imgIraq, isGoalOut: false, color: '#ff4d4d' },
-        { name: 'Venezuela', x: center.x + 30, y: center.y + 20, vx: -4, vy: 3.5, radius: 20, img: imgVenezuela, isGoalOut: false, color: '#4d94ff' }
+        { id: 'team1', name: 'Venezuela', x: center.x - 40, y: center.y + 30, vx: -4, vy: 3, radius: 20, img: null, isGoalOut: false, color: '#4d94ff' },
+        { id: 'team2', name: 'Iraq', x: center.x + 40, y: center.y - 30, vx: 3.5, vy: -4, radius: 20, img: null, isGoalOut: false, color: '#ff4d4d' }
     ];
 
-    // 🔊 Web Audio API ဖြင့် ပြင်ပဖိုင်မလိုဘဲ အသံဖန်တီးခြင်း
+    // 🔊 Web Audio API
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playTickSound() {
@@ -86,7 +193,7 @@
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(600, audioCtx.currentTime); // တောက် တောက် အသံ
+        osc.frequency.setValueAtTime(600, audioCtx.currentTime);
         gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
         osc.connect(gain);
@@ -97,7 +204,6 @@
 
     function playGoalSound() {
         if (audioCtx.state === 'suspended') audioCtx.resume();
-        // ပရိသတ်အော်သံပုံစံ Noise ဖန်တီးခြင်း
         const bufferSize = audioCtx.sampleRate * 1.5;
         const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
         const data = buffer.getChannelData(0);
@@ -109,11 +215,9 @@
         const filter = audioCtx.createBiquadFilter();
         filter.type = 'lowpass';
         filter.frequency.setValueAtTime(400, audioCtx.currentTime);
-        
         const gain = audioCtx.createGain();
         gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
-
         noise.connect(filter);
         filter.connect(gain);
         gain.connect(audioCtx.destination);
@@ -130,6 +234,8 @@
 
     // ⚙️ Logic Update
     function update() {
+        if (!isRunning) return;
+
         balls.forEach(ball => {
             if (ball.isGoalOut) {
                 ball.x += ball.vx;
@@ -149,19 +255,15 @@
 
             if (distance + ball.radius >= fieldRadius) {
                 let ballAngle = Math.atan2(dy, dx);
-                
-                // လက်ရှိ ဂိုးပေါက်ရဲ့ Angle အကွာအဝေးကို စစ်ဆေးခြင်း
                 let angleDiff = Math.abs(ballAngle - goalAngle);
                 if (angleDiff > Math.PI) angleDiff = Math.PI * 2 - angleDiff;
 
                 if (angleDiff < goalWidthAngle / 2) {
-                    // ⚽ ဂိုးဝင်သွားပြီ!
                     ball.isGoalOut = true;
                     playGoalSound();
-                    if (ball.name === 'Iraq') score.iraq++;
-                    else score.venezuela++;
+                    if (ball.id === 'team1') score.team1++;
+                    else score.team2++;
                 } else {
-                    // 튕 ဘောင်ကို တိုက်မိလျှင် လမ်းကြောင်းပြောင်းမည်
                     let nx = dx / distance;
                     let ny = dy / distance;
 
@@ -172,7 +274,6 @@
                     ball.vx = ball.vx - 2 * dotProduct * nx;
                     ball.vy = ball.vy - 2 * dotProduct * ny;
 
-                    // ⭐ [ပြင်ဆင်ချက်] ဘောလုံးတိုက်မိတဲ့ နေရာကို ဂိုးပေါက် ချက်ချင်း ရွှေ့ပေးခြင်း
                     goalAngle = ballAngle;
                     playTickSound();
                 }
@@ -211,42 +312,40 @@
     function draw() {
         ctx.clearRect(0, 0, WIDTH, HEIGHT);
         
-        // 1. ေနာင်ခံမြက်ခင်း
+        // ေနာင်ခံမြက်ခင်း
         ctx.fillStyle = '#0b7300';
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-        // 2. ရမှတ်ဘုတ်နှင့် Timer (ဗီဒီယိုထဲကပုံစံအတိုင်း)
-        // နိုင်ငံအလံများအတွက် အရောင်ကွက် (နောက်မှ ပုံထည့်နိုင်သည်)
-        ctx.fillStyle = '#4d94ff'; ctx.fillRect(WIDTH/2 - 75, 40, 40, 25); // Venezuela Color
-        ctx.fillStyle = '#ff4d4d'; ctx.fillRect(WIDTH/2 + 35, 40, 40, 25); // Iraq Color
-
+        // ရမှတ်ဘုတ်နှင့် Timer
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 28px sans-serif';
+        ctx.font = 'bold 26px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(`${score.venezuela} - ${score.iraq}`, WIDTH / 2, 63);
+        ctx.fillText(`${balls[0].name}  ${score.team1} - ${score.team2}  ${balls[1].name}`, WIDTH / 2, 60);
 
-        // Timer တွက်ချက်ခြင်း
-        let diff = Date.now() - startTime;
-        let mins = Math.floor(diff / 60000).toString().padStart(2, '0');
-        let secs = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
-        ctx.font = '22px sans-serif';
-        ctx.fillText(`${mins}:${secs}`, WIDTH / 2, 100);
+        let timeText = "00:00";
+        if (isRunning) {
+            let diff = Date.now() - startTime;
+            let mins = Math.floor(diff / 60000).toString().padStart(2, '0');
+            let secs = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+            timeText = `${mins}:${secs}`;
+        }
+        ctx.font = '20px sans-serif';
+        ctx.fillText(timeText, WIDTH / 2, 95);
 
-        // 3. အလယ်အဝိုင်းကွင်းဆွဲခြင်း
+        // အလယ်အဝိုင်းကွင်း
         ctx.beginPath();
         ctx.arc(center.x, center.y, fieldRadius, 0, Math.PI * 2);
         ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 5;
         ctx.stroke();
 
-        // 4. ဂိုးပေါက်ဆွဲခြင်း (ကွက်ကျားပိုက်ကွန်ပုံစံ)
+        // ဂိုးပေါက်
         ctx.save();
         ctx.translate(center.x, center.y);
         ctx.rotate(goalAngle);
-        
         ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 4;
-        ctx.fillStyle = 'rgba(255,255,255,0.15)';
+        ctx.fillStyle = 'rgba(255,255,255,0.2)';
         ctx.beginPath();
         ctx.arc(0, 0, fieldRadius + 25, -goalWidthAngle/2, goalWidthAngle/2);
         let endX = Math.cos(goalWidthAngle/2) * fieldRadius;
@@ -258,16 +357,16 @@
         ctx.stroke();
         ctx.restore();
 
-        // 5. ဘောလုံးများဆွဲခြင်း
+        // ဘောလုံးများဆွဲခြင်း
         balls.forEach(ball => {
             ctx.save();
             ctx.beginPath();
             ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
             ctx.clip();
             
-            try {
+            if (ball.img) {
                 ctx.drawImage(ball.img, ball.x - ball.radius, ball.y - ball.radius, ball.radius * 2, ball.radius * 2);
-            } catch (e) {
+            } else {
                 ctx.fillStyle = ball.color;
                 ctx.fill();
             }
@@ -287,9 +386,61 @@
         requestAnimationFrame(loop);
     }
 
-    // ပထမဆုံး Screen ကို ကလစ်နှိပ်မှ အသံစနစ် စတင်အလုပ်လုပ်မည်
-    window.addEventListener('click', () => {
+    // -------------------------------------------------------------
+    // 🕹️ UI Event Listeners (အသုံးပြုသူ စိတ်ကြိုက်ပြောင်းလဲနိုင်သော အပိုင်း)
+    // -------------------------------------------------------------
+    
+    // ၁။ နာမည်များ ပြောင်းလဲခြင်း စနစ်
+    document.getElementById('team1Name').addEventListener('input', (e) => {
+        balls[0].name = e.target.value || 'Team A';
+    });
+    document.getElementById('team2Name').addEventListener('input', (e) => {
+        balls[1].name = e.target.value || 'Team B';
+    });
+
+    // ၂။ ပုံများကို Upload လုပ်ပြီး ဘောလုံးထဲ ထည့်သွင်းခြင်း စနစ်
+    document.getElementById('team1Img').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => { balls[0].img = img; };
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    document.getElementById('team2Img').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => { balls[1].img = img; };
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // ၃။ Start / Pause ခလုတ် စနစ်
+    const startBtn = document.getElementById('startBtn');
+    startBtn.addEventListener('click', () => {
         if (audioCtx.state === 'suspended') audioCtx.resume();
+        
+        isRunning = !isRunning;
+        if (isRunning) {
+            startBtn.innerText = "PAUSE";
+            startBtn.style.background = "#ff4d4d";
+            startBtn.style.color = "#fff";
+            startTime = Date.now(); // Timer ကို ပြန်စမည်
+        } else {
+            startBtn.innerText = "START";
+            startBtn.style.background = "#ffffff";
+            startBtn.style.color = "#000000";
+        }
     });
 
     loop();
