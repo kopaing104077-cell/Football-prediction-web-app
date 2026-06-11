@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Football Fast Match Simulator</title>
+    <title>Advanced Football Match Simulator Pro</title>
     <style>
         * {
             margin: 0;
@@ -11,140 +11,158 @@
             box-sizing: border-box;
         }
         body {
-            background-color: #1a1a1a;
+            background-color: #141414;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
         }
-        /* 9:16 Vertical Screen TikTok/Reels Layout */
+        /* 9:16 Tiktok/Reels Aspect Ratio Vertical Viewport */
         #canvasContainer {
             position: relative;
             width: 100%;
             max-width: 450px;
             height: 100vh;
             max-height: 800px;
-            background-color: #0b7300; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background-color: #055200; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding-bottom: 20px;
+            padding-bottom: 25px;
         }
         
-        /* Top Scoreboard Container */
+        /* Premium Scoreboard Custom Design */
         .top-scoreboard {
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 25px;
+            padding-top: 30px;
             z-index: 5;
         }
         .score-row {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
+            gap: 18px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
         .score-flag {
-            width: 40px;
-            height: 26px;
-            background-color: #333;
-            border: 1px solid #fff;
+            width: 38px;
+            height: 25px;
+            background-color: #222;
+            border: 1.5px solid #fff;
             object-fit: cover;
-            border-radius: 2px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
         .score-text {
             color: #ffffff;
-            font-size: 32px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            font-size: 34px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            font-family: monospace;
         }
         .timer-text {
             color: #ffffff;
-            font-size: 26px;
-            margin-top: 5px;
-            font-weight: 500;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            font-size: 24px;
+            margin-top: 8px;
+            font-weight: bold;
+            background: rgba(0,0,0,0.2);
+            padding: 2px 12px;
+            border-radius: 10px;
+            letter-spacing: 1px;
         }
 
-        /* Canvas Area */
+        /* Simulation Pitch Viewport */
         canvas {
             width: 100%;
-            height: 420px;
+            height: 400px;
             display: block;
         }
 
-        /* 🛠️ Bottom Control Card (ဗီဒီယိုထဲက ပုံစံအတိုင်း) */
+        /* 🛠️ User Control Dashboard Card */
         .bottom-card {
-            background-color: #000000;
-            width: 90%;
+            background-color: #0a0a0a;
+            width: 92%;
             margin: 0 auto;
-            border-radius: 18px;
-            padding: 15px;
+            border-radius: 22px;
+            padding: 18px;
             color: white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            border: 1px solid #1f1f1f;
             z-index: 10;
         }
         .card-title {
             text-align: center;
             font-size: 11px;
-            color: #888;
-            margin-bottom: 4px;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
         }
         .card-main-title {
             text-align: center;
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 12px;
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #fff;
         }
         .teams-setup {
             display: flex;
             justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 12px;
+            gap: 12px;
+            margin-bottom: 15px;
         }
         .team-box {
             flex: 1;
-            background: #111;
+            background: #121212;
             border: 1px solid #222;
-            border-radius: 10px;
-            padding: 8px;
+            border-radius: 12px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
         .team-box input[type="text"] {
             width: 100%;
-            background: #222;
-            border: 1px solid #444;
+            background: #1f1f1f;
+            border: 1px solid #333;
             color: #fff;
-            padding: 5px;
-            border-radius: 6px;
+            padding: 6px;
+            border-radius: 8px;
             text-align: center;
             font-size: 13px;
             font-weight: bold;
+            outline: none;
+        }
+        .team-box input[type="text"]:focus {
+            border-color: #0b7300;
         }
         .upload-btn {
-            background: #222;
-            color: #aaa;
+            background: #1f1f1f;
+            color: #1dd1a1;
             font-size: 11px;
-            padding: 5px 8px;
-            border-radius: 6px;
+            font-weight: bold;
+            padding: 6px 10px;
+            border-radius: 8px;
             cursor: pointer;
             text-align: center;
             width: 100%;
-            border: 1px dashed #555;
+            border: 1px dashed #1dd1a1;
+            transition: 0.2s;
         }
         .upload-btn:hover {
-            background: #333;
-            color: #fff;
+            background: #1dd1a1;
+            color: #000;
         }
         .upload-btn input[type="file"] {
             display: none;
@@ -157,15 +175,16 @@
             background: #ffffff;
             color: #000000;
             border: none;
-            padding: 10px;
-            border-radius: 25px;
-            font-weight: bold;
-            font-size: 14px;
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 15px;
             cursor: pointer;
-            transition: 0.2s;
+            letter-spacing: 0.5px;
+            transition: 0.3s;
         }
         .start-btn:hover {
-            background: #e0e0e0;
+            transform: scale(1.02);
         }
     </style>
 </head>
@@ -174,9 +193,9 @@
 <div id="canvasContainer">
     <div class="top-scoreboard">
         <div class="score-row">
-            <img id="flagLeft" class="score-flag" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background-color: #4d94ff;">
+            <img id="flagLeft" class="score-flag" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background-color: #ff9f43;">
             <div class="score-text" id="scoreDisplay">0 - 0</div>
-            <img id="flagRight" class="score-flag" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background-color: #ff4d4d;">
+            <img id="flagRight" class="score-flag" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background-color: #ee5253;">
         </div>
         <div class="timer-text" id="timerDisplay">00:00</div>
     </div>
@@ -184,28 +203,28 @@
     <canvas id="gameCanvas"></canvas>
 
     <div class="bottom-card">
-        <div class="card-title" id="cardSub">6/10</div>
-        <div class="card-main-title" id="cardMain">Tomorrow</div>
+        <div class="card-title" id="cardSub">MATCH DAY PREDICTION</div>
+        <div class="card-main-title" id="cardMain">SIMULATOR PRO</div>
         
         <div class="teams-setup">
             <div class="team-box">
-                <input type="text" id="t1NameInput" value="Venezuela">
+                <input type="text" id="t1NameInput" value="Team A">
                 <label class="upload-btn">
-                    📷 Upload Image
+                    📷 UPLOAD LOGO
                     <input type="file" id="t1File" accept="image/*">
                 </label>
             </div>
             <div class="team-box">
-                <input type="text" id="t2NameInput" value="Iraq">
+                <input type="text" id="t2NameInput" value="Team B">
                 <label class="upload-btn">
-                    📷 Upload Image
+                    📷 UPLOAD LOGO
                     <input type="file" id="t2File" accept="image/*">
                 </label>
             </div>
         </div>
 
         <div class="start-btn-container">
-            <button class="start-btn" id="ctrlBtn">START SIMULATION</button>
+            <button class="start-btn" id="ctrlBtn">START MATCH SIMULATION</button>
         </div>
     </div>
 </div>
@@ -215,41 +234,42 @@
     const ctx = canvas.getContext('2d');
 
     const WIDTH = 450;
-    const HEIGHT = 420; 
-    canvas.width = WIDTH;
+    const HEIGHT = 400; 
     canvas.height = HEIGHT;
+    canvas.width = WIDTH;
 
     const center = { x: WIDTH / 2, y: HEIGHT / 2 };
-    const fieldRadius = 145; 
+    const fieldRadius = 140; 
 
-    // Simulation Configs
+    // Match Engine Configuration
     let score = { team1: 0, team2: 0 };
     let isSimulating = false;
     
-    // ⭐ အချိန်စနစ်မြှင့်တင်ခြင်း (မိနစ် ၉၀ ကို ၇၅ စက္ကန့်အတွင်း အပြီးမောင်းမည်)
+    // ⏱️ မိနစ် ၉၀ ကို ၁ မိနစ်ခွဲ (စက္ကန့် ၉၀) အတွင်း တိကျစွာ အမြန်မောင်းမည့် စနစ်
     let virtualMinutes = 0;
     let virtualSeconds = 0;
     let lastTimeUpdate = 0;
-    const matchDurationInSeconds = 75; // စုစုပေါင်း ၇၅ စက္ကန့် ကြာမြင့်မည်
+    const matchDurationInSeconds = 90; // စုစုပေါင်း ပွဲကစားချိန် ၉၀ စက္ကန့် ကွက်တိ ကြာပါမည်
 
-    let goalAngle = -Math.PI / 3; 
-    const goalWidthAngle = 0.45; 
+    // ⭐ ပိုကျဉ်းမြောင်းသွားသော ဂိုးပေါက်စနစ် (အချင်းဝက်ထောင့် ပိုနည်းသွားသည်)
+    let goalAngle = -Math.PI / 4; 
+    const goalWidthAngle = 0.35; // ဂိုးသွင်းရ ပိုခက်သွားစေရန် ကျဉ်းထားသည်
 
     const balls = [
-        { id: 'team1', name: 'Venezuela', x: center.x - 35, y: center.y + 20, vx: -6, vy: 5, radius: 21, img: null, isGoalOut: false, color: '#4d94ff' },
-        { id: 'team2', name: 'Iraq', x: center.x + 35, y: center.y - 20, vx: 5.5, vy: -6, radius: 21, img: null, isGoalOut: false, color: '#ff4d4d' }
+        { id: 'team1', name: 'Team A', x: center.x - 40, y: center.y + 15, vx: -5.5, vy: 6, radius: 21, img: null, isGoalOut: false, color: '#ff9f43' },
+        { id: 'team2', name: 'Team B', x: center.x + 40, y: center.y - 15, vx: 6, vy: -5.5, radius: 21, img: null, isGoalOut: false, color: '#ee5253' }
     ];
 
-    // 🔊 Web Audio API
+    // 🔊 High Quality Audio Generation Module
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playTickSound() {
         if (audioCtx.state === 'suspended') audioCtx.resume();
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(550, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        osc.type = 'triangle'; // Wood/Plastic click ပိုဆန်သောအသံ
+        osc.frequency.setValueAtTime(450, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.04);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
@@ -259,7 +279,8 @@
 
     function playGoalSound() {
         if (audioCtx.state === 'suspended') audioCtx.resume();
-        const bufferSize = audioCtx.sampleRate * 1.2;
+        // ပိုမိုကျယ်လောင်ပြီး သဘာဝကျသော ကွင်းလုံးကျွတ်အားပေးသံ ဖန်တီးခြင်း
+        const bufferSize = audioCtx.sampleRate * 1.8;
         const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
         const data = buffer.getChannelData(0);
         for (let i = 0; i < bufferSize; i++) {
@@ -267,12 +288,16 @@
         }
         const noise = audioCtx.createBufferSource();
         noise.buffer = buffer;
+        
         const filter = audioCtx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(450, audioCtx.currentTime);
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(350, audioCtx.currentTime);
+        filter.Q.setValueAtTime(1.5, audioCtx.currentTime);
+
         const gain = audioCtx.createGain();
-        gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.2);
+        gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + 1.6);
+
         noise.connect(filter);
         filter.connect(gain);
         gain.connect(audioCtx.destination);
@@ -280,19 +305,19 @@
     }
 
     function resetBall(ball) {
-        ball.x = center.x + (Math.random() * 30 - 15);
-        ball.y = center.y + (Math.random() * 30 - 15);
-        // အရှိန်မြှင့်ထားသော Velocity
-        ball.vx = (Math.random() > 0.5 ? 1 : -1) * (5 + Math.random() * 3);
-        ball.vy = (Math.random() > 0.5 ? 1 : -1) * (5 + Math.random() * 3);
+        ball.x = center.x + (Math.random() * 20 - 10);
+        ball.y = center.y + (Math.random() * 20 - 10);
+        // ပြန်ထွက်လာချိန် အရှိန်အဟုန်ပြင်းပြင်းဖြင့် မောင်းနှင်ခြင်း
+        ball.vx = (Math.random() > 0.5 ? 1 : -1) * (5.5 + Math.random() * 2.5);
+        ball.vy = (Math.random() > 0.5 ? 1 : -1) * (5.5 + Math.random() * 2.5);
         ball.isGoalOut = false;
     }
 
-    // ⚙️ Logic Update Loop
+    // ⚙️ Advanced Chaos Physics Update Loop
     function update() {
         if (!isSimulating) return;
 
-        // ⏱️ ၉၀ မိနစ် အမြန်ပြေးစနစ် တွက်ချက်ခြင်း
+        // ⏱️ Fast Forward Clock Engine
         let now = Date.now();
         if (now - lastTimeUpdate >= (matchDurationInSeconds * 1000 / 5400)) { 
             virtualSeconds++;
@@ -302,17 +327,25 @@
             }
             lastTimeUpdate = now;
 
-            // မိနစ် ၉၀ ပြည့်လျှင် ရပ်တန့်မည်
+            // Full Match Finished (မိနစ် ၉၀ ပြည့်သွားချိန်)
             if (virtualMinutes >= 90) {
                 virtualMinutes = 90;
                 virtualSeconds = 0;
                 isSimulating = false;
-                document.getElementById('ctrlBtn').innerText = "MATCH FINISHED";
-                document.getElementById('ctrlBtn').style.background = "#555";
-                document.getElementById('ctrlBtn').style.color = "#fff";
+                
+                // 🏆 Winner Determination Screen Card
+                let winnerText = "DRAW MATCH!";
+                if (score.team1 > score.team2) winnerText = `${balls[0].name} WINS!`;
+                else if (score.team2 > score.team1) winnerText = `${balls[1].name} WINS!`;
+                
+                document.getElementById('cardMain').innerText = winnerText;
+                document.getElementById('cardSub').innerText = "FULL TIME RESULT";
+                document.getElementById('ctrlBtn').innerText = "MATCH CONCLUDED";
+                document.getElementById('ctrlBtn').style.background = "#222";
+                document.getElementById('ctrlBtn').style.color = "#888";
+                document.getElementById('ctrlBtn').style.cursor = "default";
             }
             
-            // DOM သို့ အချိန်လှမ်းပြောင်းခြင်း
             let minsStr = virtualMinutes.toString().padStart(2, '0');
             let secsStr = virtualSeconds.toString().padStart(2, '0');
             document.getElementById('timerDisplay').innerText = `${minsStr}:${secsStr}`;
@@ -341,7 +374,7 @@
                 if (angleDiff > Math.PI) angleDiff = Math.PI * 2 - angleDiff;
 
                 if (angleDiff < goalWidthAngle / 2) {
-                    // ⚽ ဂိုးဝင်ပြီ!
+                    // ⭐ ေဂါ်လ်း ဝင်သွားပြီ!
                     ball.isGoalOut = true;
                     playGoalSound();
                     if (ball.id === 'team1') score.team1++;
@@ -349,7 +382,7 @@
                     
                     document.getElementById('scoreDisplay').innerText = `${score.team1} - ${score.team2}`;
                 } else {
-                    // ဘောင်ကန်ထွက်ခြင်း
+                    // ⭐ Advanced Elastic Reflection Physics (ပြန်ကန်ထွက်မှု အဟုန်ကို ပိုမိုရှုပ်ထွေးစေခြင်း)
                     let nx = dx / distance;
                     let ny = dy / distance;
 
@@ -357,16 +390,26 @@
                     ball.y = center.y + ny * (fieldRadius - ball.radius);
 
                     let dotProduct = ball.vx * nx + ball.vy * ny;
-                    ball.vx = ball.vx - 2 * dotProduct * nx;
-                    ball.vy = ball.vy - 2 * dotProduct * ny;
+                    
+                    // Chaos Factor: တိုက်မိတိုင်း လမ်းကြောင်းကို အနည်းငယ် ထောင့်လွှဲစေပြီး အရှိန်ထိန်းညှိပေးသည်
+                    let chaosX = (Math.random() - 0.5) * 0.4;
+                    let chaosY = (Math.random() - 0.5) * 0.4;
 
-                    goalAngle = ballAngle; // ဂိုးပေါက် ချက်ချင်းရွှေ့ခြင်း
+                    ball.vx = (ball.vx - 2 * dotProduct * nx) + chaosX;
+                    ball.vy = (ball.vy - 2 * dotProduct * ny) + chaosY;
+
+                    // အရှိန်လွန်မသွားအောင် Max Speed ကို ညှိပေးခြင်း
+                    let speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
+                    if (speed > 9) { ball.vx *= (8/speed); ball.vy *= (8/speed); }
+                    if (speed < 5) { ball.vx *= (6/speed); ball.vy *= (6/speed); }
+
+                    goalAngle = ballAngle; // ဗီဒီယိုအတိုင်း ဂိုးပေါက်ကို ချက်ချင်း နေရာရွှေ့သည်
                     playTickSound();
                 }
             }
         });
 
-        // ဘောလုံးအချင်းချင်း တိုက်မိခြင်း
+        // Ball vs Ball Collision (ဘောလုံးအချင်းချင်း တိုက်မိခြင်း)
         for (let i = 0; i < balls.length; i++) {
             for (let j = i + 1; j < balls.length; j++) {
                 let b1 = balls[i]; let b2 = balls[j];
@@ -394,24 +437,24 @@
         }
     }
 
-    // 🎨 Graphics Render Loop
+    // 🎨 Render Module (ဂရပ်ဖစ်ပိုင်း အလှဆင်ခြင်း)
     function draw() {
         ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
-        // အလယ်အဝိုင်းကွင်း
+        // ကွင်းလယ်စက်ဝိုင်းကြီး ဆွဲခြင်း
         ctx.beginPath();
         ctx.arc(center.x, center.y, fieldRadius, 0, Math.PI * 2);
-        ctx.strokeStyle = '#ffffff';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
         ctx.lineWidth = 5;
         ctx.stroke();
 
-        // လည်ပတ်/ရွေ့လျားသော ဂိုးပေါက်
+        // 🥅 ဂိုးပေါက်ကွက်အား ပိုမိုလှပသော ပိုက်ကွန်ပုံစံဆွဲခြင်း
         ctx.save();
         ctx.translate(center.x, center.y);
         ctx.rotate(goalAngle);
         ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 4;
-        ctx.fillStyle = 'rgba(255,255,255,0.2)';
+        ctx.fillStyle = 'rgba(255,255,255,0.25)';
         ctx.beginPath();
         ctx.arc(0, 0, fieldRadius + 22, -goalWidthAngle/2, goalWidthAngle/2);
         let endX = Math.cos(goalWidthAngle/2) * fieldRadius;
@@ -423,7 +466,7 @@
         ctx.stroke();
         ctx.restore();
 
-        // ဘောလုံး/အလံများ ဆွဲခြင်း
+        // အလံပုံ/ဘောလုံးများ ဆွဲထုတ်ခြင်း
         balls.forEach(ball => {
             ctx.save();
             ctx.beginPath();
@@ -440,12 +483,13 @@
             ctx.beginPath();
             ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
             ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 2.5;
             ctx.stroke();
             ctx.restore();
         });
     }
 
+    // Main Simulation Loop மောင်းနှင်ခြင်း
     function mainLoop() {
         update();
         draw();
@@ -453,62 +497,61 @@
     }
 
     // -------------------------------------------------------------
-    // 🕹️ Interactive UI Logic
+    // 🕹️ Core Event Sync Listeners
     // -------------------------------------------------------------
     
-    // အမည်များ လိုက်ပြောင်းရန်
+    // စာသားရိုက်ထည့်လျှင် Scoreboard ၌ တိုက်ရိုက်ပြောင်းလဲစေခြင်း
     document.getElementById('t1NameInput').addEventListener('input', (e) => {
-        balls[0].name = e.target.value || 'Team 1';
+        balls[0].name = e.target.value || 'Team A';
     });
     document.getElementById('t2NameInput').addEventListener('input', (e) => {
-        balls[1].name = e.target.value || 'Team 2';
+        balls[1].name = e.target.value || 'Team B';
     });
 
-    // ပုံတင်စနစ် (Upload Image to Ball & Scoreboard Flag)
-    function handleImageUpload(fileInputId, ballIndex, flagImgId) {
-        document.getElementById(fileInputId).addEventListener('change', function(e) {
+    // Image Loader Setup (Ball + Scoreboard Flag သို့ ပုံပို့ခြင်း)
+    function bindImageEngine(fileId, ballIdx, flagId) {
+        document.getElementById(fileId).addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(event) {
+                reader.onload = function(evt) {
                     const img = new Image();
-                    img.src = event.target.result;
+                    img.src = evt.target.result;
                     img.onload = () => { 
-                        balls[ballIndex].img = img; 
-                        document.getElementById(flagImgId).src = event.target.result;
+                        balls[ballIdx].img = img; 
+                        document.getElementById(flagId).src = evt.target.result;
                     };
                 };
                 reader.readAsDataURL(file);
             }
         });
     }
-    handleImageUpload('t1File', 0, 'flagLeft');
-    handleImageUpload('t2File', 1, 'flagRight');
+    bindImageEngine('t1File', 0, 'flagLeft');
+    bindImageEngine('t2File', 1, 'flagRight');
 
-    // START SIMULATION ကိုနှိပ်မှ စတင်မည့်စနစ်
+    // Control Button Click Logic
     const ctrlBtn = document.getElementById('ctrlBtn');
     ctrlBtn.addEventListener('click', () => {
-        if (virtualMinutes >= 90) return; // ပွဲပြီးရင် ထပ်နှိပ်မရပါ
+        if (virtualMinutes >= 90) return; 
         
         if (audioCtx.state === 'suspended') audioCtx.resume();
         
         isSimulating = !isSimulating;
         if (isSimulating) {
-            ctrlBtn.innerText = "PAUSE SIMULATION";
-            ctrlBtn.style.background = "#ff4d4d";
+            ctrlBtn.innerText = "PAUSE PREDICTION";
+            ctrlBtn.style.background = "#ee5253";
             ctrlBtn.style.color = "#fff";
             lastTimeUpdate = Date.now();
         } else {
-            ctrlBtn.innerText = "START SIMULATION";
+            ctrlBtn.innerText = "START MATCH SIMULATION";
             ctrlBtn.style.background = "#ffffff";
             ctrlBtn.style.color = "#000000";
         }
     });
 
-    // Engine စတင်ပတ်မောင်းနှင်ခြင်း
+    // Start Simulation Engine
     mainLoop();
 </script>
 
 </body>
 </html>
-
