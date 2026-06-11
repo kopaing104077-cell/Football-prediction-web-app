@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Supercomputer Football Predictor Pro</title>
+    <title>AI Supercomputer Football Predictor 1080p</title>
     <style>
         * {
             margin: 0;
@@ -11,7 +11,7 @@
             box-sizing: border-box;
         }
         body {
-            background-color: #050814;
+            background-color: #050811;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -19,8 +19,9 @@
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             overflow: hidden;
         }
-        /* 9:16 Vertical Video Frame (TikTok/Reels Optimized) */
-        #viewport {
+        
+        /* 9:16 Tik Tok / Reels Container Layout */
+        #viewportContainer {
             position: relative;
             width: 100%;
             max-width: 450px;
@@ -33,11 +34,22 @@
             flex-direction: column;
             justify-content: space-between;
             padding-bottom: 20px;
-            border: 1px solid #1e293b;
+            border: 1px solid rgba(0, 242, 254, 0.15);
         }
-        
-        /* Premium Sci-Fi Scoreboard */
-        .top-scoreboard {
+
+        /* Sci-Fi Grid Line Animation Overlay */
+        #viewportContainer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+
+        /* Top HUD Scoreboard Header */
+        .hud-header {
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -45,251 +57,232 @@
             padding-top: 35px;
             z-index: 5;
         }
-        .ai-badge {
+        .hud-title {
+            color: #00f2fe;
             font-size: 10px;
-            color: #00ffcc;
-            background: rgba(0, 255, 204, 0.1);
-            padding: 2px 10px;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 255, 204, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
             font-weight: bold;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            text-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
         }
-        .score-row {
+        .match-score-row {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
-            background: rgba(15, 23, 42, 0.6);
-            padding: 10px 25px;
-            border-radius: 40px;
-            border: 1px solid rgba(255,255,255,0.05);
-            backdrop-filter: blur(10px);
-        }
-        .score-flag {
-            width: 42px;
-            height: 28px;
-            background-color: #1e293b;
-            border: 2px solid #ffffff;
-            object-fit: cover;
+            gap: 15px;
+            background: rgba(2, 6, 18, 0.75);
+            padding: 8px 22px;
             border-radius: 4px;
-            box-shadow: 0 0 10px rgba(255,255,255,0.2);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            box-shadow: inset 0 0 15px rgba(0, 242, 254, 0.1);
         }
-        .score-text {
+        .team-flag {
+            width: 36px;
+            height: 24px;
+            background-color: #111;
+            border: 1px solid rgba(255,255,255,0.3);
+            object-fit: cover;
+            border-radius: 2px;
+        }
+        .score-nums {
             color: #ffffff;
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 900;
-            font-family: 'Courier New', Courier, monospace;
-            text-shadow: 0 0 15px rgba(255,255,255,0.5);
+            font-family: monospace;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
         }
-        .timer-text {
-            color: #00ffcc;
+        .hud-timer {
+            color: #00f2fe;
             font-size: 26px;
             margin-top: 10px;
             font-weight: bold;
             font-family: monospace;
-            background: rgba(0, 255, 204, 0.05);
-            padding: 4px 16px;
-            border-radius: 8px;
-            border: 1px solid rgba(0, 255, 204, 0.1);
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+            text-shadow: 0 0 6px rgba(0, 242, 254, 0.5);
         }
 
-        /* Physics Simulation Studio */
+        /* Center Canvas Simulation Board */
         canvas {
             width: 100%;
-            height: 380px;
+            height: 400px;
             display: block;
         }
 
-        /* 🛠️ Modern Sci-Fi Control Dashboard */
-        .bottom-card {
-            background: rgba(10, 15, 30, 0.9);
+        /* 🛠️ Modern Neon Control Panel */
+        .neon-control-card {
+            background: rgba(2, 4, 10, 0.9);
             width: 92%;
             margin: 0 auto;
-            border-radius: 24px;
-            padding: 20px;
+            border-radius: 16px;
+            padding: 16px;
             color: white;
+            border: 1px solid rgba(0, 242, 254, 0.2);
             box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-            border: 1px solid rgba(0, 255, 204, 0.1);
-            backdrop-filter: blur(10px);
             z-index: 10;
         }
-        .card-main-title {
-            text-align: center;
-            font-size: 18px;
-            font-weight: 800;
-            margin-bottom: 15px;
-            color: #ffffff;
-            letter-spacing: 1px;
-        }
-        .teams-setup {
+        .config-row {
             display: flex;
             justify-content: space-between;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 15px;
         }
-        .team-box {
+        .input-group {
             flex: 1;
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 14px;
-            padding: 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
-        .team-box input[type="text"] {
+        .input-group input[type="text"] {
             width: 100%;
-            background: #0f172a;
-            border: 1px solid #334155;
+            background: #070c18;
+            border: 1px solid rgba(0, 242, 254, 0.3);
             color: #fff;
-            padding: 8px;
-            border-radius: 8px;
+            padding: 6px;
+            border-radius: 6px;
             text-align: center;
             font-size: 13px;
             font-weight: bold;
             outline: none;
         }
-        .team-box input[type="text"]:focus {
-            border-color: #00ffcc;
+        .input-group input[type="text"]:focus {
+            border-color: #00f2fe;
+            box-shadow: 0 0 8px rgba(0, 242, 254, 0.4);
         }
-        .upload-btn {
-            background: rgba(0, 255, 204, 0.1);
-            color: #00ffcc;
-            font-size: 11px;
+        .neon-upload {
+            background: rgba(0, 242, 254, 0.05);
+            color: #00f2fe;
+            font-size: 10px;
             font-weight: bold;
-            padding: 7px 10px;
-            border-radius: 8px;
+            padding: 6px 10px;
+            border-radius: 6px;
             cursor: pointer;
             text-align: center;
             width: 100%;
-            border: 1px dashed rgba(0, 255, 204, 0.4);
-            transition: 0.2s;
+            border: 1px dashed rgba(0, 242, 254, 0.4);
+            text-transform: uppercase;
         }
-        .upload-btn:hover {
-            background: #00ffcc;
-            color: #000;
-        }
-        .upload-btn input[type="file"] {
+        .neon-upload input[type="file"] {
             display: none;
         }
-        .start-btn {
+        .action-btn {
             width: 100%;
-            background: #00ffcc;
-            color: #050814;
+            background: linear-gradient(45deg, #00f2fe, #4facfe);
+            color: #000;
             border: none;
-            padding: 14px;
+            padding: 12px;
             border-radius: 30px;
-            font-weight: 800;
-            font-size: 15px;
+            font-weight: bold;
+            font-size: 13px;
             cursor: pointer;
             letter-spacing: 1px;
             text-transform: uppercase;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.4);
             transition: 0.3s;
         }
-        .start-btn:hover {
-            box-shadow: 0 0 25px rgba(0, 255, 204, 0.6);
-            transform: scale(1.02);
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.6);
         }
     </style>
 </head>
 <body>
 
-<div id="viewport">
-    <div class="top-scoreboard">
-        <div class="ai-badge" id="aiStatus">Supercomputer Predictive Engine</div>
-        <div class="score-row">
-            <img id="flagLeft" class="score-flag" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background-color: #3b82f6;">
-            <div class="score-text" id="scoreDisplay">0 - 0</div>
-            <img id="flagRight" class="score-flag" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background-color: #ef4444;">
+<div id="viewportContainer">
+    <div class="hud-header">
+        <div class="hud-title">AI Supercomputer Match Prediction</div>
+        <div class="match-score-row">
+            <img id="flagL" class="team-flag" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background-color: #00f2fe;">
+            <div class="score-nums" id="hudScore">0 - 0</div>
+            <img id="flagR" class="team-flag" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background-color: #ff007f;">
         </div>
-        <div class="timer-text" id="timerDisplay">00:00</div>
+        <div class="hud-timer" id="hudTime">00:00</div>
     </div>
 
-    <canvas id="predictionCanvas"></canvas>
+    <canvas id="simulationCanvas"></canvas>
 
-    <div class="bottom-card">
-        <div class="card-main-title" id="cardMain">MATCH SETUP</div>
-        
-        <div class="teams-setup">
-            <div class="team-box">
-                <input type="text" id="t1Name" value="TEAM A">
-                <label class="upload-btn">
-                    📷 UPLOAD LOGO
-                    <input type="file" id="t1File" accept="image/*">
+    <div class="neon-control-card">
+        <div class="config-row">
+            <div class="input-group">
+                <input type="text" id="name1" value="TEAM A">
+                <label class="neon-upload">
+                    📷 Upload Logo
+                    <input type="file" id="file1" accept="image/*">
                 </label>
             </div>
-            <div class="team-box">
-                <input type="text" id="t2Name" value="TEAM B">
-                <label class="upload-btn">
-                    📷 UPLOAD LOGO
-                    <input type="file" id="t2File" accept="image/*">
+            <div class="input-group">
+                <input type="text" id="name2" value="TEAM B">
+                <label class="neon-upload">
+                    📷 Upload Logo
+                    <input type="file" id="file2" accept="image/*">
                 </label>
             </div>
         </div>
-
-        <button class="start-btn" id="startRecordBtn">Start & Record 1080p Video</button>
+        <button class="action-btn" id="triggerBtn">Record & Start Predict</button>
     </div>
 </div>
 
 <script>
-    const canvas = document.getElementById('predictionCanvas');
+    const canvas = document.getElementById('simulationCanvas');
     const ctx = canvas.getContext('2d');
 
-    // ⭐ High Definition Internal Resolution (1080p Export Optimized)
-    const WIDTH = 1080;
-    const HEIGHT = 912; 
-    canvas.width = WIDTH;
-    canvas.height = HEIGHT;
+    // ⭐ High Definition 1080p Internal Resolution Setup (ဗီဒီယိုကြည်လင်ပြတ်သားရန်)
+    const renderWidth = 1080;
+    const renderHeight = 960; 
+    canvas.width = renderWidth;
+    canvas.height = renderHeight;
 
-    const center = { x: WIDTH / 2, y: HEIGHT / 2 };
-    const fieldRadius = 330; // 1080p ကန်ဗတ်စ်အတွက် ကွင်းအရွယ်အစားကို ချဲ့ထားသည်
+    const center = { x: renderWidth / 2, y: renderHeight / 2 };
+    const fieldRadius = 360; // 1080p အချိုးကျ စက်ဝိုင်းကြီးအောင် ချဲ့ထားသည်
 
     let score = { team1: 0, team2: 0 };
-    let isSimulating = false;
-    let mediaRecorder;
-    let recordedChunks = [];
+    let isLive = false;
     
-    // ⭐ စက္ကန့် ၃၀ အမြန်ပြေးစနစ် တွက်ချက်ခြင်း
-    let virtualMinutes = 0;
-    let virtualSeconds = 0;
-    let lastTimeUpdate = 0;
-    const matchDurationInSeconds = 30; // စက္ကန့် ၃၀ ကွက်တိ
+    // ⏱️ ၁၅ စက္ကန့် စနစ်တည်ဆောက်မှု (15 Seconds Real time = 90 Minutes Match time)
+    let virtualMins = 0;
+    let virtualSecs = 0;
+    let lastClockTick = 0;
+    const simulationDuration = 15; // စက္ကန့် ၁၅ စက္ကန့်ကွက်တိ ကစားပါမည်
 
-    // ⭐ လက်တွေ့ကျကျ ဝင်ခဲအောင် ကျဉ်းမြောင်းထားသော ဂိုးပေါက်စနစ်
-    let goalAngle = -Math.PI / 2; 
-    const goalWidthAngle = 0.22; // အလွန်ကျဉ်းမြောင်းသော ဂိုးပေါက်
+    // 🥅 ဗီဒီယိုအတိုင်း အဆက်မပြတ်လည်ပတ်နေသော ဂိုးပေါက်စနစ်
+    let goalAngle = -Math.PI / 2;
+    const goalSpeed = 0.015; // လည်ပတ်နှုန်း အရှိန်
+    const goalWidthAngle = 0.28; // ဂိုးသွင်းရခက်အောင် ကျဉ်းကျဉ်းနှင့် စိတ်လှုပ်ရှားဖွရာ သတ်မှတ်ထားသည်
 
     const balls = [
-        { id: 'team1', name: 'TEAM A', x: center.x - 90, y: center.y + 40, vx: -12, vy: 14, radius: 48, img: null, isGoalOut: false, color: '#3b82f6' },
-        { id: 'team2', name: 'TEAM B', x: center.x + 90, y: center.y - 40, vx: 14, vy: -12, radius: 48, img: null, isGoalOut: false, color: '#ef4444' }
+        { id: 'team1', name: 'TEAM A', x: center.x - 90, y: center.y + 40, vx: -12, vy: 14, radius: 48, img: null, isGoalOut: false, color: '#00f2fe' },
+        { id: 'team2', name: 'TEAM B', x: center.x + 90, y: center.y - 40, vx: 14, vy: -12, radius: 48, img: null, isGoalOut: false, color: '#ff007f' }
     ];
 
-    // 🔊 High Quality Audio Context
+    // 🎥 Video Recorder Variables
+    let mediaRecorder;
+    let recordedChunks = [];
+
+    // 🔊 Web Audio API
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playTickSound() {
         if (audioCtx.state === 'suspended') audioCtx.resume();
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(380, audioCtx.currentTime); // ပိုလေးနက်ပြီး အကြည်ခံသောအသံ
-        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
         osc.start();
-        osc.stop(audioCtx.currentTime + 0.05);
+        osc.stop(audioCtx.currentTime + 0.03);
     }
 
     function playGoalSound() {
         if (audioCtx.state === 'suspended') audioCtx.resume();
-        const bufferSize = audioCtx.sampleRate * 2.0;
+        const bufferSize = audioCtx.sampleRate * 1.5;
         const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
         const data = buffer.getChannelData(0);
         for (let i = 0; i < bufferSize; i++) {
@@ -299,10 +292,10 @@
         noise.buffer = buffer;
         const filter = audioCtx.createBiquadFilter();
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(300, audioCtx.currentTime);
+        filter.frequency.setValueAtTime(380, audioCtx.currentTime);
         const gain = audioCtx.createGain();
-        gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 2.0);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + 1.4);
         noise.connect(filter);
         filter.connect(gain);
         gain.connect(audioCtx.destination);
@@ -310,41 +303,45 @@
     }
 
     function resetBall(ball) {
-        ball.x = center.x + (Math.random() * 60 - 30);
-        ball.y = center.y + (Math.random() * 60 - 30);
-        ball.vx = (Math.random() > 0.5 ? 1 : -1) * (12 + Math.random() * 6);
-        ball.vy = (Math.random() > 0.5 ? 1 : -1) * (12 + Math.random() * 6);
+        ball.x = center.x + (Math.random() * 40 - 20);
+        ball.y = center.y + (Math.random() * 40 - 20);
+        ball.vx = (Math.random() > 0.5 ? 1 : -1) * (11 + Math.random() * 5);
+        ball.vy = (Math.random() > 0.5 ? 1 : -1) * (11 + Math.random() * 5);
         ball.isGoalOut = false;
     }
 
-    // ⚙️ Simulation Engine Update
+    // ⚙️ Core Physics Engine Loop
     function update() {
-        if (!isSimulating) return;
+        // ဂိုးပေါက်ကို ဗီဒီယိုအတိုင်း အဆက်မပြတ် လည်ပတ်စေခြင်း
+        goalAngle += goalSpeed;
+        if (goalAngle > Math.PI * 2) goalAngle -= Math.PI * 2;
 
+        if (!isLive) return;
+
+        // ⏱️ ၁၅ စက္ကန့်အတွင်း မိနစ် ၉၀ အမြန်ဆုံးဖြတ်စနစ်
         let now = Date.now();
-        if (now - lastTimeUpdate >= (matchDurationInSeconds * 1000 / 5400)) { 
-            virtualSeconds++;
-            if (virtualSeconds >= 60) {
-                virtualSeconds = 0;
-                virtualMinutes++;
+        if (now - lastClockTick >= (simulationDuration * 1000 / 5400)) {
+            virtualSecs++;
+            if (virtualSecs >= 60) {
+                virtualSecs = 0;
+                virtualMins++;
             }
-            lastTimeUpdate = now;
+            lastClockTick = now;
 
-            if (virtualMinutes >= 90) {
-                virtualMinutes = 90;
-                virtualSeconds = 0;
-                isSimulating = false;
+            if (virtualMins >= 90) {
+                virtualMins = 90; virtualSecs = 0;
+                isLive = false;
                 stopRecordingAndDownload();
             }
             
-            document.getElementById('timerDisplay').innerText = `${virtualMinutes.toString().padStart(2, '0')}:${virtualSeconds.toString().padStart(2, '0')}`;
+            document.getElementById('hudTime').innerText = `${virtualMins.toString().padStart(2, '0')}:${virtualSecs.toString().padStart(2, '0')}`;
         }
 
         balls.forEach(ball => {
             if (ball.isGoalOut) {
                 ball.x += ball.vx;
                 ball.y += ball.vy;
-                if (ball.x < -100 || ball.x > WIDTH + 100 || ball.y < -100 || ball.y > HEIGHT + 100) {
+                if (ball.x < -100 || ball.x > renderWidth + 100 || ball.y < -100 || ball.y > renderHeight + 100) {
                     resetBall(ball);
                 }
                 return;
@@ -353,26 +350,26 @@
             ball.x += ball.vx;
             ball.y += ball.vy;
 
-            // ⭐ Friction (ပွတ်တိုက်မှုအဟုန်ထည့်ပြီး အရှိန်ထိန်းခြင်း)
-            ball.vx *= 0.999;
-            ball.vy *= 0.999;
-
             let dx = ball.x - center.x;
             let dy = ball.y - center.y;
             let distance = Math.sqrt(dx * dx + dy * dy);
 
             if (distance + ball.radius >= fieldRadius) {
                 let ballAngle = Math.atan2(dy, dx);
+                if (ballAngle < 0) ballAngle += Math.PI * 2;
+
                 let angleDiff = Math.abs(ballAngle - goalAngle);
                 if (angleDiff > Math.PI) angleDiff = Math.PI * 2 - angleDiff;
 
+                // ဂိုးဝင်ခြင်း ရှိ/မရှိ စစ်ဆေးခြင်း
                 if (angleDiff < goalWidthAngle / 2) {
                     ball.isGoalOut = true;
                     playGoalSound();
                     if (ball.id === 'team1') score.team1++;
                     else score.team2++;
-                    document.getElementById('scoreDisplay').innerText = `${score.team1} - ${score.team2}`;
+                    document.getElementById('hudScore').innerText = `${score.team1} - ${score.team2}`;
                 } else {
+                    // တိကျသော Elastic Collision + Chaos Factor
                     let nx = dx / distance;
                     let ny = dy / distance;
 
@@ -380,31 +377,28 @@
                     ball.y = center.y + ny * (fieldRadius - ball.radius);
 
                     let dotProduct = ball.vx * nx + ball.vy * ny;
-                    
-                    // Chaos Theory Vector
-                    let chaos = (Math.random() - 0.5) * 0.8;
-                    ball.vx = (ball.vx - 2 * dotProduct * nx) + chaos;
-                    ball.vy = (ball.vy - 2 * dotProduct * ny) + chaos;
+                    let deviation = (Math.random() - 0.5) * 0.5; // လမ်းကြောင်းလွှဲမှုစနစ်
 
-                    // Speed Constraints
-                    let speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
-                    if (speed > 22) { ball.vx *= (20/speed); ball.vy *= (20/speed); }
-                    if (speed < 12) { ball.vx *= (14/speed); ball.vy *= (14/speed); }
+                    ball.vx = (ball.vx - 2 * dotProduct * nx) + deviation;
+                    ball.vy = (ball.vy - 2 * dotProduct * ny) + deviation;
 
-                    goalAngle = ballAngle;
+                    // Speed Limits Control
+                    let currentSpeed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
+                    if (currentSpeed > 22) { ball.vx *= (18/currentSpeed); ball.vy *= (18/currentSpeed); }
+                    if (currentSpeed < 12) { ball.vx *= (14/currentSpeed); ball.vy *= (14/currentSpeed); }
+
                     playTickSound();
                 }
             }
         });
 
-        // Ball vs Ball Collision
+        // ဘောလုံးအချင်းချင်း တိုက်မိခြင်း
         for (let i = 0; i < balls.length; i++) {
             for (let j = i + 1; j < balls.length; j++) {
                 let b1 = balls[i]; let b2 = balls[j];
                 if (b1.isGoalOut || b2.isGoalOut) continue;
 
-                let dx = b2.x - b1.x;
-                let dy = b2.y - b1.y;
+                let dx = b2.x - b1.x; let dy = b2.y - b1.y;
                 let dist = Math.sqrt(dx * dx + dy * dy);
 
                 if (dist < b1.radius + b2.radius) {
@@ -425,44 +419,31 @@
         }
     }
 
-    // 🎨 Premium Cyber Grid & Neon Render Graphics
+    // 🎨 Sci-Fi High Tech Visual Rendering Module
     function draw() {
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
+        ctx.clearRect(0, 0, renderWidth, renderHeight);
 
-        // 1. Cyber Grid Background (ကြာကြာကြည့်ရှုခံမည့် Premium Glow လိုင်းများ)
-        ctx.strokeStyle = 'rgba(0, 255, 204, 0.03)';
-        ctx.lineWidth = 2;
-        let gridSize = 60;
-        for (let x = 0; x < WIDTH; x += gridSize) {
-            ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, HEIGHT); ctx.stroke();
-        }
-        for (let y = 0; y < HEIGHT; y += gridSize) {
-            ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(WIDTH, y); ctx.stroke();
-        }
-
-        // 2. Center Predictive Outer Circle Glow
-        ctx.beginPath();
-        ctx.arc(center.x, center.y, fieldRadius + 15, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(0, 255, 204, 0.05)';
-        ctx.lineWidth = 3;
-        ctx.stroke();
-
-        // 3. Main Center Circle
+        // Cyberpunk Glowing Ring Base
+        ctx.shadowBlur = 25;
+        ctx.shadowColor = '#00f2fe';
         ctx.beginPath();
         ctx.arc(center.x, center.y, fieldRadius, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-        ctx.lineWidth = 10; // High Def တွက် ထူထူဆွဲသည်
+        ctx.strokeStyle = 'rgba(0, 242, 254, 0.8)';
+        ctx.lineWidth = 12;
         ctx.stroke();
+        ctx.shadowBlur = 0; // Reset Shadow
 
-        // 4. Neon Cyber Goal Mesh
+        // 🥅 မျက်စိပသာဒဖြစ်စေမည့် တောက်ပသော လည်ပတ်ဂိုးပေါက်ဆွဲခြင်း
         ctx.save();
         ctx.translate(center.x, center.y);
         ctx.rotate(goalAngle);
-        ctx.strokeStyle = '#00ffcc';
-        ctx.lineWidth = 8;
-        ctx.shadowBlur = 20;
-        ctx.shadowColor = '#00ffcc';
-        ctx.fillStyle = 'rgba(0, 255, 204, 0.15)';
+        
+        ctx.shadowBlur = 30;
+        ctx.shadowColor = '#ffffff';
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 10;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+        
         ctx.beginPath();
         ctx.arc(0, 0, fieldRadius + 50, -goalWidthAngle/2, goalWidthAngle/2);
         let endX = Math.cos(goalWidthAngle/2) * fieldRadius;
@@ -473,8 +454,9 @@
         ctx.fill();
         ctx.stroke();
         ctx.restore();
+        ctx.shadowBlur = 0;
 
-        // 5. High Def Circular Flags Rendering
+        // ဘောလုံး/အလံပုံရိပ်များ ဖော်ထုတ်ခြင်း
         balls.forEach(ball => {
             ctx.save();
             ctx.beginPath();
@@ -491,61 +473,43 @@
             ctx.beginPath();
             ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
             ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 5;
+            ctx.lineWidth = 4;
             ctx.stroke();
             ctx.restore();
         });
     }
 
-    function mainLoop() {
+    function mainEngineLoop() {
         update();
         draw();
-        requestAnimationFrame(mainLoop);
+        requestAnimationFrame(mainEngineLoop);
     }
 
-    // -------------------------------------------------------------
-    // 📹 1080p Export HD Recording Module Logic
-    // -------------------------------------------------------------
+    // 🎥 1080p Video Capturer Engine (ဒေါင်းလုဒ်လုပ်ရန် စနစ်)
     function startRecording() {
         recordedChunks = [];
-        // Canvas stream ကို 60 FPS ဖြင့် ဖမ်းယူခြင်း
-        const stream = canvas.captureStream(60); 
+        const stream = canvas.captureStream(60); // 60 FPS HD Quality
+        mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9', videoBitsPerSecond: 8000000 }); // High Bitrate
         
-        // Browser က ထောက်ပံ့ပေးနိုင်မည့် ဗီဒီယို format ကို ရွေးချယ်ခြင်း
-        let options = { mimeType: 'video/webm;codecs=vp9,opus', videoBitsPerSecond: 8000000 }; // 8Mbps High Quality
-        try {
-            mediaRecorder = new MediaRecorder(stream, options);
-        } catch (e) {
-            options = { mimeType: 'video/webm;codecs=vp8', videoBitsPerSecond: 5000000 };
-            mediaRecorder = new MediaRecorder(stream, options);
-        }
-
-        mediaRecorder.ondataavailable = (event) => {
-            if (event.data.size > 0) recordedChunks.push(event.data);
+        mediaRecorder.ondataavailable = (e) => {
+            if (e.data.size > 0) recordedChunks.push(e.data);
         };
 
         mediaRecorder.onstop = () => {
             const blob = new Blob(recordedChunks, { type: 'video/webm' });
             const url = URL.createObjectURL(blob);
-            
-            // Auto Download Link Engine Trigger
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${balls[0].name}_vs_${balls[1].name}_Prediction_1080p.webm`;
-            document.body.appendChild(a);
+            a.download = `Match_Prediction_${balls[0].name}_vs_${balls[1].name}.webm`;
             a.click();
-            document.body.removeChild(a);
             
-            // Update Dashboard Text
-            let winner = "DRAW MATCH";
-            if (score.team1 > score.team2) winner = `${balls[0].name} WINS!`;
-            else if (score.team2 > score.team1) winner = `${balls[1].name} WINS!`;
-            
+            // UI Finish State
+            let winner = "DRAW CONCLUDED";
+            if (score.team1 > score.team2) winner = `${balls[0].name} PREDICTED WINNER`;
+            else if (score.team2 > score.team1) winner = `${balls[1].name} PREDICTED WINNER`;
             document.getElementById('cardMain').innerText = winner;
-            document.getElementById('aiStatus').innerText = "PREDICTION COMPLETE - VIDEO DOWNLOADED";
-            document.getElementById('startRecordBtn').innerText = "SIMULATION CONCLUDED";
-            document.getElementById('startRecordBtn').style.background = "#1e293b";
-            document.getElementById('startRecordBtn').style.color = "#64748b";
+            document.getElementById('triggerBtn').innerText = "PREDICTION FINISHED";
+            document.getElementById('triggerBtn').style.background = "#222";
         };
 
         mediaRecorder.start();
@@ -557,11 +521,11 @@
         }
     }
 
-    // 🕹️ Setup Basic Synchronizers
-    document.getElementById('t1Name').addEventListener('input', (e) => { balls[0].name = e.target.value.toUpperCase() || 'TEAM A'; });
-    document.getElementById('t2Name').addEventListener('input', (e) => { balls[1].name = e.target.value.toUpperCase() || 'TEAM B'; });
+    // 🕹️ UI Logic Synchronization
+    document.getElementById('name1').addEventListener('input', (e) => { balls[0].name = e.target.value.toUpperCase() || 'TEAM A'; });
+    document.getElementById('name2').addEventListener('input', (e) => { balls[1].name = e.target.value.toUpperCase() || 'TEAM B'; });
 
-    function bindUpload(inputId, ballIdx, flagId) {
+    function syncLogoUploader(inputId, ballIdx, flagId) {
         document.getElementById(inputId).addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -578,28 +542,27 @@
             }
         });
     }
-    bindUpload('t1File', 0, 'flagLeft');
-    bindUpload('t2File', 1, 'flagRight');
+    syncLogoUploader('file1', 0, 'flagL');
+    syncLogoUploader('file2', 1, 'flagR');
 
-    // Click Launch Engine
-    const startRecordBtn = document.getElementById('startRecordBtn');
-    startRecordBtn.addEventListener('click', () => {
-        if (virtualMinutes >= 90) return;
-        if (isSimulating) return; // ခလုတ်ထပ်နှိပ်လို့မရအောင် ကာကွယ်ခြင်း
-
+    // Button Click Trigger Action
+    const triggerBtn = document.getElementById('triggerBtn');
+    triggerBtn.addEventListener('click', () => {
+        if (virtualMins >= 90 || isLive) return;
+        
         if (audioCtx.state === 'suspended') audioCtx.resume();
         
-        isSimulating = true;
-        lastTimeUpdate = Date.now();
-        document.getElementById('aiStatus').innerText = "SUPERCOMPUTER CALCULATING & RECORDING HD...";
-        startRecordBtn.innerText = "RECORDING IN PROGRESS...";
-        startRecordBtn.style.background = "#ef4444";
-        startRecordBtn.style.color = "#fff";
+        isLive = true;
+        lastClockTick = Date.now();
+        triggerBtn.innerText = "RECORDING LIVE SIMULATION...";
+        triggerBtn.style.background = "linear-gradient(45deg, #ff007f, #ff0055)";
+        triggerBtn.style.color = "#fff";
         
         startRecording(); // ဗီဒီယိုဖမ်းယူခြင်း စတင်မည်
     });
 
-    mainLoop();
+    // Start Engine
+    mainEngineLoop();
 </script>
 
 </body>
