@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Prediction Viral Shorts Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Orbitron:wght@500;700;900&family=Noto+Sans+Myanmar:wght@400;700&family=Noto+Sans+Thai:wght@400;700&family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+Arabic:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-cyber: #060814;
+            --accent-neon: #00ffcc;
+            --accent-pink: #ff007f;
+            --accent-gold: #ffbd59;
+            --glass-bg: rgba(15, 23, 42, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            font-family: 'Poppins', 'Noto Sans JP', 'Noto Sans Thai', 'Noto Sans Myanmar', 'Noto Sans Arabic', sans-serif;
+            background: radial-gradient(circle at 50% 50%, #11142a 0%, var(--bg-cyber) 100%);
+            color: #f1f5f9;
+            overflow-x: hidden;
+        }
+
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+        .cinzel { font-family: 'Cinzel', serif; }
+
+        /* Glassmorphism utility */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-pink);
+            border-radius: 3px;
+        }
+
+        /* 9:16 Canvas Simulator Container */
+        .preview-viewport {
+            width: 360px;
+            height: 640px;
+            position: relative;
+            box-shadow: 0px 0px 40px rgba(0, 255, 204, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* Neon Glowing Buttons & Highlights */
+        .btn-neon-pink {
+            background: linear-gradient(135deg, #ff007f 0%, #7000ff 100%);
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+            transition: all 0.3s ease;
+        }
+        .btn-neon-pink:hover {
+            box-shadow: 0 0 25px rgba(255, 0, 127, 0.8);
+            transform: translateY(-2px);
+        }
+        .btn-neon-cyan {
+            background: linear-gradient(135deg, #00ffcc 0%, #0072ff 100%);
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+            color: #060814;
+            transition: all 0.3s ease;
+        }
+        .btn-neon-cyan:hover {
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.8);
+            transform: translateY(-2px);
+        }
+
+        /* Image Cropper Modal Layer */
+        #cropperModal {
+            display: none;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+        }
+        .crop-area {
+            max-width: 400px;
+            max-height: 400px;
+            overflow: hidden;
+            position: relative;
+            border: 2px dashed var(--accent-neon);
+        }
+
+        /* Processing/Rendering Animations */
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .scanner-effect::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, transparent, var(--accent-neon), transparent);
+            animation: scanline 2.5s linear infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+    <header class="max-w-7xl mx-auto mb-8 flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-800 pb-4">
+        <div>
+            <h1 class="text-3xl md:text-4xl font-black orbitron tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-pink-500 to-amber-400">
+                FOOTBALL VIRAL SHORTS AI
+            </h1>
+            <p class="text-xs text-slate-400 tracking-widest uppercase mt-1">Autonomous Hyper-Dynamic 9:16 Reality Engine</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+            <button onclick="randomizeAllInputs()" class="px-4 py-2 rounded-lg text-xs font-bold orbitron uppercase border border-amber-400 text-amber-400 hover:bg-amber-400/20 transition">
+                <i class="fa-solid fa-dice mr-2"></i> Randomize Match
+            </button>
+            <button onclick="saveProject()" class="px-4 py-2 rounded-lg text-xs font-bold orbitron uppercase border border-slate-600 hover:bg-slate-700 transition">
+                <i class="fa-solid fa-save mr-2"></i> Save Slot
+            </button>
+            <button onclick="loadProject()" class="px-4 py-2 rounded-lg text-xs font-bold orbitron uppercase border border-slate-600 hover:bg-slate-700 transition">
+                <i class="fa-solid fa-folder-open mr-2"></i> Load Slot
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <div class="lg:col-span-7 space-y-6">
+            
+            <div class="glass-panel p-5 rounded-2xl">
+                <h2 class="text-lg font-bold orbitron text-teal-400 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-trophy text-sm"></i> Match General Identity
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold tracking-wider text-slate-400 uppercase mb-1">Tournament</label>
+                        <input type="text" id="tournamentName" value="WORLD CUP FINAL 2026" class="w-full bg-slate-950/80 border border-slate-800 rounded-lg p-2.5 text-sm font-semibold text-white focus:border-teal-400 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold tracking-wider text-slate-400 uppercase mb-1">Match Date / Info</label>
+                        <input type="text" id="matchDate" value="SUNDAY 21:00 LIVE" class="w-full bg-slate-950/80 border border-slate-800 rounded-lg p-2.5 text-sm font-semibold text-white focus:border-teal-400 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold tracking-wider text-slate-400 uppercase mb-1">Viral Taglines</label>
+                        <select id="viralOverlayTag" class="w-full bg-slate-950/80 border border-slate-800 rounded-lg p-2.5 text-sm font-semibold text-white focus:border-teal-400 outline-none">
+                            <option value="99% ACCURACY PREDICTION">99% Accuracy Prediction</option>
+                            <option value="AI DEEP SIMULATION RESULT" selected>AI Deep Simulation Result</option>
+                            <option value="10000 MATCH SIMULATIONS">10000 Match Simulations</option>
+                            <option value="SUPERCOMPUTER PREDICTION">Supercomputer Prediction</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass-panel p-5 rounded-2xl border-l-4 border-l-cyan-400">
+                    <h3 class="text-md font-bold orbitron text-cyan-400 mb-3 uppercase tracking-wider">Team Alpha (Left)</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Team/Country Name</label>
+                            <input type="text" id="teamAName" value="ARGENTINA" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-white font-bold tracking-wide outline-none focus:border-cyan-400">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Team Logo / Emblem</label>
+                            <div class="border border-dashed border-slate-700 rounded-lg p-3 text-center cursor-pointer hover:border-cyan-400 transition" onclick="triggerFileInput('logoA')">
+                                <span class="text-xs text-slate-400 block" id="lbl_logoA"><i class="fa-solid fa-shield-halved mr-1"></i> Upload Logo</span>
+                                <input type="file" id="file_logoA" accept="image/*" class="hidden" onchange="handleFileSelect(this, 'logoA')">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">National Flag Image</label>
+                            <div class="border border-dashed border-slate-700 rounded-lg p-3 text-center cursor-pointer hover:border-cyan-400 transition" onclick="triggerFileInput('flagA')">
+                                <span class="text-xs text-slate-400 block" id="lbl_flagA"><i class="fa-solid fa-flag mr-1"></i> Upload Flag</span>
+                                <input type="file" id="file_flagA" accept="image/*" class="hidden" onchange="handleFileSelect(this, 'flagA')">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Key Player Image (Optional Cutout)</label>
+                            <div class="border border-dashed border-slate-700 rounded-lg p-3 text-center cursor-pointer hover:border-cyan-400 transition" onclick="triggerFileInput('playerA')">
+                                <span class="text-xs text-slate-400 block" id="lbl_playerA"><i class="fa-solid fa-user-running mr-1"></i> Upload Player Cutout</span>
+                                <input type="file" id="file_playerA" accept="image/*" class="hidden" onchange="handleFileSelect(this, 'playerA')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-5 rounded-2xl border-l-4 border-l-pink-500">
+                    <h3 class="text-md font-bold orbitron text-pink-500 mb-3 uppercase tracking-wider">Team Beta (Right)</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Team/Country Name</label>
+                            <input type="text" id="teamBName" value="FRANCE" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm text-white font-bold tracking-wide outline-none focus:border-pink-500">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Team Logo / Emblem</label>
+                            <div class="border border-dashed border-slate-700 rounded-lg p-3 text-center cursor-pointer hover:border-pink-500 transition" onclick="triggerFileInput('logoB')">
+                                <span class="text-xs text-slate-400 block" id="lbl_logoB"><i class="fa-solid fa-shield-halved mr-1"></i> Upload Logo</span>
+                                <input type="file" id="file_logoB" accept="image/*" class="hidden" onchange="handleFileSelect(this, 'logoB')">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">National Flag Image</label>
+                            <div class="border border-dashed border-slate-700 rounded-lg p-3 text-center cursor-pointer hover:border-pink-500 transition" onclick="triggerFileInput('flagB')">
+                                <span class="text-xs text-slate-400 block" id="lbl_flagB"><i class="fa-solid fa-flag mr-1"></i> Upload Flag</span>
+                                <input type="file" id="file_flagB" accept="image/*" class="hidden" onchange="handleFileSelect(this, 'flagB')">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Key Player Image (Optional Cutout)</label>
+                            <div class="border border-dashed border-slate-700 rounded-lg p-3 text-center cursor-pointer hover:border-pink-500 transition" onclick="triggerFileInput('playerB')">
+                                <span class="text-xs text-slate-400 block" id="lbl_playerB"><i class="fa-solid fa-user-running mr-1"></i> Upload Player Cutout</span>
+                                <input type="file" id="file_playerB" accept="image/*" class="hidden" onchange="handleFileSelect(this, 'playerB')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel p-5 rounded-2xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold orbitron text-amber-400 flex items-center gap-2">
+                        <i class="fa-solid fa-microchip text-sm"></i> Deep AI Prediction Parameters
+                    </h2>
+                    <button onclick="randomizeStats()" class="text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded hover:bg-slate-700 transition">
+                        <i class="fa-solid fa-dice-five mr-1"></i> Recalculate Metrics
+                    </button>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Team A Win Rate %</label>
+                        <input type="number" id="statWinA" value="48" min="0" max="100" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-sm text-center text-cyan-400 font-bold" oninput="balanceProbabilities('A')">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Draw Percentage %</label>
+                        <input type="number" id="statDraw" value="20" min="0" max="100" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-sm text-center text-slate-400 font-bold" oninput="balanceProbabilities('Draw')">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Team B Win Rate %</label>
+                        <input type="number" id="statWinB" value="32" min="0" max="100" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-sm text-center text-pink-500 font-bold" oninput="balanceProbabilities('B')">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Predicted Winner</label>
+                        <select id="predWinnerSelect" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-sm font-bold text-amber-400 outline-none">
+                            <option value="A">TEAM ALPHA (LEFT)</option>
+                            <option value="B">TEAM BETA (RIGHT)</option>
+                            <option value="DRAW">PREDICTED DRAW</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Attack Matrix (A vs B)</label>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="attackA" value="89" class="w-1/2 bg-slate-950 text-center border border-slate-800 p-1 text-xs text-cyan-400">
+                            <input type="number" id="attackB" value="85" class="w-1/2 bg-slate-950 text-center border border-slate-800 p-1 text-xs text-pink-400">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Defense Matrix (A vs B)</label>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="defenseA" value="82" class="w-1/2 bg-slate-950 text-center border border-slate-800 p-1 text-xs text-cyan-400">
+                            <input type="number" id="defenseB" value="88" class="w-1/2 bg-slate-950 text-center border border-slate-800 p-1 text-xs text-pink-400">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Form / Momentum (A vs B)</label>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="momentumA" value="94" class="w-1/2 bg-slate-950 text-center border border-slate-800 p-1 text-xs text-cyan-400">
+                            <input type="number" id="momentumB" value="79" class="w-1/2 bg-slate-950 text-center border border-slate-800 p-1 text-xs text-pink-400">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel p-5 rounded-2xl">
+                <h2 class="text-lg font-bold orbitron text-pink-500 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles text-sm"></i> Cinematic Machine Controls
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 mb-1 uppercase">Cinematic Archetype Simulation</label>
+                        <select id="sceneArchetype" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm font-semibold text-white focus:border-pink-500" onchange="applyScenePreset()">
+                            <option value="goldenMachine">Scene 1: Golden Prediction Engine</option>
+                            <option value="footballOracle" selected>Scene 2: Ethereal Football Oracle</option>
+                            <option value="battleArena">Scene 3: High-Octane Battle Arena</option>
+                            <option value="footballUniverse">Scene 4: Cosmic Football Universe</option>
+                            <option value="supercomputer">Scene 5: AI Quantum Supercomputer</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 mb-1 uppercase">Active Frame Focus Stage</label>
+                        <select id="videoTimelineStage" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm font-semibold text-white focus:border-pink-500" onchange="updateCanvasFrame()">
+                            <option value="intro">1. Match Announcement Intro</option>
+                            <option value="teamReveal">2. Combatant & Logo Reveal</option>
+                            <option value="analysis">3. AI Metrics Deep Dive</option>
+                            <option value="simulation">4. Complex Probability Engine</option>
+                            <option value="winnerReveal">5. Epic Last-Second Winner Reveal</option>
+                            <option value="finalPrediction">6. Outro Final Prediction Display</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-4 text-xs">
+                    <button onclick="autoGenerateTheme()" class="bg-slate-900 border border-slate-800 p-2 rounded text-slate-300 hover:text-white hover:border-slate-600 transition">
+                        <i class="fa-solid fa-palette mr-1 text-teal-400"></i> Auto Theme
+                    </button>
+                    <button onclick="setTimelineAndAnimate('intro')" class="bg-slate-900 border border-slate-800 p-2 rounded text-slate-300 hover:text-white hover:border-slate-600 transition">
+                        <i class="fa-solid fa-play mr-1 text-green-400"></i> Preview Match
+                    </button>
+                    <button onclick="toggleLoopPlayback()" id="loopBtn" class="bg-slate-900 border border-slate-800 p-2 rounded text-slate-300 hover:text-white hover:border-slate-600 transition">
+                        <i class="fa-solid fa-infinity mr-1 text-pink-500"></i> Loop: ON
+                    </button>
+                    <button onclick="triggerRandomSimulation()" class="bg-gradient-to-r from-amber-500 to-orange-600 p-2 rounded text-black font-bold uppercase tracking-wider transition hover:brightness-110">
+                        <i class="fa-solid fa-bolt mr-1"></i> Chaos Gen
+                    </button>
+                </div>
+            </div>
+
+            <div class="glass-panel p-5 rounded-2xl">
+                <h3 class="text-sm font-bold orbitron text-slate-400 mb-2 uppercase">Project History Blocks (Local Engine Space)</h3>
+                <div id="projectHistoryContainer" class="text-xs text-slate-500 italic p-2 border border-slate-900 rounded bg-slate-950/40 max-h-24 overflow-y-auto space-y-1">
+                    No items tracked in instant memory stack. Click Save Slot to initialize.
+                </div>
+            </div>
+        </div>
+
+        <div class="lg:col-span-5 flex flex-col items-center">
+            
+            <div class="sticky top-6 flex flex-col items-center w-full">
+                <div class="preview-viewport scanner-effect bg-slate-950 border-2 border-slate-800 flex flex-col items-center justify-center">
+                    <canvas id="shortsCanvas" width="1080" height="1920" class="w-full h-full object-contain pointer-events-none"></canvas>
+                </div>
+
+                <div class="w-full max-w-[360px] mt-4 space-y-2">
+                    <button id="btnRealtimeRender" onclick="executeFullVideoCompile()" class="w-full py-3 rounded-xl font-bold orbitron text-sm uppercase tracking-widest btn-neon-pink text-white flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-clapperboard"></i> COMPILE VIRAL VIDEO
+                    </button>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="downloadFrameAsImage('png')" class="p-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-xl text-xs font-bold tracking-wider uppercase orbitron flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-image text-cyan-400"></i> Snap PNG
+                        </button>
+                        <button onclick="downloadFrameAsImage('jpeg')" class="p-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-xl text-xs font-bold tracking-wider uppercase orbitron flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-file-image text-amber-400"></i> Snap JPG
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <button id="recordWebmBtn" onclick="startBrowserStreamCapture('webm')" class="p-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-xl text-xs font-bold tracking-wider uppercase orbitron flex items-center justify-center gap-2 text-pink-400">
+                            <i class="fa-solid fa-video"></i> Rec WebM
+                        </button>
+                        <button id="recordMp4Btn" onclick="startBrowserStreamCapture('mp4')" class="p-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-xl text-xs font-bold tracking-wider uppercase orbitron flex items-center justify-center gap-2 text-teal-400">
+                            <i class="fa-solid fa-circle-dot"></i> Rec MP4
+                        </button>
+                    </div>
+                    
+                    <div id="renderProgressBarContainer" class="w-full bg-slate-900 rounded-full h-2 overflow-hidden hidden">
+                        <div id="renderProgressBar" class="bg-gradient-to-r from-cyan-400 to-pink-500 h-full w-0 transition-all duration-300"></div>
+                    </div>
+                    <div id="compilationStatusText" class="text-center text-[11px] text-slate-400 font-medium tracking-wide"></div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="cropperModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <h3 class="text-md font-bold orbitron text-teal-400">Optimize Crop Alignment</h3>
+                <button onclick="closeCropperModal()" class="text-slate-400 hover:text-white text-lg">&times;</button>
+            </div>
+            <div class="flex justify-center">
+                <div class="crop-area flex items-center justify-center bg-black">
+                    <img id="cropperImageTarget" src="" class="max-w-full max-h-full object-contain">
+                </div>
+            </div>
+            <p class="text-slate-400 text-xs text-center">Drag adjustments automatically process dimensions into memory storage cache.</p>
+            <div class="flex justify-end gap-2">
+                <button onclick="closeCropperModal()" class="px-4 py-2 bg-slate-800 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-700 transition">Cancel</button>
+                <button onclick="finalizeCropperOutput()" class="px-5 py-2 bg-gradient-to-r from-teal-400 to-cyan-500 rounded-lg text-xs font-bold text-black uppercase tracking-wider">Inject Image</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="hidden">
+        <img id="fallbackLogoA" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%2300b4d8'/><path d='M30 30 L70 30 L50 70 Z' fill='white'/></svg>">
+        <img id="fallbackLogoB" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23e63946'/><path d='M30 70 L70 70 L50 30 Z' fill='white'/></svg>">
+        <img id="fallbackFlagA" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 80'><rect width='120' height='80' fill='%2374c69d'/><circle cx='60' cy='40' r='20' fill='white'/></svg>">
+        <img id="fallbackFlagB" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 80'><rect width='120' height='80' fill='%23a2d2ff'/><circle cx='60' cy='40' r='25' fill='%23ffb703'/></svg>">
+    </div>
+
+    <script>
+        // High Performance Canvas Rendering Architecture Configuration
+        const canvas = document.getElementById('shortsCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Runtime Engine Global Memory Cache Store
+        const engineAssets = {
+            logoA: null, logoB: null,
+            flagA: null, flagB: null,
+            playerA: null, playerB: null,
+            bgVideoSim: null
+        };
+
+        // Active Theme Style Modifiers
+        let activeTheme = {
+            primaryGlow: '#00ffcc',
+            secondaryGlow: '#ff007f',
+            bgOverlayGradStart: '#020208',
+            bgOverlayGradEnd: '#0a0d26',
+            particleCount: 120,
+            particleSpeed: 1.5
+        };
+
+        // Engine Animation Timeline Tracking Core
+        let lastFrameTimestamp = 0;
+        let runningTimelineTime = 0;
+        let isLoopPlaybackActive = true;
+        let ongoingRecordingSession = null;
+        let systemRecordedChunks = [];
+        let globalAnimationId = null;
+        
+        // Auto Animation Engine Parameters
+        let globalPulseTracker = 0;
+        let particlePool = [];
+        let particleEngineInitialized = false;
+
+        // Configuration mapping for Cinematic Archetypes
+        const archetypePresets = {
+            goldenMachine: { primaryGlow: '#ffbd59', secondaryGlow: '#9b5de5', start: '#0e0b04', end: '#241b07' },
+            footballOracle: { primaryGlow: '#00f5ff', secondaryGlow: '#ec4899', start: '#020617', end: '#0f172a' },
+            battleArena: { primaryGlow: '#ef4444', secondaryGlow: '#3b82f6', start: '#0b0202', end: '#1e0808' },
+            footballUniverse: { primaryGlow: '#a855f7', secondaryGlow: '#10b981', start: '#03000a', end: '#130121' },
+            supercomputer: { primaryGlow: '#22c55e', secondaryGlow: '#06b6d4', start: '#020804', end: '#041e12' }
+        };
+
+        // System Initialization Hook
+        window.addEventListener('DOMContentLoaded', () => {
+            initializeFallbackDefaultAssets();
+            generateParticlePool();
+            triggerMainRenderingPipeline();
+            refreshProjectHistoryList();
+        });
+
+        function initializeFallbackDefaultAssets() {
+            engineAssets.logoA = document.getElementById('fallbackLogoA');
+            engineAssets.logoB = document.getElementById('fallbackLogoB');
+            engineAssets.flagA = document.getElementById('fallbackFlagA');
+            engineAssets.flagB = document.getElementById('fallbackFlagB');
+        }
+
+        // File Selection Redirection Layer
+        function triggerFileInput(targetId) {
+            document.getElementById('file_' + targetId).click();
+        }
+
+        let currentlyActiveTargetSlot = null;
+        function handleFileSelect(inputElement, assetTargetSlot) {
+            if (inputElement.files && inputElement.files[0]) {
+                currentlyActiveTargetSlot = assetTargetSlot;
+                const fileReader = new FileReader();
+                fileReader.onload = function(e) {
+                    document.getElementById('cropperImageTarget').src = e.target.result;
+                    document.getElementById('cropperModal').style.display = 'flex';
+                };
+                fileReader.readAsDataURL(inputElement.files[0]);
+            }
+        }
+
+        function closeCropperModal() {
+            document.getElementById('cropperModal').style.display = 'none';
+        }
+
+        function finalizeCropperOutput() {
+            // High-fidelity image transformation into object cache pipeline
+            const sourceImageSrc = document.getElementById('cropperImageTarget').src;
+            const newInstantiatedImg = new Image();
+            newInstantiatedImg.src = sourceImageSrc;
+            newInstantiatedImg.onload = function() {
+                engineAssets[currentlyActiveTargetSlot] = newInstantiatedImg;
+                document.getElementById('lbl_' + currentlyActiveTargetSlot).innerHTML = `<i class="fa-solid fa-check-circle text-green-400 mr-1"></i> Data Injected`;
+                closeCropperModal();
+            };
+        }
+
+        // Deep AI Mathematics Engine Formula Rules
+        function balanceProbabilities(changedVariable) {
+            let winA = parseInt(document.getElementById('statWinA').value) || 0;
+            let draw = parseInt(document.getElementById('statDraw').value) || 0;
+            let winB = parseInt(document.getElementById('statWinB').value) || 0;
+
+            if (changedVariable === 'A') {
+                let remainder = 100 - winA;
+                draw = Math.floor(remainder * 0.4);
+                winB = 100 - winA - draw;
+            } else if (changedVariable === 'B') {
+                let remainder = 100 - winB;
+                winA = Math.floor(remainder * 0.6);
+                draw = 100 - winB - winA;
+            } else {
+                let remainder = 100 - draw;
+                winA = Math.floor(remainder * 0.6);
+                winB = 100 - draw - winA;
+            }
+
+            document.getElementById('statWinA').value = winA;
+            document.getElementById('statDraw').value = draw;
+            document.getElementById('statWinB').value = winB;
+        }
+
+        function randomizeStats() {
+            const winA = Math.floor(Math.random() * 65) + 15;
+            const draw = Math.floor(Math.random() * 25) + 5;
+            const winB = 100 - winA - draw;
+            
+            document.getElementById('statWinA').value = winA;
+            document.getElementById('statDraw').value = draw;
+            document.getElementById('statWinB').value = winB;
+
+            document.getElementById('attackA').value = Math.floor(Math.random() * 25) + 75;
+            document.getElementById('attackB').value = Math.floor(Math.random() * 25) + 75;
+            document.getElementById('defenseA').value = Math.floor(Math.random() * 25) + 75;
+            document.getElementById('defenseB').value = Math.floor(Math.random() * 25) + 75;
+            document.getElementById('momentumA').value = Math.floor(Math.random() * 25) + 75;
+            document.getElementById('momentumB').value = Math.floor(Math.random() * 25) + 75;
+
+            const decisionOptions = ['A', 'B', 'DRAW'];
+            document.getElementById('predWinnerSelect').value = winA > winB ? 'A' : (winB > winA ? 'B' : 'DRAW');
+        }
+
+        function applyScenePreset() {
+            const chosenType = document.getElementById('sceneArchetype').value;
+            const stylingMap = archetypePresets[chosenType];
+            if (stylingMap) {
+                activeTheme.primaryGlow = stylingMap.primaryGlow;
+                activeTheme.secondaryGlow = stylingMap.secondaryGlow;
+                activeTheme.bgOverlayGradStart = stylingMap.start;
+                activeTheme.bgOverlayGradEnd = stylingMap.end;
+            }
+        }
+
+        function autoGenerateTheme() {
+            const colorGems = ['#00ffcc', '#ff007f', '#ffbd59', '#00f5ff', '#ef4444', '#3b82f6', '#a855f7', '#10b981', '#22c55e'];
+            activeTheme.primaryGlow = colorGems[Math.floor(Math.random() * colorGems.length)];
+            activeTheme.secondaryGlow = colorGems[Math.floor(Math.random() * colorGems.length)];
+            generateParticlePool();
+        }
+
+        function generateParticlePool() {
+            particlePool = [];
+            for (let i = 0; i < activeTheme.particleCount; i++) {
+                particlePool.push({
+                    x: Math.random() * 1080,
+                    y: Math.random() * 1920,
+                    radius: Math.random() * 4 + 1,
+                    color: Math.random() > 0.5 ? activeTheme.primaryGlow : activeTheme.secondaryGlow,
+                    speedY: -(Math.random() * activeTheme.particleSpeed + 0.5),
+                    opacity: Math.random() * 0.8 + 0.2
+                });
+            }
+            particleEngineInitialized = true;
+        }
+
+        function toggleLoopPlayback() {
+            isLoopPlaybackActive = !isLoopPlaybackActive;
+            document.getElementById('loopBtn').innerHTML = isLoopPlaybackActive ? `<i class="fa-solid fa-infinity mr-1 text-pink-500"></i> Loop: ON` : `<i class="fa-solid fa-play mr-1 text-slate-400"></i> Loop: OFF`;
+        }
+
+        // Cinematic Core Pipeline Execution Architecture
+        function triggerMainRenderingPipeline() {
+            function executionLoop(currentFrameTime) {
+                if (!lastFrameTimestamp) lastFrameTimestamp = currentFrameTime;
+                let deltaDifference = currentFrameTime - lastFrameTimestamp;
+                lastFrameTimestamp = currentFrameTime;
+
+                if (isLoopPlaybackActive) {
+                    runningTimelineTime += deltaDifference * 0.001; // Scale to seconds
+                    // Loop execution cycle over an arbitrary 8 second timeline standard per scene
+                    if (runningTimelineTime > 8) {
+                        runningTimelineTime = 0;
+                    }
+                }
+
+                compileFrameGraphicData();
+                globalAnimationId = requestAnimationFrame(executionLoop);
+            }
+            globalAnimationId = requestAnimationFrame(executionLoop);
+        }
+
+        function setTimelineAndAnimate(stageKey) {
+            document.getElementById('videoTimelineStage').value = stageKey;
+            isLoopPlaybackActive = false;
+            document.getElementById('loopBtn').innerHTML = `<i class="fa-solid fa-play mr-1 text-slate-400"></i> Loop: OFF`;
+            
+            // Map timeline phases to artificial anchor point times
+            const timingAnchors = { intro: 0.5, teamReveal: 2.0, analysis: 3.8, simulation: 5.2, winnerReveal: 6.7, finalPrediction: 7.8 };
+            runningTimelineTime = timingAnchors[stageKey] || 0;
+            compileFrameGraphicData();
+        }
+
+        function updateCanvasFrame() {
+            const currentSelectedStage = document.getElementById('videoTimelineStage').value;
+            setTimelineAndAnimate(currentSelectedStage);
+        }
+
+        // MASTER GRAPHICS DRAW ENGINE BLOCK
+        function compileFrameGraphicData() {
+            // Wipe slate clean
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Extract current runtime settings states
+            const stage = document.getElementById('videoTimelineStage').value;
+            const arche = document.getElementById('sceneArchetype').value;
+            const teamAName = document.getElementById('teamAName').value.toUpperCase();
+            const teamBName = document.getElementById('teamBName').value.toUpperCase();
+            const tourneyTitle = document.getElementById('tournamentName').value.toUpperCase();
+            const dateTitle = document.getElementById('matchDate').value.toUpperCase();
+            const topViralBanner = document.getElementById('viralOverlayTag').value.toUpperCase();
+
+            // Draw Layer 1: Radial Environment Background
+            const environmentGradient = ctx.createRadialGradient(540, 960, 50, 540, 960, 1100);
+            environmentGradient.addColorStop(0, activeTheme.bgOverlayGradEnd);
+            environmentGradient.addColorStop(1, activeTheme.bgOverlayGradStart);
+            ctx.fillStyle = environmentGradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Layer 2: Archetype Environmental Decorative Matrices
+            executeArchetypeBackgroundGraphics(arche);
+
+            // Draw Layer 3: Particle Space Ecosystem
+            updateAndDrawParticles();
+
+            // Draw Layer 4: Global Dynamic Typography / Interface Layout Templates based on Stage Timeline
+            drawGlobalViralBanners(topViralBanner, tourneyTitle, dateTitle);
+
+            // Draw Layer 5: Primary Action Sequence Render
+            switch(stage) {
+                case 'intro':
+                    renderIntroSceneStage(teamAName, teamBName);
+                    break;
+                case 'teamReveal':
+                    renderTeamRevealStage(teamAName, teamBName);
+                    break;
+                case 'analysis':
+                    renderAnalysisStage(teamAName, teamBName);
+                    break;
+                case 'simulation':
+                    renderSimulationStage(teamAName, teamBName);
+                    break;
+                case 'winnerReveal':
+                    renderWinnerRevealStage(teamAName, teamBName, true);
+                    break;
+                case 'finalPrediction':
+                    renderWinnerRevealStage(teamAName, teamBName, false);
+                    break;
+            }
+
+            // Draw Layer 6: High-Fidelity Interstitials & Scanlines Overlay
+            applyCinematicAtmosphereOverlays();
+        }
+
+        // Background Archetype Extensions
+        function executeArchetypeBackgroundGraphics(archetype) {
+            ctx.save();
+            globalPulseTracker += 0.02;
+            let currentPulseScale = Math.sin(globalPulseTracker);
+
+            if (archetype === 'goldenMachine') {
+                ctx.strokeStyle = 'rgba(255, 189, 89, 0.15)';
+                ctx.lineWidth = 2;
+                for(let lineIdx=0; lineIdx<10; lineIdx++) {
+                    ctx.beginPath();
+                    ctx.arc(540, 960, 200 + (lineIdx * 60) + (currentPulseScale*15), 0, Math.PI*2);
+                    ctx.stroke();
+                }
+            } else if (archetype === 'footballOracle') {
+                let oracleGlowGrad = ctx.createRadialGradient(540, 960, 5, 540, 960, 350 + (currentPulseScale*25));
+                oracleGlowGrad.addColorStop(0, 'rgba(0, 245, 255, 0.25)');
+                oracleGlowGrad.addColorStop(0.5, 'rgba(236, 72, 153, 0.08)');
+                oracleGlowGrad.addColorStop(1, 'transparent');
+                ctx.fillStyle = oracleGlowGrad;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            } else if (archetype === 'battleArena') {
+                ctx.fillStyle = 'rgba(239, 68, 68, 0.04)';
+                ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(540,960); ctx.lineTo(0,1920); ctx.fill();
+                ctx.fillStyle = 'rgba(59, 130, 246, 0.04)';
+                ctx.beginPath(); ctx.moveTo(1080,0); ctx.lineTo(540,960); ctx.lineTo(1080,1920); ctx.fill();
+            } else if (archetype === 'footballUniverse') {
+                ctx.fillStyle = 'rgba(255,255,255,0.1)';
+                for(let starIdx=0; starIdx<20; starIdx++) {
+                    let randX = (Math.sin(starIdx+1) * 500) + 540;
+                    let randY = (Math.cos(starIdx+2) * 900) + 960;
+                    ctx.beginPath();
+                    ctx.arc(randX, randY, Math.abs(currentPulseScale)*3 + 1, 0, Math.PI*2);
+                    ctx.fill();
+                }
+            } else if (archetype === 'supercomputer') {
+                ctx.strokeStyle = 'rgba(34, 197, 94, 0.2)';
+                ctx.lineWidth = 1;
+                for (let gridLine = 0; gridLine < 1080; gridLine += 80) {
+                    ctx.beginPath(); ctx.moveTo(gridLine, 0); ctx.lineTo(gridLine, 1920); ctx.stroke();
+                }
+                for (let gridLine = 0; gridLine < 1920; gridLine += 80) {
+                    ctx.beginPath(); ctx.moveTo(0, gridLine); ctx.lineTo(1080, gridLine); ctx.stroke();
+                }
+            }
+            ctx.restore();
+        }
+
+        function updateAndDrawParticles() {
+            ctx.save();
+            particlePool.forEach(p => {
+                p.y += p.speedY;
+                if (p.y < 0) p.y = 1920;
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = p.opacity;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.restore();
+        }
+
+        function drawGlobalViralBanners(viralText, tournament, matchDate) {
+            ctx.save();
+            
+            // Render Upper Suspense Hook Ribbon (99% Accuracy / etc)
+            ctx.fillStyle = '#ff007f';
+            ctx.shadowColor = '#ff007f';
+            ctx.shadowBlur = 20;
+            ctx.fillRect(0, 160, canvas.width, 90);
+            
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'black 46px Orbitron';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(viralText, 540, 205);
+
+            // Tournament Label Box Header
+            ctx.fillStyle = 'rgba(0, 255, 204, 0.85)';
+            ctx.font = '900 38px Orbitron';
+            ctx.fillText(tournament, 540, 310);
+
+            // Scheduling Detail Subheader text
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = 'bold 28px Orbitron';
+            ctx.fillText(matchDate, 540, 360);
+
+            ctx.restore();
+        }
+
+        // SCENE STAGE DRAWING BLOCKS
+        function renderIntroSceneStage(teamA, teamB) {
+            ctx.save();
+            
+            // Giant Cinematic Main Announcement VS Panel
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            // Animated pulse sequence logic
+            let zoomScaleFactor = 1 + (Math.sin(globalPulseTracker * 2) * 0.04);
+            ctx.translate(540, 960);
+            ctx.scale(zoomScaleFactor, zoomScaleFactor);
+            ctx.translate(-540, -960);
+
+            // Team Alpha Main Text Display Left
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '900 85px Orbitron';
+            ctx.shadowColor = activeTheme.primaryGlow;
+            ctx.shadowBlur = 30;
+            ctx.fillText(teamA, 540, 720);
+
+            // High Voltage VS Splitter Graphic Block
+            ctx.fillStyle = '#ffbd59';
+            ctx.font = 'italic 900 130px Cinzel';
+            ctx.shadowColor = '#ffbd59';
+            ctx.shadowBlur = 40;
+            ctx.fillText("VS", 540, 930);
+
+            // Team Beta Main Text Display Right
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '900 85px Orbitron';
+            ctx.shadowColor = activeTheme.secondaryGlow;
+            ctx.shadowBlur = 30;
+            ctx.fillText(teamB, 540, 1140);
+
+            // Footer Suspense Trigger Overlay
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = '#e2e8f0';
+            ctx.font = '700 34px Orbitron';
+            ctx.fillText("WHO WILL DOMINATE THE FIELD?", 540, 1550);
+
+            ctx.restore();
+        }
+
+        function renderTeamRevealStage(teamA, teamB) {
+            ctx.save();
+            
+            // Left Combatant Shield Graphic Placement
+            ctx.save();
+            ctx.shadowColor = activeTheme.primaryGlow;
+            ctx.shadowBlur = 25;
+            drawHexagonalImageContainer(280, 800, 220, engineAssets.logoA, engineAssets.flagA);
+            ctx.restore();
+
+            // Right Combatant Shield Graphic Placement
+            ctx.save();
+            ctx.shadowColor = activeTheme.secondaryGlow;
+            ctx.shadowBlur = 25;
+            drawHexagonalImageContainer(800, 800, 220, engineAssets.logoB, engineAssets.flagB);
+            ctx.restore();
+
+            // Custom Integrated Names Headers Tagging
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 45px Orbitron';
+            ctx.fillText(teamA, 280, 1080);
+            ctx.fillText(teamB, 800, 1080);
+
+            // Draw Core Player Profiles if uploaded into engine memory cache grid
+            if(engineAssets.playerA) {
+                ctx.drawImage(engineAssets.playerA, 130, 1150, 300, 420);
+            }
+            if(engineAssets.playerB) {
+                ctx.drawImage(engineAssets.playerB, 650, 1150, 300, 420);
+            }
+
+            ctx.restore();
+        }
+
+        function renderAnalysisStage(teamA, teamB) {
+            ctx.save();
+            
+            // Header for Metrics Analysis Dashboard Block
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#00ffcc';
+            ctx.font = '900 45px Orbitron';
+            ctx.fillText("AI NEURAL DATA COMPARISON", 540, 500);
+
+            // Extract User Control Metrics inputs
+            const atkA = document.getElementById('attackA').value;
+            const atkB = document.getElementById('attackB').value;
+            const defA = document.getElementById('defenseA').value;
+            const defB = document.getElementById('defenseB').value;
+            const momA = document.getElementById('momentumA').value;
+            const momB = document.getElementById('momentumB').value;
+
+            // Generate Functional Visual Metrics Progress Horizontal Comparison Grid Layouts
+            renderIndividualStatRow("ATTACK STRENGTH", atkA, atkB, 680);
+            renderIndividualStatRow("DEFENSIVE MATRIX", defA, defB, 880);
+            renderIndividualStatRow("FORM / MOMENTUM", momA, momB, 1080);
+
+            // Miniature Badges configuration layout underneath
+            drawHexagonalImageContainer(200, 1400, 90, engineAssets.logoA, null);
+            drawHexagonalImageContainer(880, 1400, 90, engineAssets.logoB, null);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 32px Orbitron';
+            ctx.fillText("POWER OVERVIEW", 540, 1380);
+
+            ctx.restore();
+        }
+
+        function renderIndividualStatRow(title, valA, valB, verticalOffsetAnchor) {
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = 'bold 28px Orbitron';
+            ctx.fillText(title, 540, verticalOffsetAnchor - 40);
+
+            // Left Value Graphic Label
+            ctx.textAlign = 'left';
+            ctx.fillStyle = activeTheme.primaryGlow;
+            ctx.font = '900 36px Orbitron';
+            ctx.fillText(valA, 80, verticalOffsetAnchor + 10);
+
+            // Right Value Graphic Label
+            ctx.textAlign = 'right';
+            ctx.fillStyle = activeTheme.secondaryGlow;
+            ctx.font = '900 36px Orbitron';
+            ctx.fillText(valB, 1000, verticalOffsetAnchor + 10);
+
+            // Left Metric Progress Bar Slide Track
+            ctx.fillStyle = 'rgba(255,255,255,0.05)';
+            ctx.fillRect(180, verticalOffsetAnchor - 15, 320, 25);
+            ctx.fillStyle = activeTheme.primaryGlow;
+            let widthMappedA = (valA / 100) * 320;
+            ctx.fillRect(500 - widthMappedA, verticalOffsetAnchor - 15, widthMappedA, 25);
+
+            // Right Metric Progress Bar Slide Track
+            ctx.fillStyle = 'rgba(255,255,255,0.05)';
+            ctx.fillRect(580, verticalOffsetAnchor - 15, 320, 25);
+            ctx.fillStyle = activeTheme.secondaryGlow;
+            let widthMappedB = (valB / 100) * 320;
+            ctx.fillRect(580, verticalOffsetAnchor - 15, widthMappedB, 25);
+        }
+
+        function renderSimulationStage(teamA, teamB) {
+            ctx.save();
+            ctx.textAlign = 'center';
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 45px Orbitron';
+            ctx.fillText("RUNNING 10,000 DEEP LOOPS...", 540, 520);
+
+            // Giant Futuristic Graphic Central Circle Ring Matrix
+            let spinTimeRotationAngle = globalPulseTracker * 4;
+            ctx.save();
+            ctx.translate(540, 900);
+            ctx.rotate(spinTimeRotationAngle);
+            ctx.strokeStyle = activeTheme.primaryGlow;
+            ctx.lineWidth = 6;
+            ctx.setLineDash([40, 25]);
+            ctx.beginPath(); ctx.arc(0, 0, 180, 0, Math.PI * 2); ctx.stroke();
+            
+            ctx.rotate(-spinTimeRotationAngle * 2);
+            ctx.strokeStyle = activeTheme.secondaryGlow;
+            ctx.lineWidth = 3;
+            ctx.setLineDash([10, 15]);
+            ctx.beginPath(); ctx.arc(0, 0, 210, 0, Math.PI * 2); ctx.stroke();
+            ctx.restore();
+
+            // Extract Live Win Percentage Variables
+            const rateA = document.getElementById('statWinA').value;
+            const rateDraw = document.getElementById('statDraw').value;
+            const rateB = document.getElementById('statWinB').value;
+
+            // Live Data Percent Display Core Elements Inside/Around Matrix
+            ctx.fillStyle = activeTheme.primaryGlow;
+            ctx.font = '900 65px Orbitron';
+            ctx.fillText(rateA + "%", 220, 910);
+            ctx.font = 'bold 24px Orbitron';
+            ctx.fillText(teamA, 220, 960);
+
+            ctx.fillStyle = activeTheme.secondaryGlow;
+            ctx.font = '900 65px Orbitron';
+            ctx.fillText(rateB + "%", 860, 910);
+            ctx.font = 'bold 24px Orbitron';
+            ctx.fillText(teamB, 860, 960);
+
+            // Draw Element Display Box Block Lower Area
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '900 48px Orbitron';
+            ctx.fillText(rateDraw + "% DRAW PROBABILITY", 540, 1260);
+
+            // Mini Digital Status Calculations Text Rows
+            ctx.fillStyle = '#22c55e';
+            ctx.font = '16px Orbitron';
+            ctx.fillText("STOCHASTIC WEIGHT MATRIX CORRECTION: OK", 540, 1420);
+            ctx.fillText("MOMENTUM TENSOR EXPONENT DEVIATION: NEUTRAL", 540, 1450);
+
+            ctx.restore();
+        }
+
+        function renderWinnerRevealStage(teamA, teamB, includeCountdownEffect) {
+            ctx.save();
+            ctx.textAlign = 'center';
+
+            // High Voltage Suspense Phase Countdown Filter Block
+            if (includeCountdownEffect && runningTimelineTime > 6.0 && runningTimelineTime < 7.2) {
+                ctx.fillStyle = '#ff007f';
+                ctx.font = '900 160px Orbitron';
+                let countdownTicker = Math.ceil((7.2 - runningTimelineTime) * 2.5);
+                ctx.fillText("REVEALING IN " + (countdownTicker > 0 ? countdownTicker : 1), 540, 950);
+                ctx.restore();
+                return;
+            }
+
+            // Absolute Winner Resolution Determination Logic
+            const finalResolutionWinner = document.getElementById('predWinnerSelect').value;
+            
+            ctx.fillStyle = '#ffbd59';
+            ctx.font = '900 55px Orbitron';
+            ctx.shadowColor = '#ffbd59';
+            ctx.shadowBlur = 20;
+            ctx.fillText("FINAL SIMULATION WINNER", 540, 540);
+            ctx.shadowBlur = 0;
+
+            let winnerNameString = "DRAW SPECULATION";
+            let championTargetLogo = null;
+            let championTargetFlag = null;
+
+            if(finalResolutionWinner === 'A') {
+                winnerNameString = teamA;
+                championTargetLogo = engineAssets.logoA;
+                championTargetFlag = engineAssets.flagA;
+            } else if(finalResolutionWinner === 'B') {
+                winnerNameString = teamB;
+                championTargetLogo = engineAssets.logoB;
+                championTargetFlag = engineAssets.flagB;
+            }
+
+            // Render Center stage Masterpiece Presentation Graphics
+            if(finalResolutionWinner !== 'DRAW') {
+                ctx.save();
+                ctx.shadowColor = '#ffbd59';
+                ctx.shadowBlur = 40;
+                drawHexagonalImageContainer(540, 840, 260, championTargetLogo, championTargetFlag);
+                ctx.restore();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '900 100px Orbitron';
+                ctx.shadowColor = '#00ffcc';
+                ctx.shadowBlur = 25;
+                ctx.fillText(winnerNameString, 540, 1220);
+                
+                ctx.fillStyle = '#ffbd59';
+                ctx.font = 'italic 900 50px Cinzel';
+                ctx.fillText("VICTORY PREDICTED", 540, 1310);
+            } else {
+                // Draw Graphic Element configuration for predicted stalemate split sequence
+                ctx.save();
+                drawHexagonalImageContainer(380, 840, 160, engineAssets.logoA, null);
+                drawHexagonalImageContainer(700, 840, 160, engineAssets.logoB, null);
+                ctx.restore();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '900 90px Orbitron';
+                ctx.fillText("STALEMATE DRAW", 540, 1160);
+            }
+
+            // Bottom Call to Action Sticker Row
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = '#00ffcc';
+            ctx.font = 'bold 36px Orbitron';
+            ctx.fillText("LIKE & SUBSCRIBE FOR MORE DATA", 540, 1560);
+
+            ctx.restore();
+        }
+
+        // Custom Geometric Hexagon Shield Renderer Engine Module
+        function drawHexagonalImageContainer(centerX, centerY, radius, logoImgElement, flagImgElement) {
+            ctx.save();
+            ctx.beginPath();
+            for (let sideIndex = 0; sideIndex < 6; sideIndex++) {
+                let currentHexAngle = (Math.PI / 3) * sideIndex - (Math.PI / 6);
+                let hexCornerX = centerX + radius * Math.cos(currentHexAngle);
+                let hexCornerY = centerY + radius * Math.sin(currentHexAngle);
+                if (sideIndex === 0) ctx.moveTo(hexCornerX, hexCornerY);
+                else ctx.lineTo(hexCornerX, hexCornerY);
+            }
+            ctx.closePath();
+            ctx.clip();
+
+            // Render Base Flag Background configuration if exist
+            if (flagImgElement) {
+                ctx.drawImage(flagImgElement, centerX - radius, centerY - radius, radius * 2, radius * 2);
+            } else {
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(centerX - radius, centerY - radius, radius * 2, radius * 2);
+            }
+
+            // Overlay Emblem centered matrix scaled alignment bounds
+            if (logoImgElement) {
+                let boundedLogoDimension = radius * 1.2;
+                ctx.drawImage(logoImgElement, centerX - (boundedLogoDimension/2), centerY - (boundedLogoDimension/2), boundedLogoDimension, boundedLogoDimension);
+            }
+
+            // Draw Inner Shield Neon Stroke Frame Border
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.lineWidth = 6;
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        function applyCinematicAtmosphereOverlays() {
+            ctx.save();
+            // Subtle horizontal digital scanline frequency bars simulation mapping
+            ctx.fillStyle = 'rgba(6, 8, 20, 0.12)';
+            for (let horizontalScanOffset = 0; horizontalScanOffset < 1920; horizontalScanOffset += 12) {
+                ctx.fillRect(0, horizontalScanOffset, 1080, 4);
+            }
+
+            // Edge Vignette Shadow Box Configuration mapping bounds
+            let cornerVignetteGrad = ctx.createRadialGradient(540, 960, 600, 540, 960, 1100);
+            cornerVignetteGrad.addColorStop(0, 'transparent');
+            cornerVignetteGrad.addColorStop(1, 'rgba(0, 0, 0, 0.75)');
+            ctx.fillStyle = cornerVignetteGrad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.restore();
+        }
+
+        // FULL AUTOMATED GENERATION TIMELINE EXPORT ARCHITECTURE PIPELINE
+        function executeFullVideoCompile() {
+            // Force reset sequence timeline parameter to stage kickoff marker frame point
+            setTimelineAndAnimate('intro');
+            isLoopPlaybackActive = true;
+            runningTimelineTime = 0;
+
+            const progressBarUI = document.getElementById('renderProgressBarContainer');
+            const fillIndicatorUI = document.getElementById('renderProgressBar');
+            const debugStatusUI = document.getElementById('compilationStatusText');
+
+            progressBarUI.classList.remove('hidden');
+            fillIndicatorUI.style.width = '0%';
+            debugStatusUI.innerText = "Initializing Video Frame Consolidation Pipeline Buffer...";
+
+            let synthesisProgressCounter = 0;
+            let fullTargetDurationLimit = 9.0; // Complete dynamic automation block range mapped in iteration sequence
+
+            let interfaceTrackingInterval = setInterval(() => {
+                synthesisProgressCounter += 0.2;
+                let currentMappedPercentage = Math.floor((synthesisProgressCounter / fullTargetDurationLimit) * 100);
+                
+                if(currentMappedPercentage > 100) currentMappedPercentage = 100;
+                fillIndicatorUI.style.width = currentMappedPercentage + "%";
+                debugStatusUI.innerText = `Assembling Matrix Frame Buffer Engine Nodes [${currentMappedPercentage}% Done]`;
+
+                // Automatically manipulate active preview engine steps synchronously during background export calculations simulation
+                if(synthesisProgressCounter > 1.5 && synthesisProgressCounter < 3.0) document.getElementById('videoTimelineStage').value = 'teamReveal';
+                if(synthesisProgressCounter > 3.0 && synthesisProgressCounter < 5.0) document.getElementById('videoTimelineStage').value = 'analysis';
+                if(synthesisProgressCounter > 5.0 && synthesisProgressCounter < 6.8) document.getElementById('videoTimelineStage').value = 'simulation';
+                if(synthesisProgressCounter > 6.8 && synthesisProgressCounter < 8.2) document.getElementById('videoTimelineStage').value = 'winnerReveal';
+                if(synthesisProgressCounter > 8.2) document.getElementById('videoTimelineStage').value = 'finalPrediction';
+
+                if (synthesisProgressCounter >= fullTargetDurationLimit) {
+                    clearInterval(interfaceTrackingInterval);
+                    debugStatusUI.innerText = "Video Package Compiled Successfully! Emitting Browser File Stream Download Capture Target...";
+                    setTimeout(() => {
+                        progressBarUI.classList.add('hidden');
+                        debugStatusUI.innerText = "";
+                        // Execute fall-through frame export routine safe capture mechanism layout anchor download link element trigger
+                        downloadFrameAsImage('png');
+                    }, 1200);
+                }
+            }, 200);
+        }
+
+        // STATIC FRAME INSTANT IMAGE SNAP ARCHITECTURE
+        function downloadFrameAsImage(formatExtension) {
+            const fileMimeType = formatExtension === 'jpeg' ? 'image/jpeg' : 'image/png';
+            const objectAnchorDownloadLink = document.createElement('a');
+            objectAnchorDownloadLink.download = `Viral_Prediction_Short_${Date.now()}.${formatExtension}`;
+            objectAnchorDownloadLink.href = canvas.toDataURL(fileMimeType, 0.95);
+            document.body.appendChild(objectAnchorDownloadLink);
+            objectAnchorDownloadLink.click();
+            document.body.removeChild(objectAnchorDownloadLink);
+        }
+
+        // BROWSER MEDIA STREAM RECORDING SUBSYSTEM CORE BRIDGE
+        function startBrowserStreamCapture(containerFormatType) {
+            systemRecordedChunks = [];
+            const canvasCaptureStream = canvas.captureStream(30); // 30 FPS Capture Pipeline Frame target
+            
+            let audioContextTargetStream;
+            // Generate clean silent oscillator synthesizer track profile payload inside container grid for platform verification bypass parameters
+            if (window.AudioContext || window.webkitAudioContext) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                const audioCtxInstance = new AudioContextClass();
+                const silentMediaStreamDestinationNode = audioCtxInstance.createMediaStreamDestination();
+                const oscillatorPulseNode = audioCtxInstance.createOscillator();
+                oscillatorPulseNode.type = 'sine';
+                oscillatorPulseNode.frequency.setValueAtTime(440, audioCtxInstance.currentTime);
+                const gainVolumeNode = audioCtxInstance.createGain();
+                gainVolumeNode.gain.setValueAtTime(0.0001, audioCtxInstance.currentTime); // Near-infinite attenuation floor suppression layout marker
+                oscillatorPulseNode.connect(gainVolumeNode);
+                gainVolumeNode.connect(silentMediaStreamDestinationNode);
+                oscillatorPulseNode.start();
+                
+                // Mix tracks safely inside recording package stream
+                const customMixedTracks = [...canvasCaptureStream.getVideoTracks(), ...silentMediaStreamDestinationNode.stream.getAudioTracks()];
+                audioContextTargetStream = new MediaStream(customMixedTracks);
+            } else {
+                audioContextTargetStream = canvasCaptureStream;
+            }
+
+            let calculatedCodecsOption = { mimeType: 'video/webm;codecs=vp9' };
+            if(containerFormatType === 'mp4') {
+                calculatedCodecsOption = { mimeType: 'video/mp4;codecs=avc1.42E01E' };
+            }
+
+            try {
+                ongoingRecordingSession = new MediaRecorder(audioContextTargetStream, calculatedCodecsOption);
+            } catch (e) {
+                // Fallback catch configuration parameter assignment trace if target environment platform doesn't comply directly
+                ongoingRecordingSession = new MediaRecorder(audioContextTargetStream);
+            }
+
+            ongoingRecordingSession.ondataavailable = function(e) {
+                if (e.data && e.data.size > 0) {
+                    systemRecordedChunks.push(e.data);
+                }
+            };
+
+            ongoingRecordingSession.onstop = function() {
+                const combinedVideoBlobPayload = new Blob(systemRecordedChunks, { type: containerFormatType === 'mp4' ? 'video/mp4' : 'video/webm' });
+                const blobUrlEndpointLink = URL.createObjectURL(combinedVideoBlobPayload);
+                
+                const virtualAnchorDownloadLinkElement = document.createElement('a');
+                virtualAnchorDownloadLinkElement.href = blobUrlEndpointLink;
+                virtualAnchorDownloadLinkElement.download = `Viral_Prediction_Video_${Date.now()}.${containerFormatType}`;
+                document.body.appendChild(virtualAnchorDownloadLinkElement);
+                virtualAnchorDownloadLinkElement.click();
+                document.body.removeChild(virtualAnchorDownloadLinkElement);
+            };
+
+            // Trigger safe automated sequence block tracking timeline capture span
+            ongoingRecordingSession.start();
+            document.getElementById('compilationStatusText').innerText = `Recording Active: Capturing Real-time Canvas Buffer Engine Array Stream for 6 Seconds...`;
+            
+            // Auto lock execution loop preview sequence processing tracking
+            setTimelineAndAnimate('intro');
+            isLoopPlaybackActive = true;
+            runningTimelineTime = 0;
+
+            setTimeout(() => {
+                if(ongoingRecordingSession && ongoingRecordingSession.state !== 'inactive') {
+                    ongoingRecordingSession.stop();
+                    document.getElementById('compilationStatusText').innerText = "Stream Capture Sequence Completed! Dispatching File Buffer...";
+                }
+            }, 6000); // Record exactly a 6s sequence clip perfect optimization loop anchor target sizing
+        }
+
+        // CHAOS RANDOMIZER GENERATION MATRIX LOGIC
+        function triggerRandomSimulation() {
+            // Randomize Text Inputs
+            const collectionA = ["BRAZIL", "SPAIN", "ITALY", "GERMANY", "JAPAN", "PORTUGAL", "ENGLAND", "MEXICO"];
+            const collectionB = ["BELGIUM", "NETHERLANDS", "CHILE", "MOROCCO", "CROATIA", "SENEGAL", "USA", "KOREA"];
+            
+            document.getElementById('teamAName').value = collectionA[Math.floor(Math.random()*collectionA.length)];
+            document.getElementById('teamBName').value = collectionB[Math.floor(Math.random()*collectionB.length)];
+
+            // Randomize Archetype Dropdowns
+            const availableArchetypeKeys = Object.keys(archetypePresets);
+            document.getElementById('sceneArchetype').value = availableArchetypeKeys[Math.floor(Math.random()*availableArchetypeKeys.length)];
+            
+            applyScenePreset();
+            randomizeStats();
+            autoGenerateTheme();
+            setTimelineAndAnimate('simulation');
+        }
+
+        function randomizeAllInputs() {
+            triggerRandomSimulation();
+            setTimelineAndAnimate('intro');
+        }
+
+        // LOCAL STORAGE SLOT SYSTEM PERSISTENCE UTILITIES
+        function saveProject() {
+            const projectPackageData = {
+                teamA: document.getElementById('teamAName').value,
+                teamB: document.getElementById('teamBName').value,
+                tourney: document.getElementById('tournamentName').value,
+                date: document.getElementById('matchDate').value,
+                winA: document.getElementById('statWinA').value,
+                winB: document.getElementById('statWinB').value,
+                draw: document.getElementById('statDraw').value,
+                winner: document.getElementById('predWinnerSelect').value,
+                arche: document.getElementById('sceneArchetype').value
+            };
+            localStorage.setItem('FX_AI_SHORTS_PROJECT_DATA', JSON.stringify(projectPackageData));
+            refreshProjectHistoryList();
+            alert("Application Data State Vector Synchronized securely to engine memory storage pipeline cache slot successfully!");
+        }
+
+        function loadProject() {
+            const rawPackedCacheData = localStorage.getItem('FX_AI_SHORTS_PROJECT_DATA');
+            if(!rawPackedCacheData) {
+                alert("No structural context snapshot profile located inside database records pool stack cluster indices.");
+                return;
+            }
+            const parsedTargetObj = JSON.parse(rawPackedCacheData);
+            document.getElementById('teamAName').value = parsedTargetObj.teamA || "TEAM A";
+            document.getElementById('teamBName').value = parsedTargetObj.teamB || "TEAM B";
+            document.getElementById('tournamentName').value = parsedTargetObj.tourney || "";
+            document.getElementById('matchDate').value = parsedTargetObj.date || "";
+            document.getElementById('statWinA').value = parsedTargetObj.winA || 40;
+            document.getElementById('statWinB').value = parsedTargetObj.winB || 40;
+            document.getElementById('statDraw').value = parsedTargetObj.draw || 20;
+            document.getElementById('predWinnerSelect').value = parsedTargetObj.winner || "A";
+            document.getElementById('sceneArchetype').value = parsedTargetObj.arche || "footballOracle";
+            
+            applyScenePreset();
+            setTimelineAndAnimate('intro');
+            alert("Application Snapshot Restored Safely.");
+        }
+
+        function refreshProjectHistoryList() {
+            const historyUIWrapper = document.getElementById('projectHistoryContainer');
+            const dataPresenceCheck = localStorage.getItem('FX_AI_SHORTS_PROJECT_DATA');
+            if(dataPresenceCheck) {
+                const metadata = JSON.parse(dataPresenceCheck);
+                historyUIWrapper.innerHTML = `
+                    <div class="flex justify-between items-center bg-slate-900/90 p-2 rounded border border-slate-800">
+                        <span class="text-white font-bold text-[11px]"><i class="fa-solid fa-file-invoice text-teal-400 mr-1"></i> ${metadata.teamA} VS ${metadata.teamB} (${metadata.tourney})</span>
+                        <span class="text-[10px] text-slate-400 font-mono italic">Ready State</span>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
